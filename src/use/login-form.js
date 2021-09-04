@@ -1,14 +1,16 @@
 import * as yup from 'yup'
 import {useField, useForm} from 'vee-validate'
 import {useStore} from 'vuex'
-import { useRouter } from 'vue-router'
+import {useRouter} from "vue-router";
+
 export function useLoginForm(){
 
     const {handleSubmit,isSubmiting} = useForm()
             const store = useStore()
             const router = useRouter()
-            const {value:email, errorMessage: eError, handleBlur:eBlur} = useField(
-                'email',
+
+            const {value:login, errorMessage: lError, handleBlur:lBlur} = useField(
+                'login',
                 yup
                 .string()
                 .trim()
@@ -24,22 +26,26 @@ export function useLoginForm(){
                 .required('Обязательное поле')
                 .min(PASSWORD_MIN_LENGTH, 'Пароль не может быть меньше '+ PASSWORD_MIN_LENGTH + ' символов')
                 )
-            const onSubmit = handleSubmit(async values=>{
-                    console.log('Form:', values)
-                    await  store.dispatch('auth/login', values)
-                    router.push('/')
+            const onSubmit = handleSubmit(async values => {
+                try{
+                    // console.log('Form:', values)
+                    // await  store.state.auth.dispatch('auth/login', values)
+                    await store.dispatch('auth/login',values)
+                   await  router.push('/')
+                }catch (e) {
+
+                }
+
                 })
             
             return {
-                email,
+                login,
                 password,
-                eError,
+                lError,
                 pError,
-                eBlur,
+                lBlur,
                 pBlur,
                 onSubmit,
                 isSubmiting,
-        
-                
             }
 }

@@ -9,11 +9,30 @@ if(process.env.NODE_ENV === 'development'){
 
 export default createStore({
   plugins,
-  state: {
+  state(){
+      return {
+        errorMessage: null
+      }
   },
   mutations: {
+    //добавить сообщение об ошибке
+    setErrorMessage(state, message) {
+      state.errorMessage = message
+    },
+    //Очистить сообщение об ошибке
+    clearErrorMessage(state) {
+      state.errorMessage = null
+    }
+
   },
   actions: {
+    // Добавить и удалить сообщение об ошибке
+    setErrorMessage({commit}, message) {
+      commit('setErrorMessage', message)
+      setTimeout(() => {
+        commit('clearErrorMessage')
+      }, 5000)
+    }
   },
   modules: {
     auth,

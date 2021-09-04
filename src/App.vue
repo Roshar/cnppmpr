@@ -1,7 +1,6 @@
 <template>
     <component :is="layout + '-layout'" v-if="layout"></component>
 </template>
-
 <script>
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'

@@ -5,14 +5,12 @@
     <div class="col-10">
         <nav class="navbar justify-content-end">
             <ul class="list-group list-group-horizontal list-top-menu-ul">
-                
                 <li class="list-group-item list-group-item-action list-top-menu-li">
                     <router-link to="/">Помощь</router-link>
                 </li>
                 <li class="list-group-item list-group-item-action list-top-menu-li">
-                    <router-link to="/">Выход</router-link>
+                    <a href="" @click.prevent = "logout">Выход</a>
                 </li>
-                
             </ul>
         </nav>
     </div>
@@ -20,8 +18,20 @@
 </template>
 
 <script>
+    import {useStore} from 'vuex'
+    import {useRouter} from 'vue-router'
     export default {
-        
+        setup(){
+            const store = useStore()
+            const router = useRouter()
+
+            return {
+                logout() {
+                    store.commit('auth/logout')
+                    router.push('/auth')
+                }
+            }
+        }
     }
 </script>
 

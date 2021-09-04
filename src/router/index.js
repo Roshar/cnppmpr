@@ -13,7 +13,7 @@ const routes = [
     component: Home,
     meta:{
       layout:'main',
-      auth:true
+      auth: true
     }
   },
   {
