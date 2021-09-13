@@ -4,18 +4,15 @@
 
 <script>
     import {computed} from 'vue'
-    import {useRoute} from 'vue-router'
     import {useStore} from 'vuex'
-    import student from '../views/student/index'
-    import tutor from '../views/tutor/index'
+    import student from '../views/student/list'
+    import tutor from '../views/tutor/list'
 
     export default {
         setup() {
             const store = useStore()
-            const router = useRoute()
-            const role = computed(() => store.state['auth'].role)
 
-            const tpl = computed(() => `/`)
+            const role = computed(() => store.state['auth'].role)
 
             console.log('Роль'+ role.value)
             return {

@@ -1,11 +1,13 @@
 <template>
-    <component :is="layout + '-layout'" v-if="layout"></component>
+    <component :is="layout" v-if="layout"></component>
 </template>
 <script>
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'
-import MainLayout from './layout/MainLayout.vue'
-import AuthLayout from './layout/AuthLayout.vue'
+import Main from './layout/Main.vue'
+import Auth from './layout/Auth.vue'
+import MainStudent from "./layout/MainStudent";
+import MainTutor from "./layout/MainTutor";
 
 export default {
     setup(){
@@ -14,7 +16,7 @@ export default {
            layout: computed(()=> route.meta.layout)
        }
     },
-    components: {MainLayout,AuthLayout}
+    components: {Main,Auth,MainStudent,MainTutor}
 }
 </script>
 <style>
