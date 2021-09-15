@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store'
 import Home from '../views/Home.vue'
 import Auth from '../views/Auth'
+import Active from '../views/Active'
 import Register from "../views/Register";
 import List from '../views/List'
 import axios from 'axios'
@@ -12,10 +13,21 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: (to, from, next) => {
-      // const {role} = axios('http://localhost:3500/api/getschools/area')
-      console.log(to)
-      next()
+    beforeEnter: async (to, from, next) => {
+      try{
+        const res = await store.dispatch('auth/confirmRole')
+        console.log(res)
+        if(store.state['auth'].role && store.state['auth'].status == 'on') {
+          next()
+        } else if (store.state['auth'].role && store.state['auth'].status == 'null') {
+          next('/active?token='+store.state['auth'].token)
+        } else {
+          console.log('нет подтверждения роли')
+          next('/auth?message=auth')
+        }
+      } catch(e){
+        console.log('Ошибка подтверждения')
+      }
     },
     meta:{
       layout:'Main',
@@ -27,6 +39,20 @@ const routes = [
     path: '/list',
     name: 'list',
     component: List,
+    beforeEnter: async (to, from, next) => {
+      try{
+        const res = await store.dispatch('auth/confirmRole')
+        console.log(res)
+        if(store.state['auth'].role) {
+          next()
+        } else {
+          console.log('нет подтверждения роли')
+          next('/auth?message=auth')
+        }
+      } catch(e){
+        console.log('Ошибка подтверждения')
+      }
+    },
     meta:{
       layout:'Main',
       auth: true,
@@ -47,6 +73,15 @@ const routes = [
     path: '/auth',
     name: 'Auth',
     component: Auth,
+    meta:{
+      layout:'auth',
+      auth:false
+    }
+  },
+  {
+    path: '/active',
+    name: 'Active',
+    component: Active,
     meta:{
       layout:'auth',
       auth:false

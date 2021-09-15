@@ -9,7 +9,10 @@
                     <router-link to="/">Помощь</router-link>
                 </li>
                 <li class="list-group-item list-group-item-action list-top-menu-li">
-                    <a href="" @click.prevent = "logout">Выход</a>
+                    <form @submit.prevent="onSubmit">
+                        <button type="submit" class="btn auth-btn" > Выход </button>
+                    </form>
+
                 </li>
             </ul>
         </nav>
@@ -18,6 +21,9 @@
 </template>
 
 <script>
+    import {useForm} from "vee-validate";
+
+    const {handleSubmit} = useForm()
     import {useStore} from 'vuex'
     import {useRouter} from 'vue-router'
     export default {
@@ -25,11 +31,16 @@
             const store = useStore()
             const router = useRouter()
 
-            return {
-                logout() {
-                    store.commit('auth/logout')
-                    router.push('/auth')
+            const onSubmit = handleSubmit(async values => {
+                try{
+                    await store.dispatch('auth/logout')
+                    await  router.push('/auth')
+                }catch (e) {
+
                 }
+            })
+            return {
+                onSubmit
             }
         }
     }
