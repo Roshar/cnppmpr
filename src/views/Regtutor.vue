@@ -2,7 +2,7 @@
     <div class="row register-container">
         <div class="col-md-3 "></div>
         <div class="col-md-6 auth-block">
-            <h2 class="text-center">Регистрация </h2>
+            <h2 class="text-center">Регистрация тьютора</h2>
             <form @submit.prevent="onSubmit">
 
                 <div class="form-group mb-3">
@@ -43,31 +43,26 @@
 
                 <div class="form-group mb-3">
                     <div class="form-group">
-                        <label for="area"> Выберите ваш город/район:</label>
-                        <select :class="['form-control',{invalid:areaError}]" name="area"  v-model="area" @change="onChange($event)" required   @blur="areaBlur" id="area">
-                            <option v-for="item of areaList" :key="item.id_area" v-bind:value="item.id_area">{{item.title_area}}</option>
+                        <label for="area"> Выберите ваш предмет:</label>
+                        <select :class="['form-control',{invalid:disError}]" name="area"  v-model="discipline" required   @blur="disBlur" id="area">
+                            <option v-for="item of disciplineList" :key="item.id_dis" v-bind:value="item.id_dis">{{item.title_discipline}}</option>
                         </select>
-                        <small v-if="areaError">{{areaError}}</small>
+                        <small v-if="disError">{{disError}}</small>
                     </div>
                 </div>
 
-                <div class="form-group mb-3" >
-                    <div class="form-group">
-                        <label for="area"> Выберите вашу школу:</label>
-                        <select :class="['form-control',{invalid:schoolError}]"  name="school" v-model="school" required @blur="schoolBlur" id="school">
-
-                            <option v-for="item in schoolList" :key="item.id_school" v-bind:value="item.id_school">
-                                {{ item.school_name }}
-                            </option>
-                        </select>
-                        <small v-if="schoolError">{{schoolError}}</small>
-                    </div>
-                </div>
                 <div class="form-group mb-3">
                     <div class="form-group">
                         <label for="phone" style="color:grey; font-style: italic"> Введите только код и цифры без пробелов, пример: +79281111111</label>
                         <input type="tel" :class="['form-control',{invalid:phoneError}]" name="phone" id="phone" v-model="phone"  @blur="phoneBlur" placeholder="Номер телефона:">
                         <small v-if="phoneError">{{phoneError}}</small>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <div class="form-group">
+                        <label for="phone" style="color:grey; font-style: italic"> Введите секретный код  </label>
+                        <input type="tel" :class="['form-control',{invalid:codeError}]" name="code" id="code" v-model="code"  @blur="codeBlur" placeholder="код">
+                        <small v-if="codeError">{{codeError}}</small>
                     </div>
                 </div>
 
@@ -149,21 +144,15 @@
                     .trim()
             )
 
-            const {value:area, errorMessage: areaError, handleBlur:areaBlur} = useField(
-                'area',
+            const {value:discipline, errorMessage: disError, handleBlur:disBlur} = useField(
+                'discipline',
                 yup
                     .string()
                     .trim()
-                    // .required('Необходимо выбрать поле "город/район"')
+                    .required('Необходимо выбрать предмет')
             )
 
-            const {value:school, errorMessage: schoolError, handleBlur:schoolBlur} = useField(
-                'school',
-                yup
-                    .string()
-                    .trim()
-                    // .required('Необходимо выбрать образовательную организацию')
-            )
+
             const {value:phone, errorMessage: phoneError, handleBlur:phoneBlur} = useField(
                 'phone',
                 yup
@@ -172,20 +161,21 @@
                     .required('Необходимо указать ваш контактный номер (мобильный)')
             )
 
-            const onChange =  async (val) =>{
-                if(val.target.value){
-                    try {
-                        await store.dispatch('auth/schools',{id:val.target.value})
-                    }catch (e) {
-                        console.log(e)
-                    }
-                }
-            }
 
-            const getAreas = async () => {
-                await store.dispatch('auth/areas')
+            const {value:code, errorMessage: codeError, handleBlur:codeBlur} = useField(
+                'code',
+                yup
+                    .string()
+                    .trim()
+                    .required('Необходимо указать ваш контактный номер (мобильный)')
+            )
+
+
+
+            const getDisciplines = async () => {
+                await store.dispatch('auth/disciplines')
             }
-            getAreas()
+            getDisciplines()
 
             const onSubmit = handleSubmit(async values => {
                 values.role = "student"
@@ -204,31 +194,30 @@
                 first_name,
                 surname,
                 patronymic,
-                area,
-                school,
+                discipline,
                 phone,
+                code,
                 lError,
                 pError,
                 fnError,
                 cpError,
                 snError,
-                areaError,
-                schoolError,
+                disError,
                 phoneError,
+                codeError,
                 lBlur,
                 pBlur,
                 cpBlur,
                 fnBlur,
                 snBlur,
-                areaBlur,
-                schoolBlur,
+                disBlur,
+                codeBlur,
                 onSubmit,
                 isSubmiting,
                 confirmPassword,
                 checkInput,
-                schoolList: computed(() => store.state['auth'].schoolsList),
-                areaList: computed(() => store.state['auth'].areasList),
-                onChange,
+                disciplineList: computed(() => store.state['auth'].disciplineList),
+                code
             }
         }
     }

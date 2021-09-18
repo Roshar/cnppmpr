@@ -96,6 +96,16 @@ const routes = [
       layout:'auth',
       auth:false
     }
+  },
+  {
+    path: '/regtutor',
+    name: 'Regtutor',
+    component: ()=> import('../views/Regtutor.vue'),
+
+    meta:{
+      layout:'auth',
+      auth:false
+    }
   }
   // /
     // /iom --student||tutor
@@ -105,7 +115,9 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  linkActiveClass: 'active',
+  linkExactActiveClass: 'active'
 })
 
 router.beforeEach((to,from,next) => {

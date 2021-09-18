@@ -17,6 +17,7 @@ export default {
         status: null,
         schoolsList: [],
         areasList: [],
+        disciplineList: [],
         code: localStorage.getItem(CODE),
         message: null
     },
@@ -61,6 +62,9 @@ export default {
         },
         setAreas(state, list) {
             state.areasList = list
+        },
+        setDisciplines(state, list) {
+            state.disciplineList = list
         }
     },
 
@@ -126,6 +130,16 @@ export default {
             }
         },
 
+        // список дисциплин
+        async disciplines({commit, dispatch}) {
+            try {
+                const {data} = await axios.post('http://localhost:3500/api/get/discipines')
+                commit('setDisciplines',data.values)
+            }catch (e) {
+                console.log(e)
+            }
+        },
+
         async confirmRole({commit, dispatch, state}, payload) {
             try {
                 const user = {'token':state.token}
@@ -154,8 +168,6 @@ export default {
                 console.log(data)
                 commit('setCode', data.values.code)
                 commit('setMessage', data.values.message)
-                // commit('setCode', '3333')
-                // commit('setMessage', 'На ваш электронный адрес выслали письмо с кодом подтверждения')
             } catch (e) {
                 console.log('ошибка logout')
             }
@@ -164,7 +176,7 @@ export default {
         async confirmCode({commit, dispatch, state}, payload) {
             try {
                 console.log(payload)
-                 await axios.post('http://localhost:3500/api/auth/confirmcode',payload)
+                await axios.post('http://localhost:3500/api/auth/confirmcode',payload)
             } catch {
 
             }

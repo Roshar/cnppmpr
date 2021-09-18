@@ -15,21 +15,22 @@
         <div class="col-md-6 auth-block">
             <h2 class="text-center">Активация личного кабинета </h2>
             <form @submit.prevent="onSubmit">
-                <div class="form-group mb-3" >
+                <div class="form-group mb-3" v-if="isInput" >
                     <input type="text"  :class="['form-control',{invalid:cError}]" name="code" id="code" v-model="code" @blur="cBlur" placeholder="Введите код:">
                     <small v-if="cError">{{cError}}</small>
                 </div>
 
                 <div class="form-group mb-3" v-if="notification">
-
-                    <button type="button" @click="onClick" class="btn auth-btn"> Получить код </button>
+                    <button type="button" @click="onClick" class="btn auth-btn" > {{buttonVal}} </button>
                 </div>
                 <div class="msg">
-                    <span> {{ message.text }} </span>
+                    <span> {{ message.text }} </span><br>
+                    <span v-if="timeover"> Если вы не получили код на свой электронный адрес, через {{ timeover }} вы можете повторно запросить код </span>
                 </div>
-                <div class="row" v-if="!notification">
+
+                <div class="row" >
                     <div class="col-12">
-                        <button type="submit" class="btn auth-btn " :disabled="isSubmiting"> Отправить </button>
+                        <button type="submit" class="btn auth-btn" :disabled="!isSub" > Отправить </button>
                     </div>
                 </div>
             </form>
@@ -48,13 +49,16 @@
 
     export default {
         setup(){
-            const {handleSubmit,isSubmiting} = useForm()
-            const store = useStore()
-            const router = useRouter()
-            let notification = ref(true)
-            const message = ref({
-
-            })
+            const {handleSubmit,isSubmiting} = useForm();
+            const store = useStore();
+            const router = useRouter();
+            let notification = ref(true);
+            let buttonVal = ref('Получить код');
+            const message = ref({});
+            let flag;
+            let isSub = ref(false);
+            let isInput = ref(false);
+            let timeover = ref()
 
 
             const {value:code, errorMessage: cError, handleBlur:cBlur} = useField(
@@ -65,8 +69,45 @@
                     .required('Обязательное поле')
             )
 
-            const changeStatus = computed(() => {
-                notification  = !notification.value
+            let timer = function() {
+                const t = setInterval(() => {
+                    if(!localStorage.getItem("timer") && flag){
+                        let num = localStorage.setItem("timer", 10)
+                    }else {
+                        let num2 = parseInt(localStorage.getItem("timer"))
+                        localStorage.setItem("timer", --num2)
+                        timeover.value = localStorage.getItem("timer")
+                        if(num2 < 1){
+                            notification.value = !notification.value
+                            clearInterval(t)
+                            localStorage.removeItem("time")
+                            localStorage.removeItem("timer")
+                            timeover.value = false
+                        }
+                        console.log(num2)
+                    }
+                },1000)
+            }
+
+
+            const load = window.addEventListener('load', () => {
+                flag = localStorage.getItem("time")
+                const firstClick = localStorage.getItem("first")
+                if(firstClick) {
+                    buttonVal.value = "Прислать повторно код"
+                    isInput.value = true
+                    isSub.value = true
+                    message.value.text = localStorage.getItem("message")
+                }
+                if(!flag) {
+                    notification.value = true
+                }else {
+                    isInput.value = true
+                    isSub.value = true
+                    notification.value = false
+                    timer()
+                }
+
             })
 
             const onClick = async () => {
@@ -74,10 +115,43 @@
                     await store.dispatch('auth/sendCodeToMail')
                     const code = await store.state['auth'].code
                     const text = await store.state['auth'].message
-                    notification.value = false
+                    localStorage.setItem("first", true)
+                    isSub.value = true
+                    isInput.value = true
+                    buttonVal.value = "Прислать повторно код"
+
+                    if(localStorage.getItem('time')) {
+                        notification.value = !notification.value
+                        localStorage.removeItem('time')
+                    }
+                    if(localStorage.getItem("timer")){
+                        localStorage.removeItem('timer')
+                    }
+                    localStorage.setItem('time', 10)
+                    flag = localStorage.getItem("time")
+                    timer()
+                    // const timer = setInterval(() => {
+                    //     if(!localStorage.getItem("timer") && flag){
+                    //         let num = localStorage.setItem("timer", 5)
+                    //     }else {
+                    //         let num2 = parseInt(localStorage.getItem("timer"))
+                    //         localStorage.setItem("timer", --num2)
+                    //         timeover.value = localStorage.getItem("timer")
+                    //         if(num2 < 1){
+                    //             notification.value = !notification.value
+                    //             clearInterval(timer)
+                    //             localStorage.removeItem("time")
+                    //             localStorage.removeItem("timer")
+                    //             timeover.value = false
+                    //         }
+                    //     }
+                    // },1000)
+
+                    notification.value = !notification.value
                     message.value = {
                         text: text,
                     }
+
                 }catch (e) {
                     console.log(e)
                 }
@@ -87,7 +161,7 @@
                 values.hash = store.state['auth'].code
                 values.code = values.code + 'r'
                 values.token = store.state['auth'].token
-                console.log('sender')
+
                 try{
                     await store.dispatch('auth/confirmCode',values)
                     await  router.push('/')
@@ -109,13 +183,18 @@
                 notification,
                 isSubmiting,
                 onLogout,
-                changeStatus,
                 code,
                 cError,
                 cBlur,
                 onClick,
                 onSubmit,
-                message
+                message,
+                isSub,
+                isInput,
+                buttonVal,
+                timeover
+
+
             }
         }
     }
