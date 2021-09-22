@@ -43,6 +43,17 @@
 
                 <div class="form-group mb-3">
                     <div class="form-group">
+                        <label for="gender"> Выберите ваш пол</label>
+                        <select :class="['form-control',{invalid:areaError}]" name="gender"  v-model="gender"  required   @blur="genderBlur" id="gender">
+                            <option value="men">Муж</option>
+                            <option value="women">Жен</option>
+                        </select>
+                        <small v-if="genderError">{{genderError}}</small>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <div class="form-group">
                         <label for="area"> Выберите ваш город/район:</label>
                         <select :class="['form-control',{invalid:areaError}]" name="area"  v-model="area" @change="onChange($event)" required   @blur="areaBlur" id="area">
                             <option v-for="item of areaList" :key="item.id_area" v-bind:value="item.id_area">{{item.title_area}}</option>
@@ -63,6 +74,16 @@
                         <small v-if="schoolError">{{schoolError}}</small>
                     </div>
                 </div>
+                <div class="form-group mb-3">
+                    <div class="form-group">
+                        <label for="discipline"> Выберите ваш предмет:</label>
+                        <select :class="['form-control',{invalid:disError}]" name="area"  v-model="discipline" required   @blur="disBlur" id="discipline">
+                            <option v-for="item of disciplineList" :key="item.id_dis" v-bind:value="item.id_dis">{{item.title_discipline}}</option>
+                        </select>
+                        <small v-if="disError">{{disError}}</small>
+                    </div>
+                </div>
+
                 <div class="form-group mb-3">
                     <div class="form-group">
                         <label for="phone" style="color:grey; font-style: italic"> Введите только код и цифры без пробелов, пример: +79281111111</label>
@@ -149,6 +170,14 @@
                     .trim()
             )
 
+            const {value:gender, errorMessage: genderError, handleBlur:genderBlur} = useField(
+                'gender',
+                yup
+                    .string()
+                    .trim()
+                    .required('Обязательное поле')
+            )
+
             const {value:area, errorMessage: areaError, handleBlur:areaBlur} = useField(
                 'area',
                 yup
@@ -163,6 +192,14 @@
                     .string()
                     .trim()
                     // .required('Необходимо выбрать образовательную организацию')
+            )
+
+            const {value:discipline, errorMessage: disError, handleBlur:disBlur} = useField(
+                'discipline',
+                yup
+                    .string()
+                    .trim()
+                    .required('Необходимо выбрать предмет')
             )
             const {value:phone, errorMessage: phoneError, handleBlur:phoneBlur} = useField(
                 'phone',
@@ -187,6 +224,11 @@
             }
             getAreas()
 
+            const getDisciplines = async () => {
+                await store.dispatch('auth/disciplines')
+            }
+            getDisciplines()
+
             const onSubmit = handleSubmit(async values => {
                 values.role = "student"
                 values.patronymic ? values.patronymic : " "
@@ -204,9 +246,13 @@
                 first_name,
                 surname,
                 patronymic,
+                gender,
                 area,
                 school,
                 phone,
+                discipline,
+                disError,
+                genderError,
                 lError,
                 pError,
                 fnError,
@@ -222,12 +268,16 @@
                 snBlur,
                 areaBlur,
                 schoolBlur,
+                disBlur,
+                genderBlur,
                 onSubmit,
                 isSubmiting,
                 confirmPassword,
                 checkInput,
+
                 schoolList: computed(() => store.state['auth'].schoolsList),
                 areaList: computed(() => store.state['auth'].areasList),
+                disciplineList: computed(() => store.state['auth'].disciplineList),
                 onChange,
             }
         }

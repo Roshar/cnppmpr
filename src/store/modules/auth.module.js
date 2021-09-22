@@ -5,6 +5,8 @@ const ROLE = 'role'
 const STATUS = 'status'
 const CODE = 'code'
 const MESSAGE = 'message'
+const RECOVERY = 'recovery'
+const LOGIN = 'login'
 
 export default {
     //для экспорта модуля  в  глобальный store, например: store.dispatch('auth/login')
@@ -19,7 +21,9 @@ export default {
         areasList: [],
         disciplineList: [],
         code: localStorage.getItem(CODE),
-        message: null
+        message: null,
+        recovery: localStorage.getItem(RECOVERY),
+        login: localStorage.getItem(LOGIN)
     },
 
     mutations: {
@@ -39,9 +43,17 @@ export default {
             state.code = code
             localStorage.setItem(CODE,code)
         },
+        setCodeRecovery(state, recovery) {
+            state.code = recovery
+            localStorage.setItem(RECOVERY,recovery)
+        },
         setMessage(state, message) {
             state.message = message
             localStorage.setItem(MESSAGE,message)
+        },
+        setLogin(state, login) {
+            state.login = login
+            localStorage.setItem(LOGIN, login)
         },
         logout(state){
             state.token = null
@@ -59,6 +71,14 @@ export default {
         },
         clearSchools(state) {
             state.schoolsList = []
+        },
+        clearCodeRecovery(state) {
+            state.recovery = null
+            localStorage.removeItem(RECOVERY)
+        },
+        clearLogin(state) {
+            state.login = null
+            localStorage.removeItem(LOGIN)
         },
         setAreas(state, list) {
             state.areasList = list
@@ -177,10 +197,69 @@ export default {
             try {
                 console.log(payload)
                 await axios.post('http://localhost:3500/api/auth/confirmcode',payload)
-            } catch {
+            } catch(e) {
 
             }
-        }
+        },
+
+        async recovery({commit, dispatch, state}, payload) {
+            try {
+                if(payload.value) {
+                    const {data} = await axios.post('http://localhost:3500/api/auth/recovery',{recovery:payload.value})
+                    commit('setLogin',payload.value)
+                    dispatch('setErrorMessage', {
+                        value: data.values.message,
+                        type: 'primary'
+                    }, {root: true})
+                }
+            } catch(e){
+                dispatch('setErrorMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async recoverychecklink({commit, dispatch, state}, payload) {
+            try {
+
+                const {data} = await axios.post('http://localhost:3500/api/auth/recoverychecklink',payload)
+                commit('setCodeRecovery', data.values.code)
+                dispatch('setErrorMessage', {
+                    value: data.values.message,
+                    code: data.values.code,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                dispatch('setErrorMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async changepassword({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('http://localhost:3500/api/auth/changepassword', payload)
+                commit('clearLogin')
+                commit('clearCodeRecovery')
+                dispatch('setErrorMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                dispatch('setErrorMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+
+
 
     },
 

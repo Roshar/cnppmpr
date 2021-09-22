@@ -21,7 +21,7 @@
     export default {
         setup() {
             const TITLE_MAP = {
-                primary: 'Вы вошли!',
+                primary: 'Успешно!',
                 danger: 'Ошибка!',
                 warning: 'Внимание!'
             }

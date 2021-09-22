@@ -19,7 +19,15 @@
                         <button type="submit" class="btn auth-btn" :disabled="isSubmiting">Войти</button>
                     </div>
                     <div class="col-6">
-                         <a href="#" class="auth-not-btn">Забыли пароль?</a>
+                        <router-link class="auth-not-btn" to="/recovery">Забыли пароль?</router-link>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <router-link to="/register">Зарегистрироваться как слушатель</router-link>
+                    </div>
+                    <div class="col-6">
+                        <router-link class="auth-not-btn" to="/regtutor">Зарегистрироваться как тьютор</router-link>
                     </div>
                 </div>
             </form>

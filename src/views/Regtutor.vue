@@ -43,8 +43,8 @@
 
                 <div class="form-group mb-3">
                     <div class="form-group">
-                        <label for="area"> Выберите ваш предмет:</label>
-                        <select :class="['form-control',{invalid:disError}]" name="area"  v-model="discipline" required   @blur="disBlur" id="area">
+                        <label for="discipline"> Выберите ваш предмет:</label>
+                        <select :class="['form-control',{invalid:disError}]" name="area"  v-model="discipline" required   @blur="disBlur" id="discipline">
                             <option v-for="item of disciplineList" :key="item.id_dis" v-bind:value="item.id_dis">{{item.title_discipline}}</option>
                         </select>
                         <small v-if="disError">{{disError}}</small>

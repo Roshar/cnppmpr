@@ -130,23 +130,6 @@
                     localStorage.setItem('time', 10)
                     flag = localStorage.getItem("time")
                     timer()
-                    // const timer = setInterval(() => {
-                    //     if(!localStorage.getItem("timer") && flag){
-                    //         let num = localStorage.setItem("timer", 5)
-                    //     }else {
-                    //         let num2 = parseInt(localStorage.getItem("timer"))
-                    //         localStorage.setItem("timer", --num2)
-                    //         timeover.value = localStorage.getItem("timer")
-                    //         if(num2 < 1){
-                    //             notification.value = !notification.value
-                    //             clearInterval(timer)
-                    //             localStorage.removeItem("time")
-                    //             localStorage.removeItem("timer")
-                    //             timeover.value = false
-                    //         }
-                    //     }
-                    // },1000)
-
                     notification.value = !notification.value
                     message.value = {
                         text: text,

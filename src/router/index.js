@@ -106,10 +106,16 @@ const routes = [
       layout:'auth',
       auth:false
     }
+  },
+  {
+    path: '/recovery',
+    name: 'Recovery',
+    component: ()=> import('../views/Recovery.vue'),
+    meta:{
+      layout:'auth',
+      auth:false
+    }
   }
-  // /
-    // /iom --student||tutor
-    //
   
 ]
 
