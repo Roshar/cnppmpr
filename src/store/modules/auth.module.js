@@ -1,4 +1,5 @@
-import axios from 'axios'
+// import axios from 'axios'
+import axios from '../../axios/request'
 const TOKEN_KEY = 'jwt-token'
 const ROLE = 'role'
 const STATUS = 'status'
@@ -92,7 +93,7 @@ export default {
         async login({ commit, dispatch}, user) {
             try{
 
-                const {data} =  await axios.post('http://localhost:3500/api/auth/signin',user)
+                const {data} =  await axios.post('/api/auth/signin',user)
                     commit('setToken', data.values.token)
                     commit('setRole', data.values.role)
                     commit('setStatus', data.values.status)
@@ -109,7 +110,7 @@ export default {
 
         async registration({ commit, dispatch}, payload) {
             try{
-                const {data} = await axios.post('http://localhost:3500/api/auth/signup',payload)
+                const {data} = await axios.post('/api/auth/signup',payload)
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'
@@ -128,7 +129,7 @@ export default {
         async schools({commit, dispatch}, parameter) {
             try {
                 if(parameter.id > 0){
-                    const {data} =  await axios.post('http://localhost:3500/api/getschools/byarea',parameter)
+                    const {data} =  await axios.post('/api/getschools/byarea',parameter)
                     commit('setSchools',data.values)
                 }
                 else {
@@ -144,7 +145,7 @@ export default {
 
         async areas({commit, dispatch}) {
             try {
-                const {data} = await axios.post('http://localhost:3500/api/getschools/area')
+                const {data} = await axios.post('/api/getschools/area')
                 commit('setAreas',data.values)
             }catch (e) {
                 console.log(e)
@@ -155,7 +156,7 @@ export default {
 
         async disciplines({commit, dispatch}) {
             try {
-                const {data} = await axios.post('http://localhost:3500/api/get/discipines')
+                const {data} = await axios.post('/api/get/discipines')
                 commit('setDisciplines',data.values)
             }catch (e) {
                 console.log(e)
@@ -167,7 +168,7 @@ export default {
         async confirmRole({commit, dispatch, state}, payload) {
             try {
                 const user = {'token':state.token}
-                const {data} =  await axios.post('http://localhost:3500/api/get/role', user)
+                const {data} =  await axios.post('/api/get/role', user)
                 console.log("auth " + data.values.role)
                 commit('setRole', data.values.role)
                 commit('setStatus', data.values.status)
@@ -181,7 +182,7 @@ export default {
         async logout({commit, dispatch, state}, payload) {
             try {
                 const user = {'token':state.token}
-                await axios.post('http://localhost:3500/api/logout', user)
+                await axios.post('/api/logout', user)
                 commit('logout')
             } catch (e) {
                 console.log('ошибка logout')
@@ -193,7 +194,7 @@ export default {
         async sendCodeToMail({commit, dispatch, state}, payload) {
             try {
                 const user = {token:state.token}
-                const {data} = await axios.post('http://localhost:3500/api/sendCodeToMail', user)
+                const {data} = await axios.post('/api/sendCodeToMail', user)
                 commit('setCode', data.values.code)
                 commit('setMessage', data.values.message)
             } catch (e) {
@@ -205,7 +206,7 @@ export default {
 
         async confirmCode({commit, dispatch, state}, payload) {
             try {
-                await axios.post('http://localhost:3500/api/auth/confirmcode',payload)
+                await axios.post('/api/auth/confirmcode',payload)
             } catch(e) {
 
             }
@@ -216,7 +217,7 @@ export default {
         async recovery({commit, dispatch, state}, payload) {
             try {
                 if(payload.value) {
-                    const {data} = await axios.post('http://localhost:3500/api/auth/recovery',{recovery:payload.value})
+                    const {data} = await axios.post('/api/auth/recovery',{recovery:payload.value})
                     commit('setLogin',payload.value)
                     dispatch('setSystemMessage', {
                         value: data.values.message,
@@ -237,7 +238,7 @@ export default {
         async recoverychecklink({commit, dispatch, state}, payload) {
             try {
 
-                const {data} = await axios.post('http://localhost:3500/api/auth/recoverychecklink',payload)
+                const {data} = await axios.post('/api/auth/recoverychecklink',payload)
                 commit('setCodeRecovery', data.values.code)
                 dispatch('setSystemMessage', {
                     value: data.values.message,
@@ -257,7 +258,7 @@ export default {
 
         async changepassword({commit, dispatch, state}, payload) {
             try {
-                const {data} = await axios.post('http://localhost:3500/api/auth/changepassword', payload)
+                const {data} = await axios.post('/api/auth/changepassword', payload)
                 commit('clearLogin')
                 commit('clearCodeRecovery')
                 dispatch('setSystemMessage', {

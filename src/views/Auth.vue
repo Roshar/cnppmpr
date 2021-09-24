@@ -37,12 +37,9 @@
 </template>
 
 <script>
-
-
 import {useLoginForm} from '../use/login-form'
-
     export default {
-        setup(){
+        setup () {
             return {...useLoginForm()} 
             
         }
