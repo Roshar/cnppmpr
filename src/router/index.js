@@ -5,7 +5,7 @@ import Auth from '../views/Auth'
 import Active from '../views/Active'
 import Register from "../views/Register";
 import List from '../views/List'
-import axios from 'axios'
+
 
 console.log(store.state['auth'].role)
 const routes = [
@@ -13,11 +13,19 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    lay: "Student",
+
     beforeEnter: async (to, from, next) => {
+
+      // console.log(store.state['auth'].role)
       try{
-        const res = await store.dispatch('auth/confirmRole')
-        console.log(res)
+         await store.dispatch('auth/confirmRole')
         if(store.state['auth'].role && store.state['auth'].status == 'on') {
+          to.meta.layout = await store.state['auth'].role
+          to.meta.data = localStorage.getItem('login')
+          // console.log(localStorage.getItem('jwt-token'))
+          await store.dispatch('student/getUserData',localStorage.getItem('jwt-token'))
+
           next()
         } else if (store.state['auth'].role && store.state['auth'].status == 'null') {
           next('/active?token='+store.state['auth'].token)
@@ -30,7 +38,6 @@ const routes = [
       }
     },
     meta:{
-      layout:'Main',
       auth: true,
       role: store.state['auth'].role,
     },

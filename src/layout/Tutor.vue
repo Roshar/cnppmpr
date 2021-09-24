@@ -2,14 +2,14 @@
     <div class="container-fluid own-bg">
         <div class="own-size">
             <div class="row">
-                <student-navbar-top/>
+                <tutor-navbar-top/>
             </div>
         </div>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-3">
-                <student-navbar-left/>
+                <tutor-navbar-left/>
             </div>
             <router-view/>
         </div>
@@ -17,10 +17,10 @@
 </template>
 
 <script>
-    import StudentNavbarLeft from '../components/StudentNavbarLeft.vue'
-    import StudentNavbarTop from '../components/StudentNavbarTop.vue'
+    import TutorNavbarLeft from '../components/TutorNavbarLeft.vue'
+    import TutorNavbarTop from '../components/TutorNavbarTop.vue'
     export default {
-        components: {StudentNavbarLeft,StudentNavbarTop}
+        components: {TutorNavbarLeft,TutorNavbarTop}
     }
 </script>
 

@@ -27,7 +27,7 @@
             }
             const store = useStore()
 
-            const message = computed(() => store.state.errorMessage)
+            const message = computed(() => store.state.systemMessage)
 
             const title = computed(() => message.value ? TITLE_MAP[message.value.type] : null)
 
@@ -35,7 +35,7 @@
                 message,
                 title,
                 close: () => {
-                    store.commit('clearErrorMessage')
+                    store.commit('clearSystemMessage')
                 }
             }
         }

@@ -1,5 +1,6 @@
 import { createStore, createLogger } from 'vuex'
 import auth from './modules/auth.module'
+import student from './modules/student.module'
 
 const plugins = []
 
@@ -11,30 +12,33 @@ export default createStore({
   plugins,
   state(){
       return {
-        errorMessage: null
+        systemMessage: null
       }
   },
   mutations: {
     //добавить сообщение об ошибке
-    setErrorMessage(state, message) {
-      state.errorMessage = message
+    setSystemMessage(state, message) {
+      state.systemMessage = message
     },
     //Очистить сообщение об ошибке
-    clearErrorMessage(state) {
-      state.errorMessage = null
+    clearSystemMessage(state) {
+      state.systemMessage = null
     }
 
   },
   actions: {
-    // Добавить и удалить сообщение об ошибке
-    setErrorMessage({commit}, message) {
-      commit('setErrorMessage', message)
+
+    // Сообщения системы
+
+    setSystemMessage({commit}, message) {
+      commit('setSystemMessage', message)
       setTimeout(() => {
-        commit('clearErrorMessage')
-      }, 5000)
+        commit('clearSystemMessage')
+      }, 8000)
     }
   },
   modules: {
     auth,
+    student
   }
 })

@@ -1,4 +1,3 @@
-// import { useLoginForm } from "../../use/login-form"
 import axios from 'axios'
 const TOKEN_KEY = 'jwt-token'
 const ROLE = 'role'
@@ -94,14 +93,11 @@ export default {
             try{
 
                 const {data} =  await axios.post('http://localhost:3500/api/auth/signin',user)
-                // console.log(data.values.role)
                     commit('setToken', data.values.token)
                     commit('setRole', data.values.role)
                     commit('setStatus', data.values.status)
             } catch(e){
-
-                // console.log(e.response.data.values.message)
-                dispatch('setErrorMessage', {
+                dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
                 }, {root: true})
@@ -112,11 +108,14 @@ export default {
         //регистрация
 
         async registration({ commit, dispatch}, payload) {
-            // console.log(payload)
             try{
-                await axios.post('http://localhost:3500/api/auth/signup',payload)
+                const {data} = await axios.post('http://localhost:3500/api/auth/signup',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
             } catch(e){
-                dispatch('setErrorMessage', {
+                dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
                 }, {root: true})
@@ -125,6 +124,7 @@ export default {
         },
 
         //школы по id района
+
         async schools({commit, dispatch}, parameter) {
             try {
                 if(parameter.id > 0){
@@ -141,6 +141,7 @@ export default {
         },
 
         // районы общий список
+
         async areas({commit, dispatch}) {
             try {
                 const {data} = await axios.post('http://localhost:3500/api/getschools/area')
@@ -151,6 +152,7 @@ export default {
         },
 
         // список дисциплин
+
         async disciplines({commit, dispatch}) {
             try {
                 const {data} = await axios.post('http://localhost:3500/api/get/discipines')
@@ -160,10 +162,13 @@ export default {
             }
         },
 
+        // подтверждение роли пользователя
+
         async confirmRole({commit, dispatch, state}, payload) {
             try {
                 const user = {'token':state.token}
                 const {data} =  await axios.post('http://localhost:3500/api/get/role', user)
+                console.log("auth " + data.values.role)
                 commit('setRole', data.values.role)
                 commit('setStatus', data.values.status)
             } catch (e) {
@@ -171,21 +176,24 @@ export default {
             }
         },
 
+        // Выход
+
         async logout({commit, dispatch, state}, payload) {
             try {
                 const user = {'token':state.token}
-                const res = await axios.post('http://localhost:3500/api/logout', user)
+                await axios.post('http://localhost:3500/api/logout', user)
                 commit('logout')
             } catch (e) {
                 console.log('ошибка logout')
             }
         },
 
+        // отправка кода для активации личного кабинета
+
         async sendCodeToMail({commit, dispatch, state}, payload) {
             try {
                 const user = {token:state.token}
                 const {data} = await axios.post('http://localhost:3500/api/sendCodeToMail', user)
-                console.log(data)
                 commit('setCode', data.values.code)
                 commit('setMessage', data.values.message)
             } catch (e) {
@@ -193,74 +201,77 @@ export default {
             }
         },
 
+        // верификация роли
+
         async confirmCode({commit, dispatch, state}, payload) {
             try {
-                console.log(payload)
                 await axios.post('http://localhost:3500/api/auth/confirmcode',payload)
             } catch(e) {
 
             }
         },
 
+        // 1-й этап | восстановление пароля | отправка хэш-ссылки на почту
+
         async recovery({commit, dispatch, state}, payload) {
             try {
                 if(payload.value) {
                     const {data} = await axios.post('http://localhost:3500/api/auth/recovery',{recovery:payload.value})
                     commit('setLogin',payload.value)
-                    dispatch('setErrorMessage', {
+                    dispatch('setSystemMessage', {
                         value: data.values.message,
                         type: 'primary'
                     }, {root: true})
                 }
             } catch(e){
-                dispatch('setErrorMessage', {
+                dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
             }
         },
+
+        // 2-й этап | восстановление пароля | верификация ссылки
 
         async recoverychecklink({commit, dispatch, state}, payload) {
             try {
 
                 const {data} = await axios.post('http://localhost:3500/api/auth/recoverychecklink',payload)
                 commit('setCodeRecovery', data.values.code)
-                dispatch('setErrorMessage', {
+                dispatch('setSystemMessage', {
                     value: data.values.message,
                     code: data.values.code,
                     type: 'primary'
                 }, {root: true})
             } catch(e){
-                dispatch('setErrorMessage', {
+                dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
             }
         },
+
+        // 3-й этап | восстановление пароля | смена пароля
 
         async changepassword({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('http://localhost:3500/api/auth/changepassword', payload)
                 commit('clearLogin')
                 commit('clearCodeRecovery')
-                dispatch('setErrorMessage', {
+                dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'
                 }, {root: true})
             } catch(e){
-                dispatch('setErrorMessage', {
+                dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
             }
         },
-
-
-
-
     },
 
     getters: {
@@ -282,7 +293,6 @@ export default {
         isActive(store, status) {
             return !!store.status
         },
-
         schoolsList(state) {
             return state.schoolsList
         },
