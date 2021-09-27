@@ -12,7 +12,8 @@ export default {
         token: localStorage.getItem(TOKEN_KEY),
         userId: localStorage.getItem(USERID),
         role: null,
-        userData: []
+        userData: [],
+        userLink: []
 
     },
 
@@ -28,6 +29,9 @@ export default {
         setUserData(state, userData) {
             state.userData = userData
         },
+        setUserLink(state, userData) {
+            state.userLink = userData
+        },
         setMessage(state, message) {
             state.message = message
             localStorage.setItem(MESSAGE,message)
@@ -39,8 +43,9 @@ export default {
         async getUserData({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/getUserData',{user:payload} )
-                console.log(data.values[0].name)
-                commit('setUserData', data)
+                // console.log(data.values[0].name)
+                commit('setUserData', data.values[0])
+                commit('setUserLink', data.values[1])
 
             } catch(e){
                 dispatch('setSystemMessage', {

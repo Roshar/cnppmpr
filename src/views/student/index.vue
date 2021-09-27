@@ -33,7 +33,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-3">
-                        <p class="card-text">Куратор</p>
+                        <p class="card-text">Тьютор</p>
                     </div>
                     <div class="col-9">
                         <p class="card-text"> {{tutor}} </p>
@@ -118,18 +118,18 @@
             const store = useStore()
             const router = useRouter()
 
-            const name = store.state['user'].userData.values[0].name;
-            const surname = store.state['user'].userData.values[0].surname;
-            const patronymic = store.state['user'].userData.values[0].patronymic;
-            const school = store.state['user'].userData.values[0]['school_name'];
-            const area = store.state['user'].userData.values[0]['title_area'];
-            const phone = store.state['user'].userData.values[0].phone;
-            const discipline = store.state['user'].userData.values[0]['title_discipline'];
-            const tutor = `${store.state['user'].userData.values[1]['surname']} ${store.state['user'].userData.values[1]['name']}  ${store.state['user'].userData.values[1]['patronymic']} ` ;
+            const name = store.state['user'].userData.name;
+            const surname = store.state['user'].userData.surname;
+            const patronymic = store.state['user'].userData.patronymic;
+            const school = store.state['user'].userData['school_name'];
+            const area = store.state['user'].userData['title_area'];
+            const phone = store.state['user'].userData.phone;
+            const discipline = store.state['user'].userData['title_discipline'];
+            let tutor = "Вам еще не назначен тьютор";
+            if(store.state['user'].userLink){
+                tutor = `${store.state['user'].userLink['surname']} ${store.state['user'].userLink['name']} ${store.state['user'].userLink['patronymic']}`
+            }
 
-            console.log(store.state['user'].userData)
-
-            console.log(name)
 
             return{
                 name,
