@@ -2,14 +2,14 @@
     <div class="col-9 outside-block-indent">
         <div class="card page_info_wrap">
             <div class="card-body">
-                <h5 class="card-title"> Фамилия Имя Отчество </h5>
+                <h5 class="card-title"> {{name}} {{surname}} {{patronymic}}</h5>
                 <hr>
                 <div class="row">
                     <div class="col-3">
                         <p class="card-text">Образовательная организация</p>
                     </div>
                     <div class="col-9">
-                        <p class="card-text"> МБОУ СОШ №14 </p>
+                        <p class="card-text"> {{school}} </p>
                     </div>
                 </div>
                 <hr>
@@ -18,17 +18,25 @@
                         <p class="card-text">Город/район</p>
                     </div>
                     <div class="col-9">
-                        <p class="card-text"> Грозный </p>
+                        <p class="card-text"> {{area}} </p>
                     </div>
                 </div>
-
+                <hr>
+                <div class="row">
+                    <div class="col-3">
+                        <p class="card-text">Номер телефона</p>
+                    </div>
+                    <div class="col-9">
+                        <p class="card-text"> {{phone}} </p>
+                    </div>
+                </div>
                 <hr>
                 <div class="row">
                     <div class="col-3">
                         <p class="card-text">Куратор</p>
                     </div>
                     <div class="col-9">
-                        <p class="card-text"> не назначен </p>
+                        <p class="card-text"> {{tutor}} </p>
                     </div>
                 </div>
                 <hr>
@@ -101,9 +109,39 @@
 </template>
 
 <script>
+    import {useStore} from "vuex";
+    import {useRouter} from "vue-router";
+
     export default {
 
+        setup() {
+            const store = useStore()
+            const router = useRouter()
 
+            const name = store.state['user'].userData.values[0].name;
+            const surname = store.state['user'].userData.values[0].surname;
+            const patronymic = store.state['user'].userData.values[0].patronymic;
+            const school = store.state['user'].userData.values[0]['school_name'];
+            const area = store.state['user'].userData.values[0]['title_area'];
+            const phone = store.state['user'].userData.values[0].phone;
+            const discipline = store.state['user'].userData.values[0]['title_discipline'];
+            const tutor = `${store.state['user'].userData.values[1]['surname']} ${store.state['user'].userData.values[1]['name']}  ${store.state['user'].userData.values[1]['patronymic']} ` ;
+
+            console.log(store.state['user'].userData)
+
+            console.log(name)
+
+            return{
+                name,
+                surname,
+                patronymic,
+                school,
+                area,
+                phone,
+                discipline,
+                tutor
+            }
+        },
     }
 </script>
 

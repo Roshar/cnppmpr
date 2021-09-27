@@ -43,11 +43,11 @@ export default {
                 commit('setUserData', data)
 
             } catch(e){
-                // dispatch('setSystemMessage', {
-                //     value: e.response.data.values.message,
-                //     type: 'danger'
-                // }, {root: true})
-                // throw new Error()
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
                 console.log("not module user")
             }
         },
