@@ -1,6 +1,8 @@
-import axios from 'axios'
+import axios from '../../axios/request'
 const TOKEN_KEY = 'jwt-token'
 const ROLE = 'role'
+const USERID = 'userId'
+const MESSAGE = 'message'
 
 
 export default {
@@ -8,8 +10,9 @@ export default {
 
     state: {
         token: localStorage.getItem(TOKEN_KEY),
-        // role: localStorage.getItem(ROLE),
+        userId: localStorage.getItem(USERID),
         role: null,
+        userData: []
 
     },
 
@@ -22,22 +25,22 @@ export default {
             state.role = role
             localStorage.setItem(ROLE,role)
         },
-
+        setUserData(state, userData) {
+            state.userData = userData
+        },
         setMessage(state, message) {
             state.message = message
             localStorage.setItem(MESSAGE,message)
         },
 
-        setDisciplines(state, list) {
-            state.disciplineList = list
-        }
     },
 
     actions:{
         async getUserData({commit, dispatch, state}, payload) {
             try {
-                const {data} = await axios.post('http://localhost:3500/api/user/getUserData',{user:payload} )
-                // console.log(payload)
+                const {data} = await axios.post('/api/user/getUserData',{user:payload} )
+                console.log(data.values[0].name)
+                commit('setUserData', data)
 
             } catch(e){
                 // dispatch('setSystemMessage', {

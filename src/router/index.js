@@ -23,9 +23,7 @@ const routes = [
         if(store.state['auth'].role && store.state['auth'].status == 'on') {
           to.meta.layout = await store.state['auth'].role
           to.meta.data = localStorage.getItem('login')
-          // console.log(localStorage.getItem('jwt-token'))
-          await store.dispatch('student/getUserData',localStorage.getItem('jwt-token'))
-
+          await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
           next()
         } else if (store.state['auth'].role && store.state['auth'].status == 'null') {
           next('/active?token='+store.state['auth'].token)

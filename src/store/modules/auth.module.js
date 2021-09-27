@@ -1,4 +1,3 @@
-// import axios from 'axios'
 import axios from '../../axios/request'
 const TOKEN_KEY = 'jwt-token'
 const ROLE = 'role'
@@ -7,6 +6,7 @@ const CODE = 'code'
 const MESSAGE = 'message'
 const RECOVERY = 'recovery'
 const LOGIN = 'login'
+const USERID = 'userId'
 
 export default {
     //для экспорта модуля  в  глобальный store, например: store.dispatch('auth/login')
@@ -23,7 +23,9 @@ export default {
         code: localStorage.getItem(CODE),
         message: null,
         recovery: localStorage.getItem(RECOVERY),
-        login: localStorage.getItem(LOGIN)
+        login: localStorage.getItem(LOGIN),
+        userId: localStorage.getItem(USERID)
+
     },
 
     mutations: {
@@ -55,6 +57,10 @@ export default {
             state.login = login
             localStorage.setItem(LOGIN, login)
         },
+        setUserId(state, userId) {
+            state.userId = userId
+            localStorage.setItem(USERID, userId)
+        },
         logout(state){
             state.token = null
             state.role = null
@@ -65,6 +71,7 @@ export default {
             localStorage.removeItem(STATUS)
             localStorage.removeItem(MESSAGE)
             localStorage.removeItem(CODE)
+            localStorage.removeItem(USERID)
         },
         setSchools(state, list) {
             state.schoolsList = list
@@ -92,11 +99,11 @@ export default {
         //авторизация
         async login({ commit, dispatch}, user) {
             try{
-
                 const {data} =  await axios.post('/api/auth/signin',user)
                     commit('setToken', data.values.token)
                     commit('setRole', data.values.role)
                     commit('setStatus', data.values.status)
+                    commit('setUserId', data.values.userId)
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
