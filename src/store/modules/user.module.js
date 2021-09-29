@@ -13,7 +13,7 @@ export default {
         userId: localStorage.getItem(USERID),
         role: null,
         userData: [],
-        userLink: []
+        userLink: [],
 
     },
 
@@ -47,6 +47,7 @@ export default {
                 commit('setUserData', data.values[0])
                 commit('setUserLink', data.values[1])
 
+
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
@@ -56,6 +57,23 @@ export default {
                 console.log("not module user")
             }
         },
+        async getFromTutorTbls ({commit, state}, token) {
+            try {
+                const {data} = await axios.post('/api/user/getFromTutorTbls',{token} )
+                // console.log(data.values[0].name)
+                // commit('setUserData', data.values[0])
+                // commit('setUserLink', data.values[1])
+
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+                console.log("not module user")
+            }
+        }
     },
 
     getters: {

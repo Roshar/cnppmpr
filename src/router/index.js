@@ -5,6 +5,8 @@ import Auth from '../views/Auth'
 import Active from '../views/Active'
 import Register from "../views/Register";
 import List from '../views/List'
+import Iom from '../views/tutor/iom'
+import NotFound from '../views/NotFound'
 
 
 console.log(store.state['auth'].role)
@@ -13,11 +15,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    lay: "Student",
-
     beforeEnter: async (to, from, next) => {
-
-      // console.log(store.state['auth'].role)
       try{
          await store.dispatch('auth/confirmRole')
         if(store.state['auth'].role && store.state['auth'].status == 'on') {
@@ -66,6 +64,36 @@ const routes = [
   },
 
   {
+    path: '/iom',
+    name: 'iom',
+    component: Iom,
+    beforeEnter: async (to, from, next) => {
+      try{
+        await store.dispatch('auth/confirmRole')
+        if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role !== "student" ) {
+          console.log(store.state['auth'].role)
+          to.meta.layout = await store.state['auth'].role
+          to.meta.data = localStorage.getItem('login')
+          await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
+          next()
+        } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
+          console.log('404')
+          next('/404')
+        } else {
+          next('/auth?message=auth')
+        }
+      } catch(e){
+        console.log('Ошибка подтверждения')
+      }
+    },
+    meta:{
+      layout:'auth',
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
     path: '/help',
     name: 'Help',
     component: ()=> import('../views/Help.vue'),
@@ -102,6 +130,16 @@ const routes = [
       auth:false
     }
   },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: NotFound,
+    meta:{
+      auth:false,
+      layout: 'NotFound'
+    }
+  },
+
   {
     path: '/regtutor',
     name: 'Regtutor',
