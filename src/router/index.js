@@ -5,6 +5,7 @@ import Auth from '../views/Auth'
 import Active from '../views/Active'
 import Register from "../views/Register";
 import List from '../views/List'
+import Chat from '../views/Chat'
 
 
 console.log(store.state['auth'].role)
@@ -119,6 +120,15 @@ const routes = [
     meta:{
       layout:'auth',
       auth:false
+    }
+  },
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: Chat,
+    meta: {
+      layout: /* (() => store.state['auth'].role == 'student' ? 'Student' : 'Tutor')() */ 'Student',
+      auth: true
     }
   }
   
