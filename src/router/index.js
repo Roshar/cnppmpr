@@ -5,7 +5,9 @@ import Auth from '../views/Auth'
 import Active from '../views/Active'
 import Register from "../views/Register";
 import List from '../views/List'
-import Iom from '../views/Iom'
+// import Iom from '../views/Iom'
+import Iom from '../views/tutor/iom/index'
+import IomCreate from '../views/tutor/iom/create'
 import NotFound from '../views/NotFound'
 
 
@@ -97,8 +99,8 @@ const routes = [
 
   {
     path: '/iom/create',
-    name: 'createIom',
-    component: Iom,
+    name: '/iom/create',
+    component: IomCreate,
     beforeEnter: async (to, from, next) => {
       try{
         await store.dispatch('auth/confirmRole')
@@ -109,9 +111,7 @@ const routes = [
             admin: "AdminContext"
           }
           to.meta.layout = LayoutName[role]
-          await store.dispatch('iom/getData',localStorage.getItem('jwt-token'))
-        //   to.meta.layout = "TutorContext"
-          to.meta.postfix = "Create"
+          console.log(role)
           next()
         } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
           console.log('404')
@@ -126,7 +126,6 @@ const routes = [
     meta:{
       auth: true,
       role: store.state['auth'].role,
-
     },
   },
 

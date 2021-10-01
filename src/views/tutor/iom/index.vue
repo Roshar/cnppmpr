@@ -1,5 +1,5 @@
 <template>
-
+<!--    <router-view :key="route.fullPath" />-->
     <div class="col-9">
         <h4>Ваша библиотека индивидуальных образовательных маршрутов</h4>
         <div class="row">
@@ -31,22 +31,23 @@
 <script>
     import {useStore} from "vuex";
     import {useRouter} from "vue-router";
+    import {useRoute} from 'vue-router'
     import{ref} from "vue"
-    import store from "../../../store";
 
     export default {
 
         setup() {
             const store = useStore()
             const router = useRouter()
+            const route = useRoute()
             const iomData = ref('sd')
             const token = localStorage.getItem('jwt-token')
             const getD = async() => {
                 await store.dispatch('iom/getData',localStorage.getItem('jwt-token'))
             }
-
             return{
                 iomData,
+                route
             }
         },
     }

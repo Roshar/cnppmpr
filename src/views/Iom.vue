@@ -17,9 +17,13 @@
             const router = useRouter()
             const route = useRoute()
             const postfix = route.meta.postfix || ''
-            const role = computed(() => store.state['auth'].role + postfix)
+            // const role = computed(() => store.state['auth'].role + postfix)
+            const role = computed(() => postfix)
+            console.log(role.value)
             return {
-                role
+                role,
+                router,
+                route
             }
         },
         components: {admin, tutor, tutorCreate}
