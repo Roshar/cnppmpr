@@ -6,7 +6,7 @@ export default {
     state: {
         dialogs: JSON.parse(localStorage.getItem('dialogs')) ?? [],
         messages: JSON.parse(localStorage.getItem('messages')) ?? [],
-        contacts: []
+        students: []
     },
 
     getters: {
@@ -18,12 +18,20 @@ export default {
             return id => state.dialogs.find(dialog => dialog.tutor_id == id)
         },
 
+        getDialogByStudentId(state){
+            return id => state.dialogs.find(dialog => dialog.student_id == id)
+        },
+
         getMessagesByDialogId(state){
             return id => state.messages.filter((message) => message.dialog_id == id)
         },
 
-        getContacts(state){
-            console.log(state.users)
+        getContactsOfStudents(state){
+            return state.students
+        },
+
+        getStudentById(_, getters){
+            return id => getters['getContactsOfStudents'].find(student => student.user_id == id)
         }
     },
 
@@ -44,18 +52,17 @@ export default {
             state.dialogs = JSON.parse(localStorage.getItem('dialogs'))
         },
 
-        setContacts(state, payload){
-            console.log(state.users)
-            /* state.users.push(payload) */
+        setContactsOfStudents(state, payload){
+            state.students = payload.students
         }
     },
 
     actions: {
-        /* async setContacts({commit, dispatch}) {
+        async setContactsOfStudents({commit, dispatch}) {
             try {
-                const {data} = await axios.post('/api/user/getAllUsers')
+                const {data} = await axios.post('/api/messenger/getStudents', {tutor_id: localStorage['userId']})
                 console.log(data)
-                commit('setUsers', data.values[0])
+                commit('setContactsOfStudents', {students: data.values})
 
             } catch(e){
                 dispatch('setSystemMessage', {
@@ -65,7 +72,7 @@ export default {
                 throw new Error()
                 console.log("not module messenger")
             }
-        } */
+        }
     },
 
 }

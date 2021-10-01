@@ -21,7 +21,7 @@
 
                             <div class="input-form">
                                 <textarea v-model="message" class="messenger-input" placeholder="Введите сообщение"></textarea>
-                                <button @click="sentMessage">Отправить</button>
+                                <button @click="sentMessage" :disabled="!message.length">Отправить</button>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
 
 <script>
 
-    import {ref, computed, onMounted, onUpdated} from 'vue';
+    import {ref, computed, onMounted} from 'vue';
     import {useStore} from 'vuex';
     import { v4 as uuidv4 } from 'uuid';
 
@@ -50,7 +50,6 @@
                 )
             );
 
-            
             const tutor = computed(() => (store.state['user'].userLink 
                     ? `${store.state['user'].userLink['surname']} ${store.state['user'].userLink['name']} ${store.state['user'].userLink['patronymic']}`
                     : ref('') 
@@ -58,7 +57,6 @@
             );
 
             function sentMessage() {
-                console.log(dialog)
                 if (!dialog.value) {
                     store.commit('messenger/createDialog', {
                         id: uuidv4(), 
@@ -68,7 +66,6 @@
                         updated_at: new Date()
                     });
                 }
-                console.log(dialog)
 
                 store.commit('messenger/addMessage', {
                     dialog_id: dialog.value.id,
@@ -80,9 +77,9 @@
                 message.value = ''
             }
 
-            /* onUpdated(() => {
-                console.log(messages.value)
-            }) */
+            onMounted(() => {
+                console.log(tutor)
+            })
 
             return {
                 dialog,
@@ -110,8 +107,6 @@
 
     li{
         margin-bottom: 13px;
-        /* display: flex;
-        justify-content: space-between; */
         width: 300px;
         margin-right: auto;
         padding: .7em 1em;
@@ -131,9 +126,6 @@
         background-color: rgb(34 57 195 / 26%);
     }
 
-   /*  .chat{
-    } */
-    
     .chat h3{
         border-bottom: 2px solid #AAA;
     }

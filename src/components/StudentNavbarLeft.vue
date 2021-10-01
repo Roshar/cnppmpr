@@ -8,7 +8,7 @@
                 <router-link to="/">Моя страница</router-link>
             </li>
             <li class="list-group-item list-group-item-action">
-                <router-link to="/Chat">Сообщения</router-link>
+                <router-link to="/chat">Сообщения</router-link>
             </li>
             <li class="list-group-item list-group-item-action">
                 <router-link to="/">Выход</router-link>

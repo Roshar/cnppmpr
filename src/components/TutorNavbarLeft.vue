@@ -12,7 +12,7 @@
                 <router-link to="/">Индивидуальные образовательные маршруты</router-link>
             </li>
             <li class="list-group-item list-group-item-action">
-                <router-link to="/">Сообщения</router-link>
+                <router-link to="/chattutor">Сообщения</router-link>
             </li>
             <li class="list-group-item list-group-item-action">
                 <router-link to="/">Выход</router-link>
