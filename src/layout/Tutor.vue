@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row">
             <div class="col-3">
-                <tutor-navbar-left/>
+                <tutor-navbar-left-main/>
             </div>
             <router-view/>
         </div>
@@ -17,10 +17,10 @@
 </template>
 
 <script>
-    import TutorNavbarLeft from '../components/TutorNavbarLeft.vue'
+    import TutorNavbarLeftMain from '../components/TutorNavbarLeftMain.vue'
     import TutorNavbarTop from '../components/TutorNavbarTop.vue'
     export default {
-        components: {TutorNavbarLeft,TutorNavbarTop}
+        components: {TutorNavbarLeftMain,TutorNavbarTop}
     }
 </script>
 

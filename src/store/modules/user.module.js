@@ -47,7 +47,6 @@ export default {
                 commit('setUserData', data.values[0])
                 commit('setUserLink', data.values[1])
 
-
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,

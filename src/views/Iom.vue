@@ -5,22 +5,24 @@
 <script>
     import {computed} from 'vue'
     import {useRoute} from 'vue-router'
+    import { useRouter } from 'vue-router';
     import {useStore} from 'vuex'
-    import admin from '../views/admin/iom'
-    import tutor from '../views/tutor/iom'
+    import admin from '../views/admin/index'
+    import tutor from './tutor/iom/index'
+    import tutorCreate from './tutor/iom/create'
 
     export default {
         setup() {
             const store = useStore()
-            const router = useRoute()
-            const role = computed(() => store.state['auth'].role)
-            const tpl = computed(() => `/`)
-            console.log('Роль '+ role.value)
+            const router = useRouter()
+            const route = useRoute()
+            const postfix = route.meta.postfix || ''
+            const role = computed(() => store.state['auth'].role + postfix)
             return {
                 role
             }
         },
-        components: {admin, tutor}
+        components: {admin, tutor, tutorCreate}
     }
 </script>
 

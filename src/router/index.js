@@ -5,7 +5,7 @@ import Auth from '../views/Auth'
 import Active from '../views/Active'
 import Register from "../views/Register";
 import List from '../views/List'
-import Iom from '../views/tutor/iom'
+import Iom from '../views/Iom'
 import NotFound from '../views/NotFound'
 
 
@@ -71,10 +71,13 @@ const routes = [
       try{
         await store.dispatch('auth/confirmRole')
         if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role !== "student" ) {
-          console.log(store.state['auth'].role)
-          to.meta.layout = await store.state['auth'].role
-          to.meta.data = localStorage.getItem('login')
-          await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
+          const role = await store.state['auth'].role
+          const LayoutName = {
+                tutor: "TutorContext",
+                admin: "AdminContext"
+              }
+          to.meta.layout = LayoutName[role]
+          await store.dispatch('iom/getData', localStorage.getItem('jwt-token'))
           next()
         } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
           console.log('404')
@@ -87,9 +90,43 @@ const routes = [
       }
     },
     meta:{
-      layout:'auth',
       auth: true,
       role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/iom/create',
+    name: 'createIom',
+    component: Iom,
+    beforeEnter: async (to, from, next) => {
+      try{
+        await store.dispatch('auth/confirmRole')
+        if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role !== "student" ) {
+          const role = await store.state['auth'].role
+          const LayoutName = {
+            tutor: "TutorContext",
+            admin: "AdminContext"
+          }
+          to.meta.layout = LayoutName[role]
+          await store.dispatch('iom/getData',localStorage.getItem('jwt-token'))
+        //   to.meta.layout = "TutorContext"
+          to.meta.postfix = "Create"
+          next()
+        } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
+          console.log('404')
+          next('/404')
+        } else {
+          next('/auth?message=auth')
+        }
+      } catch(e){
+        console.log('Ошибка подтверждения')
+      }
+    },
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+
     },
   },
 

@@ -1,7 +1,9 @@
 import { createStore, createLogger } from 'vuex'
 import auth from './modules/auth.module'
 import user from './modules/user.module'
+import iom from './modules/iom.module'
 import tutor from './modules/tutor.module'
+
 
 const plugins = []
 
@@ -41,6 +43,8 @@ export default createStore({
   modules: {
     auth,
     user,
-    tutor
+    iom,
+    tutor,
+
   }
 })

@@ -9,6 +9,8 @@ import Auth from './layout/Auth.vue'
 import Student from "./layout/Student";
 import Tutor from "./layout/Tutor";
 import NotFound from "./layout/NotFound";
+import TutorContext from "./layout/TutorContext";
+import AdminContext from "./layout/AdminContext";
 
 export default {
     setup(){
@@ -17,7 +19,7 @@ export default {
            layout: computed(()=> route.meta.layout)
        }
     },
-    components: {Main,Auth,Student,Tutor,NotFound}
+    components: {Main,Auth,Student,Tutor,NotFound,TutorContext,AdminContext}
 }
 </script>
 <style>

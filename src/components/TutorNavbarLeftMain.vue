@@ -1,6 +1,9 @@
 <template>
     <nav class="navbar">
         <ul class="list-group">
+            <li class="text-center"><img class="avatar avatar-128 img-circle img-thumbnail" src="https://bankwatch.org/wp-content/uploads/2018/03/Portrait_Placeholder.png"/><p></p></li>
+        </ul>
+        <ul class="list-group">
 
             <li class="list-group-item list-group-item-action">
                 <router-link to="/">Моя страница</router-link>
@@ -26,7 +29,7 @@
 </script>
 
 <style  scoped>
-    ul li {
-        list-style-type: none;
-    }
+        ul li {
+            list-style-type: none;
+        }
 </style>
