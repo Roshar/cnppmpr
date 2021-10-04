@@ -1,14 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store'
-import Home from '../views/Home.vue'
 import Auth from '../views/Auth'
+import Home from '../views/Home.vue'
 import Active from '../views/Active'
 import Register from "../views/Register";
-import List from '../views/List'
-// import Iom from '../views/Iom'
 import Iom from '../views/tutor/iom/index'
 import IomCreate from '../views/tutor/iom/create'
+import ExerciseCreate from '../views/tutor/exercise/crud'
 import NotFound from '../views/NotFound'
+import {before} from '../api/checkroleIom'
+
 
 
 console.log(store.state['auth'].role)
@@ -22,7 +23,7 @@ const routes = [
          await store.dispatch('auth/confirmRole')
         if(store.state['auth'].role && store.state['auth'].status == 'on') {
           to.meta.layout = await store.state['auth'].role
-          to.meta.data = localStorage.getItem('login')
+          // to.meta.data = localStorage.getItem('login')
           await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
           next()
         } else if (store.state['auth'].role && store.state['auth'].status == 'null') {
@@ -40,57 +41,12 @@ const routes = [
       role: store.state['auth'].role,
     },
   },
-  {
-    path: '/list',
-    name: 'list',
-    component: List,
-    beforeEnter: async (to, from, next) => {
-      try{
-        const res = await store.dispatch('auth/confirmRole')
-        console.log(res)
-        if(store.state['auth'].role) {
-          next()
-        } else {
-          console.log('нет подтверждения роли')
-          next('/auth?message=auth')
-        }
-      } catch(e){
-        console.log('Ошибка подтверждения')
-      }
-    },
-    meta:{
-      layout:'Main',
-      auth: true,
-      role: store.state['auth'].role,
-    },
-  },
 
   {
     path: '/iom',
     name: 'iom',
     component: Iom,
-    beforeEnter: async (to, from, next) => {
-      try{
-        await store.dispatch('auth/confirmRole')
-        if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role !== "student" ) {
-          const role = await store.state['auth'].role
-          const LayoutName = {
-                tutor: "TutorContext",
-                admin: "AdminContext"
-              }
-          to.meta.layout = LayoutName[role]
-          await store.dispatch('iom/getData', localStorage.getItem('jwt-token'))
-          next()
-        } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
-          console.log('404')
-          next('/404')
-        } else {
-          next('/auth?message=auth')
-        }
-      } catch(e){
-        console.log('Ошибка подтверждения')
-      }
-    },
+    beforeEnter: before(),
     meta:{
       auth: true,
       role: store.state['auth'].role,
@@ -101,28 +57,20 @@ const routes = [
     path: '/iom/create',
     name: '/iom/create',
     component: IomCreate,
-    beforeEnter: async (to, from, next) => {
-      try{
-        await store.dispatch('auth/confirmRole')
-        if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role !== "student" ) {
-          const role = await store.state['auth'].role
-          const LayoutName = {
-            tutor: "TutorContext",
-            admin: "AdminContext"
-          }
-          to.meta.layout = LayoutName[role]
-          console.log(role)
-          next()
-        } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
-          console.log('404')
-          next('/404')
-        } else {
-          next('/auth?message=auth')
-        }
-      } catch(e){
-        console.log('Ошибка подтверждения')
-      }
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
     },
+  },
+
+  {
+    path: '/iom/:id/exercise',
+    name: 'addExercise',
+    component: ExerciseCreate,
+    beforeEnter: before({
+      iomId: true
+    }),
     meta:{
       auth: true,
       role: store.state['auth'].role,
@@ -159,8 +107,7 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: ()=> import('../views/Register.vue'),
-
+    component: () => import('../views/Register.vue'),
     meta:{
       layout:'auth',
       auth:false
@@ -180,7 +127,6 @@ const routes = [
     path: '/regtutor',
     name: 'Regtutor',
     component: ()=> import('../views/Regtutor.vue'),
-
     meta:{
       layout:'auth',
       auth:false

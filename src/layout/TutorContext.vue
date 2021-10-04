@@ -7,6 +7,7 @@
         </div>
     </div>
     <div class="container">
+        <app-message />
         <div class="row">
             <div class="col-3">
                 <tutor-navbar-left/>
@@ -19,8 +20,9 @@
 <script>
     import TutorNavbarLeft from "../components/TutorNavbarLeft";
     import TutorNavbarTop from '../components/TutorNavbarTop'
+    import AppMessage from '../components/ui/AppMessage'
     export default {
-        components: {TutorNavbarLeft,TutorNavbarTop}
+        components: {TutorNavbarLeft,TutorNavbarTop, AppMessage}
     }
 </script>
 

@@ -25,6 +25,7 @@ export default {
     actions:{
         async getFromTutorTbls ({commit, dispatch, state}, token) {
             try {
+                console.log('token')
                 const {data} = await axios.post('/api/user/getFromTutorTbls',{token} )
                 commit('setStatistics', data.values[0])
             } catch(e){

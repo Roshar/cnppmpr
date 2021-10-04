@@ -7,6 +7,7 @@
         </div>
     </div>
     <div class="container">
+        <app-message />
         <div class="row">
             <div class="col-3">
                 <tutor-navbar-left-main/>
@@ -19,8 +20,9 @@
 <script>
     import TutorNavbarLeftMain from '../components/TutorNavbarLeftMain.vue'
     import TutorNavbarTop from '../components/TutorNavbarTop.vue'
+    import AppMessage from '../components/ui/AppMessage'
     export default {
-        components: {TutorNavbarLeftMain,TutorNavbarTop}
+        components: {TutorNavbarLeftMain,TutorNavbarTop,AppMessage}
     }
 </script>
 

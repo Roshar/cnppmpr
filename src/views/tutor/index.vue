@@ -86,7 +86,7 @@
                     <div class="card text-white bg-secondary mb-3 between-s" style="max-width: 18rem;">
 
                         <div class="card-body">
-                            <h5 class="card-title">МЕНЕДЖЕР СЛУШАТЕЛЕЙ</h5>
+                            <h5 class="card-title">МЕНЕДЖЕР СЛУШАТЕЛЕЙ1</h5>
 
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                 <div class="card-flex-container">
                     <div class="card text-white bg-success mb-3 between-s" style="max-width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title">БИБЛИОТЕКА ЗАДАНИЙ</h5>
+                            <h5 class="card-title">БИБЛИОТЕКА ЗАДАНИЙ1</h5>
                         </div>
                     </div>
                     <div class="card text-white bg-danger mb-3 between-s" style="max-width: 18rem;">
@@ -123,13 +123,11 @@
             const phone = store.state['user'].userData.phone;
             const discipline = store.state['user'].userData['title_discipline'];
             let students = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
-            let token = store.state['user'].token
+            let token = store.state['auth'].token
             let statData;
             let countIom = ref()
             let studentIom = ref()
             let finishedIom = ref()
-
-
             const iomCount = async() => {
                 await store.dispatch('tutor/getFromTutorTbls',token)
                 statData = await store.state['tutor']
