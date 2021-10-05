@@ -13,14 +13,14 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="iomData">
             <div class="col-sm-6">
-                <div class="card">
+                <div class="card" v-for="item in iomData">
                     <div class="card-body">
                         <span style="color: #5d5d5d; font-size: .8em">Дата создания:</span>
-                        <h5 class="card-title">Наименование ИОМ</h5>
+                        <h5 class="card-title">{{item.title}}</h5>
                         <p style="color: #5d5d5d; font-size: .9em">Количество заданий: 0</p>
-                        <a href="#" class="btn btn-primary" style="width: 100%">Просмотр</a>
+                        <router-link :to="{ path: `/iom/${item['iom_id']}/exercise`}" class="btn btn-primary" style="width: 100%" >Просмотр</router-link>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,8 @@
     import {useStore} from "vuex";
     import {useRouter} from "vue-router";
     import {useRoute} from 'vue-router'
-    import{ref} from "vue"
+    import{ref,computed} from "vue"
+
 
     export default {
 
@@ -40,13 +41,13 @@
             const store = useStore()
             const router = useRouter()
             const route = useRoute()
-            const iomData = ref('sd')
             const token = localStorage.getItem('jwt-token')
             const getD = async() => {
                 await store.dispatch('iom/getData',localStorage.getItem('jwt-token'))
             }
+            getD()
             return{
-                iomData,
+                iomData: computed(() => store.state['iom'].iomData),
                 route
             }
         },

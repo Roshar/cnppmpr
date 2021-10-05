@@ -1,90 +1,32 @@
 <template>
     <div class="col-9">
-        <h4>Менеджер индивидуальных образовательных маршрутов: Создать новый маршрут</h4>
+        <h4>Карта индивидуального образовательного маршрута </h4>
+        <button type="button" class="btn btn-info" @click="modal = true">Создать задание</button>
         <div class="exercise-content" >
             <div class="modal-exercise">
-                <form @submit.prevent>
-                    <div class="form-group">
-                        <label for="title">Название задания</label>
-                        <input type="text" class="form-control" v-model="title"  id="title"  placeholder="Введите название задания">
-                        <small id="titleExHelp" class="form-text text-muted">Обязательное поле</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="descriptionEx">Краткое описание:</label>
-                        <textarea class="form-control" id="descriptionEx" v-model="description"  name="description" placeholder="Здесь вы можете добавить краткое описание"></textarea>
-                        <small id="descriptionExHelp" class="form-text text-muted">Необязательное поле</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="link">Ссылка на задание</label>
-                        <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Введите название задания">
-                        <small id="linkExHelp" class="form-text text-muted">Обязательное поле</small>
-                    </div>
-                    <div class="form-group">
-                        <select class="form-control" name="author" v-model="author">
-                            <option>Выбрать автора задания</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select class="form-control" name="tag" v-model="tag">
-                            <option>Выбрать тип задания</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Срок выполнения </label>
-                        <input type="date" id="date" name="term" v-model="term">
-                    </div>
-                    <button type="button" @click="addExercise" class="btn btn-primary">Добавить задание в ИОМ</button>
-                </form>
+                <teleport to="body">
+                    <app-modal v-if="modal" title="Создать задание" @close="modal = false"></app-modal>
+                </teleport>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <h5>Данный индивидуальный образовательный маршрут не содержит в себе ни одного задания</h5>
-                </div>
-            </div>
+        <div class="row">
+            <exercise-tbl :exe="exe"></exercise-tbl>
+        </div>
         </div>
     </div>
 </template>
 
 <script>
-    import {useStore} from "vuex";
-    import {useRouter} from "vue-router";
-    import {useRoute} from 'vue-router'
-    import{ref,computed} from "vue"
-    import store from "../../../store";
-
-
+import {useExerciseForm} from '../../../use/exercise-form'
+import ExerciseTbl from "../../../components/ui/ExerciseTbl";
+import {ref} from 'vue'
+import AppModal from "../../../components/ui/AppModal";
     export default {
-
         setup() {
-            const store = useStore()
-            const router = useRouter()
-            const route = useRoute()
-            let title = ref('')
-            let description = ref('')
-            let link = ref('')
-            let author = ref('')
-            let tag = ref('')
-            let term = ref('')
-            let invalid = ref({
-                titleIomInvalid: '',
-                titleExInvalid: '',
-            })
-
-            //console.log(route.params)
-            // const validIdIom = async() => await store.dispatch('iom/getIomId',)
-
-
-            return{
-                title,
-                description,
-                link,
-                author,
-                tag,
-                term,
-                invalid,
-
-            }
+            const modal = ref(false)
+            document.title = "Менеджер индивидуальных образовательных маршрутов"
+            return {...useExerciseForm(),modal,close: () => modal.value = false}
         },
+        components: {AppModal, ExerciseTbl,AppModal}
     }
 </script>
 
@@ -102,8 +44,8 @@
     .iom-add li.active {
         color: #edeef0;
     }
-    .modal-exercise {
-        display: none;
-    }
+    /*.modal-exercise {*/
+    /*    display: none;*/
+    /*}*/
 
 </style>

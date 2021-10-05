@@ -1,7 +1,7 @@
 <template>
     <div class="col-9">
         <h4>Менеджер индивидуальных образовательных маршрутов: Создать новый маршрут</h4>
-        <form  @submit.prevent>
+        <form  @submit.prevent ref="form">
             <div class="form-group">
                 <label for="titleIom">Наименование</label>
                 <input type="text" :class="['form-control',invalid.titleIomInvalid]" v-model="titleIom" id="titleIom" name="titleIom"  placeholder="Введите название индивидуального образовательного маршрута">
