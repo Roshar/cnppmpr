@@ -91,7 +91,8 @@ export default {
         async getExerciseByIomId ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/iom/getExercise',{token: localStorage.getItem('jwt-token'),payload})
-                console.log(data.values)
+                // console.log('getExerciseByIomId')
+                // console.log(data.values)
                 commit('setExerciseData',data.values)
             } catch(e){
                 dispatch('setSystemMessage', {

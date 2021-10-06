@@ -1,36 +1,134 @@
 <template>
-    <div class="col-9">
-        <h4>Карта индивидуального образовательного маршрута </h4>
-        <button type="button" class="btn btn-info" @click="modal = true">Создать задание</button>
-        <div class="exercise-content" >
-            <div class="modal-exercise">
-                <teleport to="body">
-                    <app-modal v-if="modal" title="Создать задание" @close="modal = false"></app-modal>
-                </teleport>
+
+        <div class="col-9">
+            <h4>Карта индивидуального образовательного маршрута </h4>
+            <button type="button" class="btn btn-info" @click="showModal = true">Создать задание</button>
+            <button type="button" class="btn btn-success" @click="showModal = true">Добавить задание из библиотеки</button>
+            <button type="button" class="btn btn-danger" @click="showModal = true">Удалить ИОМ!</button>
+            <div class="modal-form" v-if="showModal">
+                <form @submit.prevent="onSubmit">
+                    <div class="form-group">
+                        <label for="title">Название задания</label>
+                        <input type="text" :class="['form-control',{invalid:titleError}]" v-model="title"  id="title"  placeholder="Введите название задания">
+                        <small v-if="titleError">{{titleError}}</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Краткое описание:</label>
+                        <textarea :class="['form-control',{invalid:descriptionError}]" id="description" v-model="description"  name="description" placeholder="Здесь вы можете добавить краткое описание"></textarea>
+                        <small v-if="descriptionError">{{descriptionError}}</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="link">Ссылка на задание</label>
+                        <input type="text" :class="['form-control',{invalid:linkError}]" v-model="link" id="link" name="link" placeholder="Введите название задания">
+                        <small v-if="linkError">{{linkError}}</small>
+                    </div>
+                    <div class="form-group">
+                        <select :class="['form-control',{invalid:authorError}]" name="author" v-model="author">
+                            <option value="1">Вы</option>
+                            <option value="2">Наставник</option>
+                        </select>
+                        <small v-if="authorError">{{authorError}}</small>
+                    </div>
+                    <div class="form-group">
+                        <select :class="['form-control',{invalid:tagError}]"  name="tag" v-model="tag">
+                            <option value="1">Bur</option>
+                            <small v-if="tagError">{{authorError}}</small>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="term">Срок выполнения </label>
+                        <input type="date" id="term" name="term" v-model="term">
+                        <small v-if="termError">{{termError}}</small>
+                    </div>
+                    <button type="submit"  class="btn btn-primary"  :disabled="isSubmiting">Добавить задание в ИОМ</button>
+                    <button type="button"  class="btn btn-info" @click="showModal=false">Отменить</button>
+                </form>
             </div>
-        <div class="row">
-            <exercise-tbl :exe="exe"></exercise-tbl>
+            <app-loader v-if="loading"></app-loader>
+            <div class="exercise-content" v-else >
+                <div class="row">
+                    <exercise-tbl :exeData="exeData"></exercise-tbl>
+                </div>
+            </div>
         </div>
+    <transition  name="fade"  appear>
+        <div class="modal-overlay" v-if="showModal" @click="showModal=false">
         </div>
-    </div>
+    </transition>
+
 </template>
 
 <script>
-import {useExerciseForm} from '../../../use/exercise-form'
-import ExerciseTbl from "../../../components/ui/ExerciseTbl";
-import {ref} from 'vue'
-import AppModal from "../../../components/ui/AppModal";
+    import {ref,onMounted} from 'vue'
+    import ExerciseTbl from "../../../components/request/RequestExerciseTbl";
+    import AppLoader from "../../../components/ui/AppLoader";
+    import {useExerciseForm} from "../../../use/exercise-form";
+    import {useStore} from 'vuex'
+    import {useRouter} from "vue-router";
+    import {useRoute} from 'vue-router'
     export default {
         setup() {
-            const modal = ref(false)
+            const store = useStore()
+            const route = useRoute()
+            const router = useRouter()
+            const loading = ref(true)
+            const tblA = ref([])
+            const exeData = ref([])
+            const validIdIom = async() => {
+                await store.dispatch('iom/getIomId',route.params)
+                await tblA.value.push(store.state['iom'].tblNames)
+            }
+            validIdIom()
+
+            const dataExercises = async() => {
+                await store.dispatch('iom/getExerciseByIomId',route.params)
+                exeData.value = store.state['iom'].exerciseData
+            }
+
+            onMounted(async()=>{
+                loading.value = true
+                await dataExercises()
+                loading.value = false
+
+            })
+            const submit = async (values) => {
+                values['iom'] = route.params
+                await store.dispatch('iom/addExercise',{tbl:tblA.value[0][0].subTypeTableIom,values})
+                dataExercises()
+                showModal.value = false
+                await router.push(`/iom/${route.params.id}/exercise`)
+            }
+            const showModal = ref(false)
             document.title = "Менеджер индивидуальных образовательных маршрутов"
-            return {...useExerciseForm(),modal,close: () => modal.value = false}
+            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false,exeData, loading}
         },
-        components: {AppModal, ExerciseTbl,AppModal}
+        components: {ExerciseTbl,AppLoader}
     }
 </script>
 
 <style scoped>
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 98;
+        background-color: rgba(0,0,0, 0.5);
+    }
+
+    .modal-form{
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        width: 60%;
+        /*max-width:400px;*/
+        background-color: #edeef0;
+        padding: 60px 60px;
+
+    }
     ul.iom-add {
         list-style-type: none;
     }
@@ -44,8 +142,5 @@ import AppModal from "../../../components/ui/AppModal";
     .iom-add li.active {
         color: #edeef0;
     }
-    /*.modal-exercise {*/
-    /*    display: none;*/
-    /*}*/
 
 </style>

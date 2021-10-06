@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12" v-if="!exe">
+    <div class="col-12" v-if="!exeData.length">
         <h5 >Данный индивидуальный образовательный маршрут не содержит в себе ни одного задания</h5>
     </div>
     <div class="col-12" v-else>
@@ -14,11 +14,12 @@
                 <th scope="col">Автор</th>
                 <th scope="col">Срок</th>
                 <th scope="col">Тип</th>
+                <th scope="col">Действие</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in exe" >
-                <th scope="row">1</th>
+            <tr v-for="(item, index) in exeData"  :key="item['id_exercise']">
+                <th scope="row">{{index + 1}}</th>
                 <td>{{item.title}}</td>
                 <td>{{item.description}}</td>
                 <td><a href="{{item.link}}">{{item.link}}</a></td>
@@ -28,12 +29,12 @@
             </tr>
             </tbody>
         </table>
+        <slot/>
     </div>
 </template>
-
 <script>
     export default {
-        props: ['exe']
+        props: ['exeData'],
     }
 </script>
 
