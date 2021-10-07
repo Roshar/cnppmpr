@@ -1,5 +1,5 @@
 import store from '../store'
-export function before (params = null) {
+export function before () {
 const func = async (to, from, next) => {
         try{
             await store.dispatch('auth/confirmRole')
@@ -10,13 +10,6 @@ const func = async (to, from, next) => {
                     admin: "AdminContext"
                 }
                 to.meta.layout = LayoutName[role]
-                // if(params) {
-                //     const checkData = await store.dispatch('iom/getIomId',to.params)
-                //     if(!checkData.length){
-                //         console.log(checkData)
-                //         next('/404')
-                //     }
-                // }
                 next()
             } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
                 console.log('404')

@@ -6,7 +6,7 @@
             <button type="button" class="btn btn-success" @click="showModal = true">Добавить задание из библиотеки</button>
             <button type="button" class="btn btn-danger" @click="showModal = true">Удалить ИОМ!</button>
             <div class="modal-form" v-if="showModal">
-                <form @submit.prevent="onSubmit">
+                <form @submit.prevent="onSubmit" id="form">
                     <div class="form-group">
                         <label for="title">Название задания</label>
                         <input type="text" :class="['form-control',{invalid:titleError}]" v-model="title"  id="title"  placeholder="Введите название задания">
@@ -44,8 +44,9 @@
                     <button type="button"  class="btn btn-info" @click="showModal=false">Отменить</button>
                 </form>
             </div>
+            <request-filter v-model="filter" ></request-filter>
             <app-loader v-if="loading"></app-loader>
-            <div class="exercise-content" v-else >
+            <div class="exercise-content" v-else>
                 <div class="row">
                     <exercise-tbl :exeData="exeData"></exercise-tbl>
                 </div>
@@ -59,9 +60,10 @@
 </template>
 
 <script>
-    import {ref,onMounted} from 'vue'
+    import {ref,computed,onMounted,watch} from 'vue'
     import ExerciseTbl from "../../../components/request/RequestExerciseTbl";
     import AppLoader from "../../../components/ui/AppLoader";
+    import RequestFilter from "../../../components/request/RequestFilter";
     import {useExerciseForm} from "../../../use/exercise-form";
     import {useStore} from 'vuex'
     import {useRouter} from "vue-router";
@@ -73,36 +75,41 @@
             const router = useRouter()
             const loading = ref(true)
             const tblA = ref([])
-            const exeData = ref([])
+            const showModal = ref(false)
+            const filter = ref({})
+
+
+            //Проверка существует ли текущий ИОМ
             const validIdIom = async() => {
                 await store.dispatch('iom/getIomId',route.params)
                 await tblA.value.push(store.state['iom'].tblNames)
             }
             validIdIom()
 
-            const dataExercises = async() => {
-                await store.dispatch('iom/getExerciseByIomId',route.params)
-                exeData.value = store.state['iom'].exerciseData
-            }
 
             onMounted(async()=>{
                 loading.value = true
-                await dataExercises()
+                await store.dispatch('iom/getExerciseByIomId',route.params)
                 loading.value = false
-
             })
-            const submit = async (values) => {
+
+            const exeData = computed(() => store.getters['iom/getExerciseByIomId']
+                .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
+                .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
+
+            // Задания из текущего ИОМа
+
+            const submit = async function (values)  {
                 values['iom'] = route.params
                 await store.dispatch('iom/addExercise',{tbl:tblA.value[0][0].subTypeTableIom,values})
-                dataExercises()
+                await store.dispatch('iom/getExerciseByIomId',route.params)
                 showModal.value = false
                 await router.push(`/iom/${route.params.id}/exercise`)
             }
-            const showModal = ref(false)
             document.title = "Менеджер индивидуальных образовательных маршрутов"
-            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false,exeData, loading}
+            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, filter}
         },
-        components: {ExerciseTbl,AppLoader}
+        components: {ExerciseTbl,AppLoader,RequestFilter}
     }
 </script>
 

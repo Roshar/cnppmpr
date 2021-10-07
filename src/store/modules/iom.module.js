@@ -33,12 +33,16 @@ export default {
         setExerciseData(state, exercise) {
             state.exerciseData = exercise
         },
+        clearExerciseData(state) {
+            state.exerciseData = []
+        },
         setTblNames(state,tblNames) {
             state.tblNames.push(tblNames)
         }
     },
 
     actions:{
+
         async getData ({commit, dispatch, state}, token) {
             try {
                 const {data} = await axios.post('/api/iom/getData',{token} )
@@ -54,13 +58,14 @@ export default {
                 throw new Error()
             }
         },
+
+        // Создание ИОМа
         async addNewIom ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/iom/addNewIom',{
                     token: localStorage.getItem('jwt-token'),
                     payload
                 } )
-
                 let iomId = data.values.iomId
                await router.push({path: `/iom/${iomId}/exercise`})
             } catch(e){
@@ -90,10 +95,11 @@ export default {
 
         async getExerciseByIomId ({commit, dispatch, state}, payload) {
             try {
+                commit('clearExerciseData')
                 const {data} = await axios.post('/api/iom/getExercise',{token: localStorage.getItem('jwt-token'),payload})
-                // console.log('getExerciseByIomId')
-                // console.log(data.values)
-                commit('setExerciseData',data.values)
+                if(data.values.length){
+                    commit('setExerciseData',data.values)
+                }
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
@@ -122,6 +128,9 @@ export default {
     },
 
     getters: {
+        getExerciseByIomId(state) {
+            return state.exerciseData
+        }
 
     }
 }

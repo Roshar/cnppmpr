@@ -68,9 +68,18 @@ const routes = [
     path: '/iom/:id/exercise',
     name: 'addExercise',
     component: ExerciseCreate,
-    beforeEnter: before({
-      iomId: true
-    }),
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/iom/:id/exercise/:task',
+    name: 'openExercise',
+    component: ExerciseCreate,
+    beforeEnter: before(),
     meta:{
       auth: true,
       role: store.state['auth'].role,
