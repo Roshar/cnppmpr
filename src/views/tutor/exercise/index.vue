@@ -1,5 +1,4 @@
 <template>
-
         <div class="col-9">
             <h4>Карта индивидуального образовательного маршрута </h4>
             <button type="button" class="btn btn-info" @click="showModal = true">Создать задание</button>
@@ -23,11 +22,11 @@
                         <small v-if="linkError">{{linkError}}</small>
                     </div>
                     <div class="form-group">
-                        <select :class="['form-control',{invalid:authorError}]" name="author" v-model="author">
-                            <option value="1">Вы</option>
-                            <option value="2">Наставник</option>
+                        <select :class="['form-control',{invalid:mentorError}]" name="author" v-model="mentor">
+                            <option value="0">Вы</option>
+                            <option value="1">Наставник</option>
                         </select>
-                        <small v-if="authorError">{{authorError}}</small>
+                        <small v-if="mentorError">{{authorError}}</small>
                     </div>
                     <div class="form-group">
                         <select :class="['form-control',{invalid:tagError}]"  name="tag" v-model="tag">
@@ -77,8 +76,6 @@
             const tblA = ref([])
             const showModal = ref(false)
             const filter = ref({})
-
-
             //Проверка существует ли текущий ИОМ
             const validIdIom = async() => {
                 await store.dispatch('iom/getIomId',route.params)
@@ -86,23 +83,21 @@
             }
             validIdIom()
 
-
             onMounted(async()=>{
                 loading.value = true
-                await store.dispatch('iom/getExerciseByIomId',route.params)
+                await store.dispatch('iom/getExercisesByIomId',route.params)
                 loading.value = false
             })
 
-            const exeData = computed(() => store.getters['iom/getExerciseByIomId']
+            const exeData = computed(() => store.getters['iom/getExercisesByIomId']
                 .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
                 .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
 
             // Задания из текущего ИОМа
-
             const submit = async function (values)  {
-                values['iom'] = route.params
+                values['iomId'] = route.params.id
                 await store.dispatch('iom/addExercise',{tbl:tblA.value[0][0].subTypeTableIom,values})
-                await store.dispatch('iom/getExerciseByIomId',route.params)
+                await store.dispatch('iom/getExercisesByIomId',route.params)
                 showModal.value = false
                 await router.push(`/iom/${route.params.id}/exercise`)
             }

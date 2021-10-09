@@ -13,7 +13,8 @@ export default {
         exercise: null,
         iomId: null,
         exerciseData: [],
-        tblNames: []
+        tblNames: [],
+        taskData: []
     },
 
     mutations: {
@@ -93,13 +94,26 @@ export default {
             }
         },
 
-        async getExerciseByIomId ({commit, dispatch, state}, payload) {
+        async getExercisesByIomId ({commit, dispatch, state}, payload) {
             try {
                 commit('clearExerciseData')
-                const {data} = await axios.post('/api/iom/getExercise',{token: localStorage.getItem('jwt-token'),payload})
+                const {data} = await axios.post('/api/iom/getExercises',{token: localStorage.getItem('jwt-token'),payload})
                 if(data.values.length){
                     commit('setExerciseData',data.values)
                 }
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getTaskById ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getTask',{token: localStorage.getItem('jwt-token'),payload})
+                return data.values
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
@@ -125,10 +139,27 @@ export default {
                 throw new Error()
             }
         },
+
+        async updateExercise({ commit, dispatch}, payload) {
+            try{
+                const {data} = await axios.post('/api/iom/updateExercise',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
     },
 
     getters: {
-        getExerciseByIomId(state) {
+        getExercisesByIomId(state) {
             return state.exerciseData
         }
 

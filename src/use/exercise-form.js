@@ -6,7 +6,7 @@ export function useExerciseForm(fn){
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
             tag:1,
-            author:1
+            mentor:0
         }
     })
 
@@ -29,7 +29,7 @@ export function useExerciseForm(fn){
             .string()
             .trim()
     )
-    const {value:author, errorMessage: authorError, handleBlur:authorBlur} = useField(
+    const {value:mentor, errorMessage: mentorError, handleBlur:mentorBlur} = useField(
         'author',
         yup
             .string()
@@ -49,6 +49,7 @@ export function useExerciseForm(fn){
         yup
             .string()
             .trim()
+            .required('Обязательное поле')
     )
 
     const onSubmit = handleSubmit(fn)
@@ -57,21 +58,21 @@ export function useExerciseForm(fn){
         title,
         description,
         link,
-        author,
         term,
         tag,
+        mentor,
         titleError,
         descriptionError,
         linkError,
-        authorError,
+        mentorError,
         termError,
         tagError,
         titleBlur,
         descriptionBlur,
         linkBlur,
-        authorBlur,
         termBlur,
         tagBlur,
+        mentorBlur,
         onSubmit,
         isSubmiting,
     }

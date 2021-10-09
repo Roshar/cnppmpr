@@ -6,7 +6,8 @@ import Active from '../views/Active'
 import Register from "../views/Register";
 import Iom from '../views/tutor/iom/index'
 import IomCreate from '../views/tutor/iom/create'
-import ExerciseCreate from '../views/tutor/exercise/crud'
+import ExerciselistAndCreate from '../views/tutor/exercise/index'
+import udTask from '../views/tutor/exercise/udTask'
 import NotFound from '../views/NotFound'
 import {before} from '../api/checkroleIom'
 
@@ -67,7 +68,7 @@ const routes = [
   {
     path: '/iom/:id/exercise',
     name: 'addExercise',
-    component: ExerciseCreate,
+    component: ExerciselistAndCreate,
     beforeEnter: before(),
     meta:{
       auth: true,
@@ -77,8 +78,8 @@ const routes = [
 
   {
     path: '/iom/:id/exercise/:task',
-    name: 'openExercise',
-    component: ExerciseCreate,
+    name: 'updateDeleteOpen',
+    component: udTask,
     beforeEnter: before(),
     meta:{
       auth: true,
