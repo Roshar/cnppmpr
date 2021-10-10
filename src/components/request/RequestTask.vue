@@ -9,7 +9,7 @@
             <span style="font-style: italic;">Наименование: </span><h5 class="card-title">{{taskData.title}}</h5>
             <span style="font-style: italic;">Описание: </span><p class="card-text">{{taskData.description}}</p>
             <br>
-            <span style="font-style: italic;">Автор: </span><p class="card-text">{{taskData.mentor}}</p>
+            <span style="font-style: italic;">Автор:  </span><p class="card-text">{{currentMentor}}</p>
             <span style="font-style: italic;">Ссылка: </span><p class="card-text">{{taskData.link}}</p>
             <span style="font-style: italic;">Категория: </span><p class="card-text">{{taskData['tag_id']}}</p>
             <span style="font-style: italic;">Срок выполнения: </span><p class="card-text">{{taskData.term}}</p>
@@ -20,7 +20,8 @@
 <script>
     export default {
         emits: ['open'],
-        props: ['taskData', 'path']
+        props: ['taskData', 'path', 'currentMentor'],
+
     }
 </script>
 

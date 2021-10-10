@@ -11,7 +11,6 @@
                     <th scope="col">Наименование</th>
                     <th scope="col">Краткое описание</th>
                     <th scope="col">Ссылка на задание</th>
-                    <th scope="col">Автор</th>
                     <th scope="col">Срок</th>
                     <th scope="col">Тип</th>
                     <th scope="col">Действие</th>
@@ -21,11 +20,10 @@
                 <tr v-for="(item, index) in exeData" :key="item['id_exercise']">
                     <th scope="row">{{index + 1}}</th>
                     <td>{{item.title}}</td>
-                    <td>{{item.description}}</td>
+                    <td>{{shortContent(item.description, 100)}}</td>
                     <td>
                         <a href="{{item.link}}">{{item.link }}</a>
                     </td>
-                    <td>{{item.author}}</td>
                     <td>{{item['term']}}</td>
                     <td>{{item['tag_id']}}</td>
                     <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-success">Открыть</router-link></td>
@@ -36,8 +34,15 @@
     </div>
 </template>
 <script>
+    import {shortContent} from "../../utils/shortContent";
+
     export default {
         props: ['exeData'],
+        setup() {
+            return{
+                shortContent
+            }
+        }
     }
 </script>
 

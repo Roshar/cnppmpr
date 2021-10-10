@@ -60,6 +60,20 @@ export default {
             }
         },
 
+        async getMentor ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getMentor',payload )
+                return data.values ? data.values : []
+            } catch(e){
+                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         // Создание ИОМа
         async addNewIom ({commit, dispatch, state}, payload) {
             try {

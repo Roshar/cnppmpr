@@ -16,9 +16,10 @@
                     <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Введите название задания">
                 </div>
                 <div class="form-group">
-                    <select  :class="['form-control',invalid.mentorInvalid]" name="mentor" v-model="mentor">
+                    <label for="mentor">Автор</label>
+                    <select  :class="['form-control',invalid.mentorInvalid]" name="mentor" id="mentor" v-model="mentor">
                         <option value="0">Вы</option>
-                        <option value="1">Наставник</option>
+                        <option v-for="(item, index) in mentorsData"  :key="item.id"  :selected="item.id === mentor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
                     </select>
                     <small v-if="mentorError" class="form-text text-muted">Обязательное поле</small>
                 </div>
@@ -39,7 +40,7 @@
             </form>
         </div>
         <app-loader v-if="loading"></app-loader>
-        <request-task :taskData="taskData" :path="route.params" @click="open" ></request-task>
+        <request-task :taskData="taskData" :currentMentor="currentMentor"  :path="route.params" @click="open" ></request-task>
     </div>
 </template>
 
@@ -64,6 +65,8 @@
             const term = ref()
             const link = ref()
             const mentor = ref()
+            const mentorsData = ref()
+            const currentMentor = ref()
             const id_exercise = ref()
             const taskData = ref({})
             const showModal = ref(false)
@@ -91,6 +94,7 @@
             onMounted(async() => {
                 loading.value = true
                 taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
+                mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
                 title.value = taskData.value.title
                 description.value = taskData.value.description
                 tag_id.value = taskData.value['tag_id']
@@ -99,6 +103,14 @@
                 link.value = taskData.value.link
                 id_exercise.value = taskData.value['id_exercises']
                 loading.value = false
+                mentorsData.value.forEach((person) =>{
+                    if(person.id === taskData.value.mentor){
+                        currentMentor.value = person.firstname
+                    }else{
+                        currentMentor.value = 'Вы'
+                    }
+                })
+
             })
 
             const onSubmit = async() => {
@@ -120,14 +132,13 @@
                                         id_exercise:id_exercise.value,
                                         iomId: route.params.id
                                     }})
-                    taskData.value = await store.dispatch('iom/getTaskById',route.params)
+                    taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
                                 showModal.value = false
                                 await router.push(`/iom/${route.params.id}/exercise/${route.params.task}`)
                 }
 
                 error.value = {}
             }
-
             document.title = "Просмотр задания"
             return{
                 loading,
@@ -141,12 +152,14 @@
                 description,
                 link,
                 mentor,
+                mentorsData,
+                currentMentor,
                 tag_id,
                 error,
                 tagError,
                 titleError,
                 mentorError,
-                open: () => showModal.value = true
+                open: () => showModal.value = true,
             }
 
         },
