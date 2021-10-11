@@ -11,9 +11,6 @@ import udTask from '../views/tutor/exercise/udTask'
 import NotFound from '../views/NotFound'
 import {before} from '../api/checkroleIom'
 
-
-
-console.log(store.state['auth'].role)
 const routes = [
   {
     path: '/',

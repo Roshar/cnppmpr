@@ -103,13 +103,17 @@
                 link.value = taskData.value.link
                 id_exercise.value = taskData.value['id_exercises']
                 loading.value = false
-                mentorsData.value.forEach((person) =>{
-                    if(person.id === taskData.value.mentor){
-                        currentMentor.value = person.firstname
-                    }else{
-                        currentMentor.value = 'Вы'
-                    }
-                })
+                console.log(taskData.value)
+                if(Object.keys(mentorsData.value).length !== 0) {
+                    mentorsData.value.forEach((person) =>{
+                        if(person.id === taskData.value.mentor){
+                            currentMentor.value = person.firstname
+                        }
+                    })
+                }else{
+                    currentMentor.value = 'Вы'
+                }
+
 
             })
 

@@ -24,7 +24,7 @@
                     <div class="form-group">
                         <select :class="['form-control',{invalid:mentorError}]" name="author" v-model="mentor">
                             <option value="0">Вы</option>
-                            <option value="1">Наставник</option>
+                            <option v-for="(item, index) in mentorsData"  :key="item.id"  :selected="item.id === mentor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
                         </select>
                         <small v-if="mentorError">{{authorError}}</small>
                     </div>
@@ -76,6 +76,7 @@
             const tblA = ref([])
             const showModal = ref(false)
             const filter = ref({})
+            const mentorsData = ref()
             //Проверка существует ли текущий ИОМ
             const validIdIom = async() => {
                 await store.dispatch('iom/getIomId',route.params)
@@ -86,6 +87,7 @@
             onMounted(async()=>{
                 loading.value = true
                 await store.dispatch('iom/getExercisesByIomId',route.params)
+                mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
                 loading.value = false
             })
 
@@ -102,7 +104,7 @@
                 await router.push(`/iom/${route.params.id}/exercise`)
             }
             document.title = "Менеджер индивидуальных образовательных маршрутов"
-            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, filter}
+            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, filter, mentorsData}
         },
         components: {ExerciseTbl,AppLoader,RequestFilter}
     }
@@ -129,11 +131,12 @@
         /*max-width:400px;*/
         background-color: #edeef0;
         padding: 60px 60px;
-
     }
+
     ul.iom-add {
         list-style-type: none;
     }
+
     .iom-add li {
         display: inline-block;
         padding: 10px;
@@ -141,6 +144,7 @@
         background-color: gray;
         color: #5d5d5d;
     }
+
     .iom-add li.active {
         color: #edeef0;
     }
