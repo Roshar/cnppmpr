@@ -25,8 +25,7 @@
                 </div>
                 <div class="form-group">
                     <select :class="['form-control',invalid.tagInvalid]"  name="tag" v-model="tag_id">
-                        <option value="1">Bur</option>
-                        <option value="2">Poll</option>
+                        <option v-for="(item, index) in tagsData"  :key="item['id_tag']"  :selected="item['id_tag'] === tag_id ? ' selected ' : '' "  :value="item['id_tag']">{{item['title_tag']}}</option>
                     </select>
                     <small v-if="tagError" class="form-text text-muted">Обязательное поле</small>
                 </div>
@@ -40,8 +39,19 @@
             </form>
         </div>
         <app-loader v-if="loading"></app-loader>
-        <request-task :taskData="taskData" :currentMentor="currentMentor"  :path="route.params" @click="open" ></request-task>
+        <div class="load-content" v-else>
+            <button type="button" @click="refund" class="btn btn-success">Вернуться к списку </button>
+            <button type="button" @click="showModal = true" class="btn btn-warning" >Изменить задание </button>
+            <button type="button" @click="deleteTask" class="btn btn-danger">Удалить это задание </button>
+            <div class="content-task" v-if="!showModal">
+                <request-task :taskData="taskData"  :currentMentor="currentMentor"  :path="route.params" v-else></request-task>
+            </div>
+        </div>
     </div>
+    <transition  name="fade" appear>
+        <div class="modal-overlay" v-if="showModal" @click="showModal=false">
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -51,6 +61,8 @@
     import {useRoute} from 'vue-router'
     import {useRouter} from 'vue-router'
     import {requiredForm} from '../../../utils/requiredForm'
+    import {checkPossibilityDeleteTask} from '../../../api/checkPossibilityDeleteTask'
+
 
     import {ref,computed,onMounted,watch} from 'vue'
     export default {
@@ -66,6 +78,7 @@
             const link = ref()
             const mentor = ref()
             const mentorsData = ref()
+            const tagsData = ref()
             const currentMentor = ref()
             const id_exercise = ref()
             const taskData = ref({})
@@ -95,6 +108,7 @@
                 loading.value = true
                 taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
                 mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
+                tagsData.value = await store.dispatch('iom/getTag')
                 title.value = taskData.value.title
                 description.value = taskData.value.description
                 tag_id.value = taskData.value['tag_id']
@@ -103,7 +117,8 @@
                 link.value = taskData.value.link
                 id_exercise.value = taskData.value['id_exercises']
                 loading.value = false
-                console.log(taskData.value)
+
+                console.log(tagsData.value)
                 if(Object.keys(mentorsData.value).length !== 0) {
                     mentorsData.value.forEach((person) =>{
                         if(person.id === taskData.value.mentor){
@@ -113,14 +128,23 @@
                 }else{
                     currentMentor.value = 'Вы'
                 }
-
-
             })
+
+            const deleteTask = async() => {
+                await checkPossibilityDeleteTask(store,{
+                    param:route.params,
+                    tbl:{
+                        subTypeTableIom:tblA.value[0][0].subTypeTableIom,
+                        report:tblA.value[0][0].report,
+                        student:tblA.value[0][0].student,
+                    }
+                })
+                await router.push(`/iom/${route.params.id}/exercise/`)
+            }
 
             const onSubmit = async() => {
                 requiredForm('input',errorSchemaRequired,error)
                 requiredForm('select',errorSchemaRequired,error)
-
                 tagError.value = error.value?.tag
                 titleError.value = error.value?.title
                 mentorError.value = error.value?.mentor
@@ -140,7 +164,6 @@
                                 showModal.value = false
                                 await router.push(`/iom/${route.params.id}/exercise/${route.params.task}`)
                 }
-
                 error.value = {}
             }
             document.title = "Просмотр задания"
@@ -157,6 +180,7 @@
                 link,
                 mentor,
                 mentorsData,
+                tagsData,
                 currentMentor,
                 tag_id,
                 error,
@@ -164,6 +188,10 @@
                 titleError,
                 mentorError,
                 open: () => showModal.value = true,
+                refund: () => {
+                    router.push(`/iom/${route.params.id}/exercise`)
+                },
+                deleteTask
             }
 
         },
@@ -172,5 +200,40 @@
 </script>
 
 <style scoped>
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 98;
+        background-color: rgba(0,0,0, 0.5);
+    }
+    .modal-form{
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        width: 60%;
+        /*max-width:400px;*/
+        background-color: #edeef0;
+        padding: 60px 60px;
+    }
 
+    ul.iom-add {
+        list-style-type: none;
+    }
+
+    .iom-add li {
+        display: inline-block;
+        padding: 10px;
+        border: 1px solid gray;
+        background-color: gray;
+        color: #5d5d5d;
+    }
+
+    .iom-add li.active {
+        color: #edeef0;
+    }
 </style>

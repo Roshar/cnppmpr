@@ -22,16 +22,18 @@
                         <small v-if="linkError">{{linkError}}</small>
                     </div>
                     <div class="form-group">
+                        <label for="link">Автор</label>
                         <select :class="['form-control',{invalid:mentorError}]" name="author" v-model="mentor">
-                            <option value="0">Вы</option>
-                            <option v-for="(item, index) in mentorsData"  :key="item.id"  :selected="item.id === mentor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
+                            <option value=0>Вы</option>
+                            <option v-if="mentorsData" v-for="(item, index) in mentorsData"  :key="item.id"  :selected="item.id === mentor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
                         </select>
-                        <small v-if="mentorError">{{authorError}}</small>
+                        <small v-if="mentorError">{{mentorError}}</small>
                     </div>
                     <div class="form-group">
+                        <label for="link">Тип задания</label>
                         <select :class="['form-control',{invalid:tagError}]"  name="tag" v-model="tag">
-                            <option value="1">Bur</option>
-                            <small v-if="tagError">{{authorError}}</small>
+                            <option v-for="(item, index) in tagsData"  :key="item['id_tag']"   :value="item['id_tag']">{{item['title_tag']}}</option>
+                            <small v-if="tagError">{{tagError}}</small>
                         </select>
                     </div>
                     <div class="form-group">
@@ -43,7 +45,7 @@
                     <button type="button"  class="btn btn-info" @click="showModal=false">Отменить</button>
                 </form>
             </div>
-            <request-filter v-model="filter" ></request-filter>
+            <request-filter v-model="filter" :tags-data="tagsData" ></request-filter>
             <app-loader v-if="loading"></app-loader>
             <div class="exercise-content" v-else>
                 <div class="row">
@@ -51,7 +53,7 @@
                 </div>
             </div>
         </div>
-    <transition  name="fade"  appear>
+    <transition  name="fade" appear>
         <div class="modal-overlay" v-if="showModal" @click="showModal=false">
         </div>
     </transition>
@@ -77,7 +79,10 @@
             const showModal = ref(false)
             const filter = ref({})
             const mentorsData = ref()
-            //Проверка существует ли текущий ИОМ
+            const tagsData = ref()
+
+            // Проверка текущего ИОМ : TRUE|FALSE
+            // Получить все таблицы тьютора | Array
             const validIdIom = async() => {
                 await store.dispatch('iom/getIomId',route.params)
                 await tblA.value.push(store.state['iom'].tblNames)
@@ -88,9 +93,11 @@
                 loading.value = true
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
+                tagsData.value = await store.dispatch('iom/getTag')
                 loading.value = false
             })
 
+            //Фильтрация: НАЗВАНИЕ|КАТЕГОРИЯ
             const exeData = computed(() => store.getters['iom/getExercisesByIomId']
                 .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
                 .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
@@ -104,7 +111,7 @@
                 await router.push(`/iom/${route.params.id}/exercise`)
             }
             document.title = "Менеджер индивидуальных образовательных маршрутов"
-            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, filter, mentorsData}
+            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, filter, mentorsData, tagsData}
         },
         components: {ExerciseTbl,AppLoader,RequestFilter}
     }

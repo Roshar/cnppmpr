@@ -25,7 +25,7 @@
                         <a href="{{item.link}}">{{item.link }}</a>
                     </td>
                     <td>{{item['term']}}</td>
-                    <td>{{item['tag_id']}}</td>
+                    <td>{{item['title_tag']}}</td>
                     <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-success">Открыть</router-link></td>
                 </tr>
             </tbody>
