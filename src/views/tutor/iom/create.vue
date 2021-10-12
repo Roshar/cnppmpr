@@ -12,23 +12,19 @@
                 <textarea class="form-control" v-model="descriptionIom"  id="descriptionIom" name="descriptionIom" placeholder="Здесь вы можете добавить краткое описание"></textarea>
                 <small id="descriptionIomHelp" class="form-text text-muted">Необязательное поле</small>
             </div>
-            <button type="button" @click="addIom" class="btn btn-primary">Дальше</button>
+            <button type="button" @click="addIom" class="btn btn-primary">Создать и перейти в ИОМ </button>
         </form>
     </div>
 </template>
 
 <script>
     import {useStore} from "vuex";
-    import {useRouter} from "vue-router";
-    import {useRoute} from 'vue-router'
     import{ref} from "vue"
 
     export default {
 
         setup() {
             const store = useStore()
-            const router = useRouter()
-            const route = useRoute()
             let titleIom = ref('')
             let descriptionIom = ref('')
             let invalid = ref({

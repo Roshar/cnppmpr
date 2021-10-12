@@ -80,7 +80,6 @@
                     <h4 class="card-title"> КАТЕГОРИИ </h4>
                     <div class="card-flex-container">
                         <div class="card text-white bg-primary mb-3 between-s" style="max-width: 18rem;">
-
                             <div class="card-body">
                                 <h5 class="card-title"> <router-link to="/iom"> ИНДИВИДУАЛЬНЫЕ ОБРАЗОВАТЕЛЬНЫЕ МАРШРУТЫ </router-link> </h5>
                             </div>
@@ -88,15 +87,14 @@
                         <div class="card text-white bg-secondary mb-3 between-s" style="max-width: 18rem;">
 
                             <div class="card-body">
-                                <h5 class="card-title">МЕНЕДЖЕР СЛУШАТЕЛЕЙ</h5>
-
+                                <h5 class="card-title"><router-link to="/students"> МЕНЕДЖЕР СЛУШАТЕЛЕЙ </router-link></h5>
                             </div>
                         </div>
                     </div>
                     <div class="card-flex-container">
                         <div class="card text-white bg-success mb-3 between-s" style="max-width: 18rem;">
                             <div class="card-body">
-                                <h5 class="card-title">БИБЛИОТЕКА ЗАДАНИЙ</h5>
+                                <h5 class="card-title"><router-link :to="{path:`/library`}">БИБЛИОТЕКА ЗАДАНИЙ</router-link></h5>
                             </div>
                         </div>
                         <div class="card text-white bg-danger mb-3 between-s" style="max-width: 18rem;">
@@ -110,7 +108,6 @@
         </div>
 
     </div>
-
 </template>
 <script>
     import {useStore} from "vuex";
@@ -118,7 +115,6 @@
     import AppLoader from "../../components/ui/AppLoader";
 
     export default {
-
         setup() {
             const store = useStore()
             const name = store.state['user'].userData.name;
@@ -153,7 +149,7 @@
                 countIom,
                 studentIom,
                 finishedIom,
-                loading
+                loading,
             }
         },
         components:{AppLoader}

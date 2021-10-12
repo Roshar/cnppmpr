@@ -61,7 +61,7 @@
     import {useRoute} from 'vue-router'
     import {useRouter} from 'vue-router'
     import {requiredForm} from '../../../utils/requiredForm'
-    import {checkPossibilityDeleteTask} from '../../../api/checkPossibilityDeleteTask'
+    import {checkPossibilityDeleteData} from '../../../api/checkPossibilityDeleteData'
 
 
     import {ref,computed,onMounted,watch} from 'vue'
@@ -108,7 +108,7 @@
                 loading.value = true
                 taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
                 mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
-                tagsData.value = await store.dispatch('iom/getTag')
+                tagsData.value = await store.dispatch('tag/getTag')
                 title.value = taskData.value.title
                 description.value = taskData.value.description
                 tag_id.value = taskData.value['tag_id']
@@ -131,7 +131,7 @@
             })
 
             const deleteTask = async() => {
-                await checkPossibilityDeleteTask(store,{
+                await checkPossibilityDeleteData(store,{
                     param:route.params,
                     tbl:{
                         subTypeTableIom:tblA.value[0][0].subTypeTableIom,

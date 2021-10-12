@@ -8,6 +8,8 @@ import Iom from '../views/tutor/iom/index'
 import IomCreate from '../views/tutor/iom/create'
 import ExerciselistAndCreate from '../views/tutor/exercise/index'
 import udTask from '../views/tutor/exercise/udTask'
+import library from '../views/tutor/library/'
+import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
 import {before} from '../api/checkroleIom'
 
@@ -77,6 +79,28 @@ const routes = [
     path: '/iom/:id/exercise/:task',
     name: 'updateDeleteOpen',
     component: udTask,
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/library',
+    name: 'library',
+    component: library,
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/library/:id',
+    name: 'libraryUpdateDelete',
+    component: libraryUD,
     beforeEnter: before(),
     meta:{
       auth: true,

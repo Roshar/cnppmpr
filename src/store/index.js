@@ -3,6 +3,8 @@ import auth from './modules/auth.module'
 import user from './modules/user.module'
 import iom from './modules/iom.module'
 import tutor from './modules/tutor.module'
+import library from './modules/library.module'
+import tag from './modules/tag.module'
 
 
 const plugins = []
@@ -45,6 +47,7 @@ export default createStore({
     user,
     iom,
     tutor,
-
+    library,
+    tag
   }
 })

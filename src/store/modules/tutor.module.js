@@ -18,7 +18,7 @@ export default {
         },
         setStatistics(state, statistics) {
             state.statistics = statistics
-        }
+        },
 
     },
 

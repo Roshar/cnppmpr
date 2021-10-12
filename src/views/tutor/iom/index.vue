@@ -18,14 +18,16 @@
                 <div class="col-sm-6">
                     <div class="card" v-for="item in iomData">
                         <div class="card-body">
-                            <span style="color: #5d5d5d; font-size: .8em">Дата создания:</span>
+                            <span style="color: #5d5d5d; font-size: .8em">Дата создания: {{item['created_at']}}</span>
                             <h5 class="card-title">{{item.title}}</h5>
-                            <p style="color: #5d5d5d; font-size: .9em">Количество заданий: 0</p>
+                            <p style="color: #5d5d5d; font-size: .9em">Количество заданий: {{item.countExercises}}</p>
                             <router-link :to="{ path: `/iom/${item['iom_id']}/exercise`}" class="btn btn-primary" style="width: 100%" >Просмотр</router-link>
                         </div>
                     </div>
                 </div>
             </div>
+            <h5 v-if="iomData.length == 0">Ваша библиотека пуста</h5>
+
         </div>
     </div>
 </template>
@@ -36,7 +38,6 @@
     import AppLoader from "../../../components/ui/AppLoader";
 
     export default {
-
         setup() {
             const store = useStore()
             const route = useRoute()

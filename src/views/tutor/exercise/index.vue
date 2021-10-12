@@ -3,7 +3,7 @@
             <h4>Карта индивидуального образовательного маршрута </h4>
             <button type="button" class="btn btn-info" @click="showModal = true">Создать задание</button>
             <button type="button" class="btn btn-success" @click="showModal = true">Добавить задание из библиотеки</button>
-            <button type="button" class="btn btn-danger" @click="showModal = true">Удалить ИОМ!</button>
+            <button type="button" class="btn btn-danger" @click="deleteIom" >Удалить ИОМ!</button>
             <div class="modal-form" v-if="showModal">
                 <form @submit.prevent="onSubmit" id="form">
                     <div class="form-group">
@@ -69,6 +69,7 @@
     import {useStore} from 'vuex'
     import {useRouter} from "vue-router";
     import {useRoute} from 'vue-router'
+    import {checkPossibilityDeleteIom} from "../../../api/checkPossibilityDeleteData";
     export default {
         setup() {
             const store = useStore()
@@ -93,7 +94,7 @@
                 loading.value = true
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
-                tagsData.value = await store.dispatch('iom/getTag')
+                tagsData.value = await store.dispatch('tag/getTag')
                 loading.value = false
             })
 
@@ -101,6 +102,21 @@
             const exeData = computed(() => store.getters['iom/getExercisesByIomId']
                 .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
                 .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
+
+           // Удалить текущий ИОМ
+            const deleteIom = async() => {
+                await checkPossibilityDeleteIom(store,{
+                    token: localStorage.getItem('jwt-token'),
+                    param:route.params,
+                    tbl:{
+                        subTypeTableIom:tblA.value[0][0].subTypeTableIom,
+                        report:tblA.value[0][0].report,
+                        student:tblA.value[0][0].student,
+                    },
+                    userId: localStorage.getItem('USERID')
+                })
+                await router.push(`/iom/${route.params.id}/exercise/`)
+            }
 
             // Задания из текущего ИОМа
             const submit = async function (values)  {
@@ -111,7 +127,7 @@
                 await router.push(`/iom/${route.params.id}/exercise`)
             }
             document.title = "Менеджер индивидуальных образовательных маршрутов"
-            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, filter, mentorsData, tagsData}
+            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, deleteIom,filter, mentorsData, tagsData}
         },
         components: {ExerciseTbl,AppLoader,RequestFilter}
     }

@@ -73,19 +73,7 @@ export default {
                 throw new Error()
             }
         },
-        async getTag ({dispatch}) {
-            try {
-                const {data} = await axios.post('/api/iom/getTag')
-                return data.values ? data.values : []
-            } catch(e){
-                console.log(e)
-                dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
-                    type: 'danger'
-                }, {root: true})
-                throw new Error()
-            }
-        },
+
 
         // Создание ИОМа
         async addNewIom ({commit, dispatch, state}, payload) {
@@ -187,6 +175,22 @@ export default {
         async deleteTask({commit, dispatch}, payload) {
             try{
                 const {data} = await axios.post('/api/iom/deleteTask',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+        async deleteIom({commit, dispatch}, payload) {
+            try{
+                const {data} = await axios.post('/api/iom/deleteIom',payload)
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'
