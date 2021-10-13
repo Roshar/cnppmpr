@@ -32,7 +32,7 @@
                 <input type="hidden" name="id_exercises" v-model="id_exercise">
                 <div class="form-group">
                     <label for="term">Срок выполнения </label>
-                    <input type="date" id="term" name="term" >
+                    <input type="date" id="term" name="term"  v-model="term" >
                 </div>
                 <button type="submit"  class="btn btn-primary" >Изменить</button>
                 <button type="button"  class="btn btn-info" @click="showModal=false">Отменить</button>
@@ -107,11 +107,13 @@
             onMounted(async() => {
                 loading.value = true
                 taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
+                taskData.value.term = taskData.value.term.split(".").reverse().join("-")
                 mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
                 tagsData.value = await store.dispatch('tag/getTag')
                 title.value = taskData.value.title
                 description.value = taskData.value.description
                 tag_id.value = taskData.value['tag_id']
+                //term.value = taskData.value.term.split(".").reverse().join("-");
                 term.value = taskData.value.term
                 mentor.value = taskData.value.mentor
                 link.value = taskData.value.link
@@ -161,6 +163,7 @@
                                         iomId: route.params.id
                                     }})
                     taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
+                    taskData.value.term = taskData.value.term.split(".").reverse().join("-")
                                 showModal.value = false
                                 await router.push(`/iom/${route.params.id}/exercise/${route.params.task}`)
                 }
@@ -178,6 +181,7 @@
                 title,
                 description,
                 link,
+                term,
                 mentor,
                 mentorsData,
                 tagsData,

@@ -24,7 +24,7 @@
                     <td>
                         <a href="{{item.link}}">{{item.link }}</a>
                     </td>
-                    <td>{{item['term']}}</td>
+                    <td>{{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</td>
                     <td>{{item['title_tag']}}</td>
                     <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-success">Открыть</router-link></td>
                 </tr>
@@ -35,11 +35,12 @@
 </template>
 <script>
     import {shortContent} from "../../utils/shortContent";
-
+    import {checkTerm} from '../../utils/checkTerm'
     export default {
         props: ['exeData'],
         setup() {
             return{
+                checkTerm,
                 shortContent
             }
         }

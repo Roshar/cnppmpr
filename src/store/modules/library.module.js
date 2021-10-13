@@ -63,7 +63,23 @@ export default {
 
         async updateExercise({ commit, dispatch}, payload) {
             try{
-                const {data} = await axios.post('/api/library/updateExercise',payload)
+                const {data} = await axios.post('/api/library/update',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+        async deleteTask({commit, dispatch}, payload) {
+            try{
+                const {data} = await axios.post('/api/library/deleteTask',payload)
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'

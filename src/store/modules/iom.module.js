@@ -154,6 +154,22 @@ export default {
                 throw new Error()
             }
         },
+        async addExerciseFromLib({ commit, dispatch}, payload) {
+            try{
+                const {data} = await axios.post('/api/iom/addExerciseFromLib',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
 
         async updateExercise({ commit, dispatch}, payload) {
             try{

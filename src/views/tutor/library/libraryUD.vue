@@ -96,8 +96,9 @@ export default {
 
         })
 
-        const deleteTask = () => {
-
+        const deleteTask = async() => {
+            await store.dispatch('library/deleteTask', {token:localStorage.getItem('jwt-token'),id: route.params.id})
+            await router.push('/library')
         }
 
         const onSubmit = async() => {

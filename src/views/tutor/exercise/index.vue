@@ -2,8 +2,13 @@
         <div class="col-9">
             <h4>Карта индивидуального образовательного маршрута </h4>
             <button type="button" class="btn btn-info" @click="showModal = true">Создать задание</button>
-            <button type="button" class="btn btn-success" @click="showModal = true">Добавить задание из библиотеки</button>
+            <button type="button" class="btn btn-success" @click="getLibrary">Добавить задание из библиотеки</button>
             <button type="button" class="btn btn-danger" @click="deleteIom" >Удалить ИОМ!</button>
+            <request-library-data v-model="filterLib" :show-modal-lib="showModalLib"
+                                  :execLib="execLib"
+                                  :title="title"
+                                  :tags-data="tagsData"
+                                  @closeLib="showModalLib = false"></request-library-data>
             <div class="modal-form" v-if="showModal">
                 <form @submit.prevent="onSubmit" id="form">
                     <div class="form-group">
@@ -54,15 +59,17 @@
             </div>
         </div>
     <transition  name="fade" appear>
-        <div class="modal-overlay" v-if="showModal" @click="showModal=false">
+        <div class="modal-overlay" v-if="showModal || showModalLib" @click="showModalOption">
         </div>
     </transition>
+
 
 </template>
 
 <script>
     import {ref,computed,onMounted,watch} from 'vue'
     import ExerciseTbl from "../../../components/request/RequestExerciseTbl";
+    import RequestLibraryData from "../../../components/request/RequestLibraryData";
     import AppLoader from "../../../components/ui/AppLoader";
     import RequestFilter from "../../../components/request/RequestFilter";
     import {useExerciseForm} from "../../../use/exercise-form";
@@ -78,9 +85,13 @@
             const loading = ref(true)
             const tblA = ref([])
             const showModal = ref(false)
+            const showModalLib = ref(false)
             const filter = ref({})
             const mentorsData = ref()
             const tagsData = ref()
+            const filterLib = ref({})
+            const termNot = ref(false)
+
 
             // Проверка текущего ИОМ : TRUE|FALSE
             // Получить все таблицы тьютора | Array
@@ -90,9 +101,22 @@
             }
             validIdIom()
 
+            const showModalOption = () => {
+                showModal.value = false
+                showModalLib.value = false
+            }
+
+
+
+            const getLibrary = async() => {
+                // await store.dispatch('library/getLibraryData',{token: localStorage.getItem('jwt-token')})
+                showModalLib.value = true
+            }
+
             onMounted(async()=>{
                 loading.value = true
                 await store.dispatch('iom/getExercisesByIomId',route.params)
+                await store.dispatch('library/getLibraryData',{token: localStorage.getItem('jwt-token')})
                 mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
                 tagsData.value = await store.dispatch('tag/getTag')
                 loading.value = false
@@ -102,6 +126,11 @@
             const exeData = computed(() => store.getters['iom/getExercisesByIomId']
                 .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
                 .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
+
+            let execLib = computed(() => store.getters['library/getLibraryData']
+                .filter(data => (filterLib.value.title) ? data.title.includes(filterLib.value.title) : data)
+                .filter(data => (filterLib.value.tag) ? filterLib.value.tag == data['tag_id'] : data))
+
 
            // Удалить текущий ИОМ
             const deleteIom = async() => {
@@ -127,14 +156,29 @@
                 await router.push(`/iom/${route.params.id}/exercise`)
             }
             document.title = "Менеджер индивидуальных образовательных маршрутов"
-            return {...useExerciseForm(submit),showModal,close: () => showModal.value = false, exeData, loading, deleteIom,filter, mentorsData, tagsData}
+            return {
+                ...useExerciseForm(submit),
+                showModal,
+                close: () => showModal.value = false,
+                showModalLib,
+                exeData,
+                loading,
+                deleteIom,
+                filter,
+                getLibrary,
+                execLib,
+                filterLib,
+                mentorsData,
+                tagsData,
+                showModalOption,
+            }
         },
-        components: {ExerciseTbl,AppLoader,RequestFilter}
+        components: {ExerciseTbl,AppLoader,RequestFilter,RequestLibraryData}
     }
 </script>
 
 <style scoped>
-    .modal-overlay {
+    .modal-overlay,.modal-overlay2 {
         position: absolute;
         top: 0;
         left: 0;
