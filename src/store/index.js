@@ -5,6 +5,7 @@ import iom from './modules/iom.module'
 import tutor from './modules/tutor.module'
 import library from './modules/library.module'
 import tag from './modules/tag.module'
+import admin from './modules/admin.module'
 
 
 const plugins = []
@@ -48,6 +49,7 @@ export default createStore({
     iom,
     tutor,
     library,
-    tag
+    tag,
+    admin
   }
 })

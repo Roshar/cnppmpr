@@ -2,7 +2,7 @@
     <div class="row register-container">
         <div class="col-md-3 "></div>
         <div class="col-md-6 auth-block">
-            <h2 class="text-center">Регистрация тьютора</h2>
+            <h2 class="text-center">Регистрация администратора</h2>
             <form @submit.prevent="onSubmit">
 
                 <div class="form-group mb-3">
@@ -40,17 +40,17 @@
                         <input type="text" class="form-control" name="patronymic" id="patronymic" v-model="patronymic"  placeholder="Отчество:">
                     </div>
                 </div>
-
                 <div class="form-group mb-3">
                     <div class="form-group">
-                        <label for="discipline"> Выберите ваш предмет:</label>
-                        <select :class="['form-control',{invalid:disError}]" name="area"  v-model="discipline" required   @blur="disBlur" id="discipline">
-                            <option v-for="item of disciplineList" :key="item.id_dis" v-bind:value="item.id_dis">{{item.title_discipline}}</option>
+                        <label for="gender"> Выберите ваш пол</label>
+                        <select :class="['form-control',{invalid:genderError}]" name="gender"  v-model="gender"  required   @blur="genderBlur" id="gender">
+                            <option value="">Выбрать</option>
+                            <option value="men">Муж</option>
+                            <option value="woman">Жен</option>
                         </select>
-                        <small v-if="disError">{{disError}}</small>
+                        <small v-if="genderError">{{genderError}}</small>
                     </div>
                 </div>
-
                 <div class="form-group mb-3">
                     <div class="form-group">
                         <label for="phone" style="color:grey; font-style: italic"> Введите только код и цифры без пробелов, пример: +79281111111</label>
@@ -78,10 +78,10 @@
 </template>
 
 <script>
-    import {useRegisterTutorForm} from "../use/registration-tutor-form";
+    import {useRegisterAdminForm} from "../../use/registration-admin-form";
     export default {
         setup(){
-            return {...useRegisterTutorForm()}
+            return {...useRegisterAdminForm()}
         }
     }
 </script>

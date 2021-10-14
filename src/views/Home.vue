@@ -8,6 +8,7 @@
     import {useStore} from 'vuex'
     import student from '../views/student/index'
     import tutor from '../views/tutor/index'
+    import admin from '../views/admin/index'
 
     export default {
         setup() {
@@ -20,7 +21,7 @@
                 role
             }
         },
-        components: {student, tutor}
+        components: {student, tutor, admin}
     }
 </script>
 

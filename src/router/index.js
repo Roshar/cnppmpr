@@ -3,8 +3,10 @@ import store from '../store'
 import Auth from '../views/Auth'
 import Home from '../views/Home.vue'
 import Active from '../views/Active'
-import Register from "../views/Register";
-import Iom from '../views/tutor/iom/index'
+import AdminConfirm from '../views/AdminConfirm'
+import Register from "../views/authForms/Register";
+import IomTutor from '../views/tutor/iom/index'
+import IomAdmin from '../views/admin/iom/index'
 import IomCreate from '../views/tutor/iom/create'
 import ExerciselistAndCreate from '../views/tutor/exercise/index'
 import udTask from '../views/tutor/exercise/udTask'
@@ -18,13 +20,22 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    // beforeEnter: before(),
     beforeEnter: async (to, from, next) => {
       try{
          await store.dispatch('auth/confirmRole')
-        if(store.state['auth'].role && store.state['auth'].status == 'on') {
+        const roleAuth = store.state['auth'].role
+        if(roleAuth == 'student' || roleAuth == 'tutor'  && store.state['auth'].status == 'on') {
           to.meta.layout = await store.state['auth'].role
-          // to.meta.data = localStorage.getItem('login')
           await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
+          next()
+        } else if (roleAuth == 'admin'  && store.state['auth'].status == 'null') {
+          to.meta.layout = await store.state['auth'].role
+          await store.dispatch('user/getAdminData',localStorage.getItem('jwt-token'))
+          next('/adminconfirm?token='+store.state['auth'].token)
+        }else if (roleAuth == 'admin'  && store.state['auth'].status == 'on') {
+          to.meta.layout = await store.state['auth'].role
+          await store.dispatch('user/getAdminData',localStorage.getItem('jwt-token'))
           next()
         } else if (store.state['auth'].role && store.state['auth'].status == 'null') {
           next('/active?token='+store.state['auth'].token)
@@ -45,7 +56,17 @@ const routes = [
   {
     path: '/iom',
     name: 'iom',
-    component: Iom,
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return IomAdmin
+        case "tutor":
+          return IomTutor
+        case "seller":
+          return 'fdfdf'
+      }
+
+    },
     beforeEnter: before(),
     meta:{
       auth: true,
@@ -135,10 +156,20 @@ const routes = [
       auth:false
     }
   },
+
+  {
+    path: '/adminconfirm',
+    name: 'AdminConfirm',
+    component: AdminConfirm,
+    meta:{
+      layout:'auth',
+      auth:false
+    }
+  },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('../views/Register.vue'),
+    component: () => import('../views/authForms/Register.vue'),
     meta:{
       layout:'auth',
       auth:false
@@ -157,7 +188,17 @@ const routes = [
   {
     path: '/regtutor',
     name: 'Regtutor',
-    component: ()=> import('../views/Regtutor.vue'),
+    component: ()=> import('../views/authForms/Regtutor.vue'),
+    meta:{
+      layout:'auth',
+      auth:false
+    }
+  },
+
+  {
+    path: '/regadmin',
+    name: 'RegAdmin',
+    component: ()=> import('../views/authForms/Regadmin.vue'),
     meta:{
       layout:'auth',
       auth:false

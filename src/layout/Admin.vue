@@ -6,7 +6,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container-fluid">
         <app-message />
         <div class="row">
             <router-view/>
@@ -15,11 +15,10 @@
 </template>
 
 <script>
-    import TutorNavbarLeftMain from '../components/TutorNavbarLeftMain.vue'
     import TutorNavbarTop from '../components/TutorNavbarTop.vue'
     import AppMessage from '../components/ui/AppMessage'
     export default {
-        components: {TutorNavbarLeftMain,TutorNavbarTop,AppMessage}
+        components: {TutorNavbarTop,AppMessage}
     }
 </script>
 

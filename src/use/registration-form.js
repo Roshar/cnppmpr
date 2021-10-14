@@ -5,7 +5,14 @@ import {useStore} from 'vuex'
 import {useRouter} from "vue-router";
 
 export function useRegisterForm() {
-        const {handleSubmit,isSubmiting} = useForm()
+        const {handleSubmit,isSubmiting} = useForm({
+            initialValues: {
+                gender: '',
+                discipline: '',
+                area: '',
+                school: ''
+            }
+        })
         const store = useStore()
         const router = useRouter()
 
@@ -74,7 +81,15 @@ export function useRegisterForm() {
             yup
                 .string()
                 .trim()
-            // .required('Необходимо выбрать поле "город/район"')
+                .required('Необходимо выбрать поле "город/район"')
+        )
+
+        const {value:birthday, errorMessage: birthdayError, handleBlur:birthdayBlur} = useField(
+            'birthday',
+            yup
+                .string()
+                .trim()
+                .required('Необходимо указать дату рождения')
         )
 
         const {value:school, errorMessage: schoolError, handleBlur:schoolBlur} = useField(
@@ -139,6 +154,7 @@ export function useRegisterForm() {
             patronymic,
             gender,
             area,
+            birthday,
             school,
             phone,
             discipline,
@@ -146,6 +162,7 @@ export function useRegisterForm() {
             genderError,
             lError,
             pError,
+            birthdayError,
             fnError,
             cpError,
             snError,
@@ -153,6 +170,7 @@ export function useRegisterForm() {
             schoolError,
             phoneError,
             lBlur,
+            birthdayBlur,
             pBlur,
             cpBlur,
             fnBlur,

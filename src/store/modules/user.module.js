@@ -40,10 +40,27 @@ export default {
     },
 
     actions:{
+        async getAdminData({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/user/getAdminData',{user:payload} )
+                return data.value
+                // console.log(data.value)
+                // commit('setUserData', data.values[0])
+                // commit('setUserLink', data.values[1])
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+                console.log("not module user")
+            }
+        },
         async getUserData({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/getUserData',{user:payload} )
-                // console.log(data.values[0].name)
+                console.log(data.value)
                 commit('setUserData', data.values[0])
                 commit('setUserLink', data.values[1])
 

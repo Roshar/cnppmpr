@@ -5,7 +5,12 @@ import {useStore} from 'vuex'
 import {useRouter} from "vue-router";
 
 export function useRegisterTutorForm() {
-        const {handleSubmit,isSubmiting} = useForm()
+        const {handleSubmit,isSubmiting} = useForm({
+            initialValues: {
+                gender: '',
+                discipline: ''
+            }
+        })
         const store = useStore()
         const router = useRouter()
 
@@ -69,6 +74,14 @@ export function useRegisterTutorForm() {
                 .required('Необходимо выбрать предмет')
         )
 
+        const {value:gender, errorMessage: genderError, handleBlur:genderBlur} = useField(
+            'gender',
+            yup
+                .string()
+                .trim()
+                .required('Необходимо выбрать пол')
+        )
+
 
         const {value:phone, errorMessage: phoneError, handleBlur:phoneBlur} = useField(
             'phone',
@@ -84,10 +97,8 @@ export function useRegisterTutorForm() {
             yup
                 .string()
                 .trim()
-                .required('Необходимо указать ваш контактный номер (мобильный)')
+                .required('Необходимо указать секретный код')
         )
-
-
 
         const getDisciplines = async () => {
             await store.dispatch('auth/disciplines')
@@ -95,7 +106,7 @@ export function useRegisterTutorForm() {
         getDisciplines()
 
         const onSubmit = handleSubmit(async values => {
-            values.role = "student"
+            values.role = "tutor"
             values.patronymic ? values.patronymic : " "
             try{
                 await store.dispatch('auth/registration',values)
@@ -114,6 +125,7 @@ export function useRegisterTutorForm() {
             discipline,
             phone,
             code,
+            gender,
             lError,
             pError,
             fnError,
@@ -121,6 +133,7 @@ export function useRegisterTutorForm() {
             snError,
             disError,
             phoneError,
+            genderError,
             codeError,
             lBlur,
             pBlur,
@@ -128,6 +141,7 @@ export function useRegisterTutorForm() {
             fnBlur,
             snBlur,
             disBlur,
+            genderBlur,
             codeBlur,
             onSubmit,
             isSubmiting,

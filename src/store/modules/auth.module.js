@@ -174,9 +174,9 @@ export default {
 
         async confirmRole({commit, dispatch, state}, payload) {
             try {
+                // console.log(state.role)
                 const user = {'token':state.token}
                 const {data} =  await axios.post('/api/get/role', user)
-                console.log("auth " + data.values.role)
                 commit('setRole', data.values.role)
                 commit('setStatus', data.values.status)
             } catch (e) {
