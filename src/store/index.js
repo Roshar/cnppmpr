@@ -3,6 +3,7 @@ import auth from './modules/auth.module'
 import user from './modules/user.module'
 import messenger from './modules/messenger.module'
 
+
 const plugins = []
 
 if(process.env.NODE_ENV === 'development'){
@@ -28,7 +29,6 @@ export default createStore({
 
   },
   actions: {
-
     // Сообщения системы
 
     setSystemMessage({commit}, message) {

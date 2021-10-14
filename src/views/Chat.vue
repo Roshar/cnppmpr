@@ -7,7 +7,7 @@
                     <div v-else class="col-12 chat">
                         <h3>Тьютор: {{tutor}}</h3>
                         <div class="chat-space">
-                            <ul v-if="messages.length">
+                            <ul v-if="messages.length" ref="messagesUl">
                                 <li
                                     v-for="message in messages"
                                     :key="message.id"
@@ -33,7 +33,7 @@
 
 <script>
 
-    import {ref, computed, onMounted} from 'vue';
+    import {ref, computed, onMounted, onUpdated} from 'vue';
     import {useStore} from 'vuex';
     import { v4 as uuidv4 } from 'uuid';
 
@@ -41,6 +41,7 @@
         setup() {
             const store = useStore();
 
+            const messagesUl = ref('');
             const message = ref('');
             const dialog = computed(() => store.getters['messenger/getDialogByTutorId'](store.state['user'].userLink['user_id']));
 
@@ -77,11 +78,15 @@
                 message.value = ''
             }
 
-            onMounted(() => {
-                console.log(tutor)
+            onUpdated(() => {
+                messagesUl.value.scrollTo({
+                    top: messagesUl.value.scrollHeight,
+                    behavior: "smooth"
+                })
             })
 
             return {
+                messagesUl,
                 dialog,
                 messages,
                 message,
@@ -103,6 +108,7 @@
         list-style: none;
         padding: 1em 1em .5em;
         overflow: scroll;
+        height: 400px;
     }
 
     li{
@@ -112,7 +118,11 @@
         padding: .7em 1em;
         border-radius: 15px;
         box-shadow: 3px 3px 3px 0px #373c595c;
-        background-color: rgb(34 57 195 / 11%);
+        background-color: rgb(34 57 195 / 26%);
+    }
+
+    li:first-child{
+        margin-top: auto;
     }
 
     li:last-child{
@@ -123,11 +133,16 @@
         margin-right: 0;
         margin-left: auto;
         box-shadow: -3px 3px 3px 0px #373c595c;
-        background-color: rgb(34 57 195 / 26%);
+        background-color: rgb(34 57 195 / 11%);
     }
 
     .chat h3{
         border-bottom: 2px solid #AAA;
+    }
+
+    .chat ul {
+        display: flex;
+        flex-direction: column;
     }
 
     .chat-space{

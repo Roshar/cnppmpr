@@ -1,4 +1,5 @@
 import axios from '../../axios/request'
+import app from '../../main'
 
 export default {
     namespaced: true,
@@ -6,7 +7,7 @@ export default {
     state: {
         dialogs: JSON.parse(localStorage.getItem('dialogs')) ?? [],
         messages: JSON.parse(localStorage.getItem('messages')) ?? [],
-        students: []
+        students: [],
     },
 
     getters: {
@@ -36,12 +37,17 @@ export default {
     },
 
     mutations: {
-        addMessage(state, payload){
+        sentMessage(rootState, state, payload){
             const messages = state.messages.length 
                             ? JSON.stringify([...state.messages, payload]) 
                             : JSON.stringify([payload]);
             localStorage.setItem('messages', messages);
             state.messages = JSON.parse(localStorage.getItem('messages'))
+            app.$socket.emit('add_message', {msg: payload, userId: rootState.userId})
+        },
+
+        addMessage(state, payload){
+            state.messages.push(payload);
         },
 
         createDialog(state, payload){
@@ -50,6 +56,7 @@ export default {
                             : JSON.stringify([payload]);
             localStorage.setItem('dialogs', dialogs);
             state.dialogs = JSON.parse(localStorage.getItem('dialogs'))
+            app.$socket.emit('create_dialog', {dialog: payload})
         },
 
         setContactsOfStudents(state, payload){
@@ -72,6 +79,16 @@ export default {
                 throw new Error()
                 console.log("not module messenger")
             }
+        },
+
+        //listening socket events from server
+
+        SOCKET_CONNECT(){
+            console.log('socket: connected with server')
+        },
+
+        SOCKET_ADD_MESSAGE(store, msg) {
+            store.emit('addMessage', msg);
         }
     },
 

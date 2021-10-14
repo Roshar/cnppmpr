@@ -5,7 +5,13 @@
                 <div class="row messenger">
                     <div class="col-4 messenger-aside">
                         <div class="dialogs">
-                            <h3>Диалоги <button @click="this.isModal = true">Cont</button></h3>
+                            <h3>Диалоги 
+                                <button @click="this.isModal = true">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+                                    </svg>
+                                </button>
+                            </h3>
                         <ul>
                             <li 
                                 v-for="dialog in dialogs"
@@ -13,10 +19,12 @@
                                 @click="openDialog(dialog.student_id)"
                             >
                                 <div>
-                                    <p v-if="dialogs.length && students.length">
-                                        {{  students.find(student => student.user_id = dialog.student_id)['name'] }}
-                                        {{  students.find(student => student.user_id = dialog.student_id)['surname']  }}
-                                    </p>
+                                    <div v-if="dialogs.length && students.length">
+                                        <div>
+                                            {{  students.find(student => student.user_id = dialog.student_id)['name'] }}
+                                            {{  students.find(student => student.user_id = dialog.student_id)['surname']  }}
+                                        </div>
+                                    </div>
                                 </div>
                              
                                 <div>
@@ -29,7 +37,7 @@
 
                     <div class="contacts" :class="isModal ? 'modal-opened' : 'modal-closed'">
                         <span class="close" @click="this.isModal = false">x</span>
-                        <h3>Контакты</h3>
+                        <h3>Студенты</h3>
                         <ul class="contacts-list">
                             <li 
                                 v-for="student in students"
@@ -46,7 +54,7 @@
                         <h3 v-if="student">{{student.name}} {{student.surname}} {{student.patronymic}}</h3>
                         <h3 v-else>Выберите диалог</h3>
                         <div class="chat-space" v-if="student">
-                            <ul v-if="messages.length">
+                            <ul v-if="messages.length" ref="messagesUl">
                                 <li
                                     v-for="message in messages"
                                     :key="message.id"
@@ -77,7 +85,9 @@
     import { v4 as uuidv4 } from 'uuid';
 
     export default {
+
         setup() {
+            const messagesUl = ref(null)
             const isModal = ref(false);
             const store = useStore();
             const dialog = ref('');
@@ -92,8 +102,6 @@
             );
 
             const message = ref('');
-            const dialogId = ref('');
-
 
             function openDialog(student_id) {
                 dialog.value = store.getters['messenger/getDialogByStudentId'](student_id);
@@ -124,21 +132,29 @@
                     created_at: new Date(),
                     from: 'tutor'
                 })
-                message.value = ''
+                message.value = '';
             }
             onBeforeMount(() => {
                 store.dispatch('messenger/setContactsOfStudents')
             })
+
+            onUpdated(() => {
+                if(messagesUl.value) {
+                    messagesUl.value.scrollTo({
+                        top: messagesUl.value.scrollHeight,
+                        behavior: "smooth"
+                    })
+                }
+            })
             
             return {
+                messagesUl,
                 students,
                 student,
                 dialogs,
                 dialog,
                 messages,
                 isModal,
-
-                dialogId,
                 message,
 
                 openDialog,
@@ -161,14 +177,32 @@
         overflow: scroll;
     }
 
+    .chat{
+        background: #373c59;
+    }
+
+    .chat h3{
+        color: #FFF;
+    }
+
+    .chat ul{
+        min-height: 400px;
+        height: 400px;
+        max-height: 100%;
+    }
+
     .chat-space li{
         margin-bottom: 13px;
         width: 300px;
         margin-right: auto;
         padding: .7em 1em;
         border-radius: 15px;
-        box-shadow: 3px 3px 3px 0px #373c595c;
-        background-color: rgb(34 57 195 / 11%);
+        box-shadow: 3px 3px 3px 0px rgb(255 255 255 / 17%);
+        background-color: #e0e5ff;
+    }
+
+    li:first-child{
+        margin-top: auto;
     }
 
     li:last-child{
@@ -179,19 +213,16 @@
         margin-right: 0;
         margin-left: auto;
         box-shadow: -3px 3px 3px 0px #373c595c;
-        background-color: rgb(34 57 195 / 26%);
-    }
-
-    .chat h3{
-        border-bottom: 2px solid #AAA;
+        background-color: #FFF;
     }
 
     .chat-space{
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        min-height: 90%;
-        height: auto;
+        min-height: 87%;
+        height: 500px;
+        max-height: 100vh;
     }
 
     .messenger{
@@ -203,31 +234,34 @@
     .input-form{
         display: flex;
         width: 100%;
-        margin-top: 1em;
+        margin-top: 1.2em;
         align-items: flex-end;
     }
 
     .messenger-input{
         width: 100%;
         padding: .5em .7em;
-        border: 1px solid #bbb;
+        border: 1px solid #373c59;
+        color: #373c59;
         box-shadow: 1px 1px 2px 0px #bbbbbb;
     }
 
     .input-form button{
         margin-left: 1em;
-        border: 1px solid #bbb;
+        border: 1px solid #373c59;
         padding: .7em 1em;
-        background: none;
+        background: #FFF;
+        color: #373c59;
         box-shadow: 1px 1px 2px 0px #bbbbbb;
     }
 
     .messenger-aside{
-        border-right: 1px solid #CCC;
+        border-right: 1px solid #373c59;
     }
 
     .messenger-aside h3, .chat h3{
-        border-bottom: 2px solid #AAA;
+        border-bottom: 1px solid #373c59;    
+        padding: .5em .2em;
     }
 
     .dialogs {
@@ -242,7 +276,8 @@
     .dialogs h3 button {
         background: none;
         font-size: .9rem;
-        width: 70px;
+        color: #ea5045;
+        border: none;
     }
 
     .dialogs li{
@@ -264,8 +299,8 @@
         position: absolute;
         background: #FFF;
         padding: 1.5em 3em;
-        border: 2px solid #999;
-        box-shadow: 0 0 4px 0 #999;
+        border: 2px solid #373c59;
+        box-shadow: 0 0 6px 0 #373c59;
         width: 500px;
         z-index: 1000;
         right: 0;
@@ -292,5 +327,6 @@
         top: .9em;
         right: 1.5em;
         cursor: pointer;
+        color: #373c59;
     }
 </style>
