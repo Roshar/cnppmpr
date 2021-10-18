@@ -6,6 +6,9 @@ import tutor from './modules/tutor.module'
 import library from './modules/library.module'
 import tag from './modules/tag.module'
 import admin from './modules/admin.module'
+import notification from './modules/notification.module'
+import area from './modules/area.module'
+import discipline from './modules/discipline.module'
 
 
 const plugins = []
@@ -50,6 +53,9 @@ export default createStore({
     tutor,
     library,
     tag,
-    admin
+    admin,
+    notification,
+    area,
+    discipline
   }
 })

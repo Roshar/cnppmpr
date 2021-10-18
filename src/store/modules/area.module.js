@@ -3,19 +3,12 @@ import axios from '../../axios/request'
 export default {
     namespaced: true,
 
-    state: {
-
-    },
-
-    mutations: {
-
-    },
     actions:{
-        async getTag ({dispatch}) {
+        async getAreas({dispatch}) {
             try {
-                const {data} = await axios.post('/api/iom/getTag')
+                const {data} = await axios.post('/api/getschools/area')
                 return data.values ? data.values : []
-            } catch(e){
+            }catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -26,7 +19,4 @@ export default {
 
     },
 
-    getters: {
-
-    }
 }

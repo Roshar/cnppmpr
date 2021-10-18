@@ -9,6 +9,6 @@ exports.getDateCurrent = () => {
     let Minutes = Data.getMinutes();
     let Seconds = Data.getSeconds();
 
-    today = mm + '-' + dd + '-' + yyyy + ' ' + Hour + ":" + Minutes + ":" + Seconds;
+    today = dd + '-' + mm + '-' + yyyy + ' ' + Hour + ":" + Minutes + ":" + Seconds;
     return today
 }

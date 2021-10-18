@@ -2,7 +2,7 @@
     <div class="container-fluid own-bg">
         <div class="own-size">
             <div class="row">
-                <tutor-navbar-top/>
+                <admin-navbar-top/>
             </div>
         </div>
     </div>
@@ -15,10 +15,10 @@
 </template>
 
 <script>
-    import TutorNavbarTop from '../components/TutorNavbarTop.vue'
+    import AdminNavbarTop from '../components/AdminNavBarTop'
     import AppMessage from '../components/ui/AppMessage'
     export default {
-        components: {TutorNavbarTop,AppMessage}
+        components: {AdminNavbarTop,AppMessage}
     }
 </script>
 

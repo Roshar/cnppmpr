@@ -7,20 +7,26 @@ import AdminConfirm from '../views/AdminConfirm'
 import Register from "../views/authForms/Register";
 import IomTutor from '../views/tutor/iom/index'
 import IomAdmin from '../views/admin/iom/index'
+import StudentAdmin from '../views/admin/student'
+import StudentTutor from '../views/tutor/student'
+import NotificationAdmin from '../views/admin/notification/index'
+import NotificationTutor from '../views/tutor/notification/index'
 import IomCreate from '../views/tutor/iom/create'
 import ExerciselistAndCreate from '../views/tutor/exercise/index'
 import udTask from '../views/tutor/exercise/udTask'
+import Group from '../views/admin/group'
 import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
 import {before} from '../api/checkroleIom'
+import {beforeAdmin} from '../api/checkRoleAdmin'
 
 const routes = [
+
   {
     path: '/',
     name: 'Home',
     component: Home,
-    // beforeEnter: before(),
     beforeEnter: async (to, from, next) => {
       try{
          await store.dispatch('auth/confirmRole')
@@ -62,12 +68,39 @@ const routes = [
           return IomAdmin
         case "tutor":
           return IomTutor
-        case "seller":
-          return 'fdfdf'
       }
 
     },
     beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/students',
+    name: 'students',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return StudentAdmin
+        case "tutor":
+          return StudentTutor
+      }
+    },
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/group',
+    name: 'group',
+    component: Group,
+    beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
       role: store.state['auth'].role,
@@ -138,6 +171,7 @@ const routes = [
       auth:true,
     }
   },
+
   {
     path: '/auth',
     name: 'Auth',
@@ -147,6 +181,7 @@ const routes = [
       auth:false
     }
   },
+
   {
     path: '/active',
     name: 'Active',
@@ -166,6 +201,26 @@ const routes = [
       auth:false
     }
   },
+
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return NotificationAdmin
+        case "tutor":
+          return NotificationTutor
+      }
+
+    },
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
   {
     path: '/register',
     name: 'Register',
@@ -175,6 +230,7 @@ const routes = [
       auth:false
     }
   },
+
   {
     path: '/404',
     name: 'NotFound',
@@ -204,6 +260,7 @@ const routes = [
       auth:false
     }
   },
+
   {
     path: '/recovery',
     name: 'Recovery',

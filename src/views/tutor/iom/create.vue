@@ -31,7 +31,6 @@
                 titleIomInvalid: '',
                 titleExInvalid: '',
             })
-
             const addIom = async() => {
                 if(!titleIom.value ||titleIom.value.length<3 ){
                     invalid.value.titleIomInvalid = "is-invalid"

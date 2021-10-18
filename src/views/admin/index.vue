@@ -1,58 +1,108 @@
 <template>
+        <app-loader v-if="loading"></app-loader>
+        <div class="content-loader" v-else>
+            <div class="col-lg-3">
+                <div class="card card-margin">
+                    <div class="card-header no-border">
+                        <h5 class="card-title">Слушатели</h5>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="widget-49">
+                            <div class="widget-49-title-wrapper">
+                                <div class="widget-49-meeting-info">
+                                    <span class="widget-49-pro-title">Общая статистика на  </span>
+                                    <span class="widget-49-meeting-time">{{currentTime}}</span>
+                                </div>
+                            </div>
+                            <ol class="widget-49-meeting-points">
+                                <li class="widget-49-meeting-item"><span>Всего слушателей: {{countStudents}}</span></li>
+                                <li class="widget-49-meeting-item"><span>Всего районов:</span></li>
+                                <li class="widget-49-meeting-item"><span>Статистика по районам:</span>
+                                    <ul class="widget-49-meeting-points">
+                                        <li class="widget-49-meeting-item"><span>Ачхой-Мартановский район - {{achkhoy}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Веденский район - {{vedeno}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Грозненский район - {{grozarea}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Гудермесский район - {{gudarea}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Итум-Калинский район - {{itum}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Курчалоевский район - {{kurchaloy}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Надтеречный район - {{nadterech}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Наурский район - {{naur}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Ножай-Юртовский район - {{nojay}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Сунженский район - {{sun}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Урус-Мартановский район - {{urus}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Шалинский район - {{shali}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Шаройский район - {{sharoy}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Шатойский район - {{shatoy}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Шелковской район -{{shelk}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>город Аргун -{{argun}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>город Грозный -{{grozny}}</span></li>
+                                    </ul>
+                                </li>
 
+                                <li class="widget-49-meeting-item"><span>Гендерная статистика:</span>
+                                    <ul class="widget-49-meeting-points">
+                                        <li class="widget-49-meeting-item"><span>Мужчин - {{man}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Женщин - {{woman}}</span></li>
+                                    </ul>
+                                </li>
+                                <li class="widget-49-meeting-item"><span>Возрастные группы</span>
+                                    <ul class="widget-49-meeting-points">
+                                        <li class="widget-49-meeting-item"><span>до 25 лет - {{ageBefore25}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>от 25 до 35 лет - {{ageInterval25to35}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>от 35 до 45 лет - {{ageInterval35to45}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>от 45 до 55 лет -{{ageInterval45to55}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>от 55 до 65 лет - {{ageInterval55to65}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>старше 65 лет  - {{ageMore65}}</span></li>
+                                    </ul>
+                                </li>
+                                <li class="widget-49-meeting-item"><span>Количество студентов по учебным предметам</span>
+                                    <ul class="widget-49-meeting-points">
+                                        <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYAS}} </span></li>
+                                        <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLitS}} </span></li>
+                                        <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMathS}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHimS}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBioS}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhizS}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHistS}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObzS}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeoS}}</span></li>
+                                    </ul>
+                                </li>
 
-        <div class="col-lg-3">
+                            </ol>
+                            <div class="widget-49-meeting-action">
+                                <router-link to="/students" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</router-link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
             <div class="card card-margin">
                 <div class="card-header no-border">
-                    <h5 class="card-title">Слушатели</h5>
+                    <h5 class="card-title">Тьюторы</h5>
                 </div>
                 <div class="card-body pt-0">
                     <div class="widget-49">
                         <div class="widget-49-title-wrapper">
                             <div class="widget-49-meeting-info">
-                                <span class="widget-49-pro-title">Общая статистика на {{currentTime}} </span>
-                                <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
+                                <span class="widget-49-pro-title">Общая статистика на  </span>
+                                <span class="widget-49-meeting-time">{{currentTime}}</span>
                             </div>
                         </div>
                         <ol class="widget-49-meeting-points">
-                            <li class="widget-49-meeting-item"><span>Всего слушателей: {{countStudents}}</span></li>
-                            <li class="widget-49-meeting-item"><span>Всего районов:</span></li>
-                            <li class="widget-49-meeting-item"><span>Статистика по районам:</span>
+                            <li class="widget-49-meeting-item"><span>Всего тьюторов {{tutorCount}}</span></li>
+                            <li class="widget-49-meeting-item"><span>Количество тьюторов по учебным предметам</span>
                                 <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Ачхой-Мартановский район - {{achkhoy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Веденский район - {{vedeno}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Грозненский район - {{grozarea}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Гудермесский район - {{gudarea}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Итум-Калинский район - {{itum}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Курчалоевский район - {{kurchaloy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Надтеречный район - {{nadterech}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Наурский район - {{naur}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Ножай-Юртовский район - {{nojay}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Сунженский район - {{sun}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Урус-Мартановский район - {{urus}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шалинский район - {{shali}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шаройский район - {{sharoy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шатойский район - {{shatoy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шелковской район -{{shelk}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>город Аргун -{{argun}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>город Грозный -{{grozny}}</span></li>
-                                </ul>
-                            </li>
-
-                            <li class="widget-49-meeting-item"><span>Гендерная статистика:</span>
-                                <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Мужчин - {{man}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Женщин - {{woman}}</span></li>
-                                </ul>
-                            </li>
-                            <li class="widget-49-meeting-item"><span>Возрастные группы</span>
-                                <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>до 25 лет - {{ageBefore25}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>от 25 до 35 лет - {{ageInterval25to35}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>от 35 до 45 лет -</span></li>
-                                    <li class="widget-49-meeting-item"><span>от 45 до 55 лет -</span></li>
-                                    <li class="widget-49-meeting-item"><span>от 55 до 65 лет -</span></li>
-                                    <li class="widget-49-meeting-item"><span>старше 65 лет  -</span></li>
+                                    <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYA}} </span></li>
+                                    <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLit}} </span></li>
+                                    <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMath}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHim}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBio}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhiz}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHist}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObz}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeo}}</span></li>
                                 </ul>
                             </li>
 
@@ -64,109 +114,43 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
-        <div class="card card-margin">
-            <div class="card-header no-border">
-                <h5 class="card-title">Тьюторы</h5>
-            </div>
-            <div class="card-body pt-0">
-                <div class="widget-49">
-                    <div class="widget-49-title-wrapper">
-                        <div class="widget-49-meeting-info">
-                            <span class="widget-49-pro-title">Общая статистика на </span>
-                            <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
+            <div class="col-lg-3">
+            <div class="card card-margin">
+                <div class="card-header no-border">
+                    <h5 class="card-title">Индивидуальные образовательные маршруты</h5>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="widget-49">
+                        <div class="widget-49-title-wrapper">
+                            <div class="widget-49-meeting-info">
+                                <span class="widget-49-pro-title">Общая статистика на  </span>
+                                <span class="widget-49-meeting-time">{{currentTime}}</span>
+                            </div>
                         </div>
-                    </div>
-                    <ol class="widget-49-meeting-points">
-                        <li class="widget-49-meeting-item"><span>Всего тьюторов</span></li>
-                        <li class="widget-49-meeting-item"><span>Гендерная статистика:</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>Мужчин</span></li>
-                                <li class="widget-49-meeting-item"><span>Женщин</span></li>
-                            </ul>
-                        </li>
-                        <li class="widget-49-meeting-item"><span>Возрастные группы</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>до 25 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 25 до 35 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 35 до 45 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 45 до 55 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 55 до 65 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>старше 65 лет  -</span></li>
-                            </ul>
-                        </li>
-
-                    </ol>
-                    <div class="widget-49-meeting-action">
-                        <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
+                        <ol class="widget-49-meeting-points">
+                            <li class="widget-49-meeting-item"><span>Всего ИОМов {{countIom}}</span></li>
+                            <li class="widget-49-meeting-item"><span>Количество ИОМов по учебным предметам</span>
+                                <ul class="widget-49-meeting-points">
+                                    <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYAI}} </span></li>
+                                    <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLitI}} </span></li>
+                                    <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMathI}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHimI}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBioI}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhizI}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHistI}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObzI}}</span></li>
+                                    <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeoI}}</span></li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <div class="widget-49-meeting-action">
+                            <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-        <div class="col-lg-3">
-        <div class="card card-margin">
-            <div class="card-header no-border">
-                <h5 class="card-title">Индивидуальные образовательные маршруты</h5>
             </div>
-            <div class="card-body pt-0">
-                <div class="widget-49">
-                    <div class="widget-49-title-wrapper">
-                        <div class="widget-49-meeting-info">
-                            <span class="widget-49-pro-title">Общая статистика на </span>
-                            <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
-                        </div>
-                    </div>
-                    <ol class="widget-49-meeting-points">
-                        <li class="widget-49-meeting-item"><span>Всего слушателей</span></li>
-                        <li class="widget-49-meeting-item"><span>Всего районов:</span></li>
-                        <li class="widget-49-meeting-item"><span>Статистика по районам:</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>Ачхой-Мартановский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Веденский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Грозненский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Гудермесский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Итум-Калинский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Курчалоевский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Надтеречный район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Наурский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Ножай-Юртовский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Урус-Мартановский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шалинский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шаройский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шатойский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шелковской район -</span></li>
-                                <li class="widget-49-meeting-item"><span>город Аргун -</span></li>
-                                <li class="widget-49-meeting-item"><span>город Грозный -</span></li>
-                            </ul>
-                        </li>
-
-                        <li class="widget-49-meeting-item"><span>Гендерная статистика:</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>Мужчин</span></li>
-                                <li class="widget-49-meeting-item"><span>Женщин</span></li>
-                            </ul>
-                        </li>
-                        <li class="widget-49-meeting-item"><span>Возрастные группы</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>до 25 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 25 до 35 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 35 до 45 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 45 до 55 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 55 до 65 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>старше 65 лет  -</span></li>
-                            </ul>
-                        </li>
-
-                    </ol>
-                    <div class="widget-49-meeting-action">
-                        <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-        <div class="col-lg-3">
+            <div class="col-lg-3">
         <div class="card card-margin">
             <div class="card-header no-border">
                 <h5 class="card-title">Отчеты</h5>
@@ -176,49 +160,11 @@
                     <div class="widget-49-title-wrapper">
                         <div class="widget-49-meeting-info">
                             <span class="widget-49-pro-title">Общая статистика на </span>
-                            <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
+                            <span class="widget-49-meeting-time">{{currentTime}}</span>
                         </div>
                     </div>
                     <ol class="widget-49-meeting-points">
-                        <li class="widget-49-meeting-item"><span>Всего слушателей</span></li>
-                        <li class="widget-49-meeting-item"><span>Всего районов:</span></li>
-                        <li class="widget-49-meeting-item"><span>Статистика по районам:</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>Ачхой-Мартановский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Веденский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Грозненский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Гудермесский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Итум-Калинский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Курчалоевский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Надтеречный район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Наурский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Ножай-Юртовский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Урус-Мартановский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шалинский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шаройский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шатойский район -</span></li>
-                                <li class="widget-49-meeting-item"><span>Шелковской район -</span></li>
-                                <li class="widget-49-meeting-item"><span>город Аргун -</span></li>
-                                <li class="widget-49-meeting-item"><span>город Грозный -</span></li>
-                            </ul>
-                        </li>
-
-                        <li class="widget-49-meeting-item"><span>Гендерная статистика:</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>Мужчин</span></li>
-                                <li class="widget-49-meeting-item"><span>Женщин</span></li>
-                            </ul>
-                        </li>
-                        <li class="widget-49-meeting-item"><span>Возрастные группы</span>
-                            <ul class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>до 25 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 25 до 35 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 35 до 45 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 45 до 55 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>от 55 до 65 лет -</span></li>
-                                <li class="widget-49-meeting-item"><span>старше 65 лет  -</span></li>
-                            </ul>
-                        </li>
+                        <li class="widget-49-meeting-item"><span>Всего слушателей, завершившие обучение - {{countReport}}</span></li>
 
                     </ol>
                     <div class="widget-49-meeting-action">
@@ -228,18 +174,19 @@
             </div>
         </div>
     </div>
-
-
-
+        </div>
 </template>
 
 <script>
     import {getDateCurrent} from '../../utils/getDateCurrent'
     import {ref, onMounted, computed} from 'vue'
     import {useStore} from 'vuex'
+    import AppLoader from "../../components/ui/AppLoader";
     export default {
         setup() {
             const store = useStore()
+            const loading = ref(true)
+            // STUDENTS DATA
             const currentTime = ref()
             const countStudents = ref()
             const optionStudents = ref()
@@ -264,6 +211,47 @@
             const woman = ref()
             const ageBefore25 = ref(0)
             const ageInterval25to35 = ref(0)
+            const ageInterval35to45 = ref(0)
+            const ageInterval45to55 = ref(0)
+            const ageInterval55to65 = ref(0)
+            const ageMore65 = ref(0)
+            const tutorCountS = ref(0)
+            const disciplineCountRYAS = ref(0)
+            const disciplineCountLitS = ref(0)
+            const disciplineCountMathS = ref(0)
+            const disciplineCountHimS = ref(0)
+            const disciplineCountBioS = ref(0)
+            const disciplineCountPhizS = ref(0)
+            const disciplineCountHistS = ref(0)
+            const disciplineCountObzS = ref(0)
+            const disciplineCountGeoS = ref(0)
+
+            // TUTOR DATA
+            const tutorCount = ref(0)
+            const disciplineCountRYA = ref(0)
+            const disciplineCountLit = ref(0)
+            const disciplineCountMath = ref(0)
+            const disciplineCountHim = ref(0)
+            const disciplineCountBio = ref(0)
+            const disciplineCountPhiz = ref(0)
+            const disciplineCountHist = ref(0)
+            const disciplineCountObz = ref(0)
+            const disciplineCountGeo = ref(0)
+
+            // IOM INFO
+            const countIom = ref(0)
+            const disciplineCountRYAI = ref(0)
+            const disciplineCountLitI = ref(0)
+            const disciplineCountMathI = ref(0)
+            const disciplineCountHimI = ref(0)
+            const disciplineCountBioI = ref(0)
+            const disciplineCountPhizI = ref(0)
+            const disciplineCountHistI = ref(0)
+            const disciplineCountObzI = ref(0)
+            const disciplineCountGeoI = ref(0)
+
+            // REPORT INFO
+            const countReport = ref(0)
 
             // const countItem = async(obj,item,val) => {
             //     let result = 0
@@ -277,10 +265,17 @@
             const countItem = async(column,table,option) => {
                 return  await store.dispatch('admin/getOptionFromStudents',{column:column, table:table, value:option})
             }
+
             onMounted(async()=>{
-                // student info
-                countStudents.value = await store.dispatch('admin/getStudentsCount')
-                //area info
+                loading.value = true
+
+                // STUDENT INFO
+                countStudents.value = await store.dispatch('admin/getUserCount',{tbl:'students'})
+
+                // TUTOR INFO
+                tutorCount.value = await store.dispatch('admin/getUserCount', {tbl: 'tutors'})
+
+                //AREA INFO
                 achkhoy.value = await countItem('area_id','students', {parameter:'number',val:1})
                 vedeno.value = await countItem('area_id','students',{parameter:'number',val:2})
                 grozarea.value = await countItem('area_id','students',{parameter:'number',val:3})
@@ -298,13 +293,15 @@
                 shelk.value = await countItem('area_id','students',{parameter:'number',val:16})
                 argun.value = await countItem('area_id','students',{parameter:'number',val:17})
                 grozny.value = await countItem('area_id','students',{parameter:'number',val:18})
-                //gender info
+
+                //GANDER INFO
                 man.value = await countItem('gender','students',{parameter:'string',val:'man'})
                 woman.value = await countItem('gender','students',{parameter:'string',val:'woman'})
-                //age info
+
+                //AGE INFO
                 ageBefore25.value = await countItem('birthday','students',
                     {parameter:'age',val:{
-                            start:0,
+                            start:1,
                             end:25
                             }})
                 ageInterval25to35.value = await countItem('birthday','students',
@@ -312,13 +309,68 @@
                             start:25,
                             end:35
                         }})
+                ageInterval35to45.value = await countItem('birthday','students',
+                    {parameter:'age',val:{
+                            start:35,
+                            end:45
+                        }})
+                ageInterval45to55.value = await countItem('birthday','students',
+                    {parameter:'age',val:{
+                            start:45,
+                            end:55
+                        }})
+                ageInterval55to65.value = await countItem('birthday','students',
+                    {parameter:'age',val:{
+                            start:55,
+                            end:55
+                        }})
+                ageMore65.value = await countItem('birthday','students',
+                    {parameter:'age',val:{
+                            start:55,
+                            end:100
+                        }})
+                disciplineCountRYAS.value = await countItem('discipline_id','students',{parameter:'number',val:1})
+                disciplineCountLitS.value = await countItem('discipline_id','students',{parameter:'number',val:2})
+                disciplineCountMathS.value = await countItem('discipline_id','students',{parameter:'number',val:3})
+                disciplineCountHimS.value = await countItem('discipline_id','students',{parameter:'number',val:4})
+                disciplineCountBioS.value = await countItem('discipline_id','students',{parameter:'number',val:5})
+                disciplineCountPhizS.value = await countItem('discipline_id','students',{parameter:'number',val:6})
+                disciplineCountHistS.value = await countItem('discipline_id','students',{parameter:'number',val:7})
+                disciplineCountObzS.value = await countItem('discipline_id','students',{parameter:'number',val:8})
+                disciplineCountGeoS.value = await countItem('discipline_id','students',{parameter:'number',val:9})
+
+                disciplineCountRYA.value = await countItem('discipline_id','tutors',{parameter:'number',val:1})
+                disciplineCountLit.value = await countItem('discipline_id','tutors',{parameter:'number',val:2})
+                disciplineCountMath.value = await countItem('discipline_id','tutors',{parameter:'number',val:3})
+                disciplineCountHim.value = await countItem('discipline_id','tutors',{parameter:'number',val:4})
+                disciplineCountBio.value = await countItem('discipline_id','tutors',{parameter:'number',val:5})
+                disciplineCountPhiz.value = await countItem('discipline_id','tutors',{parameter:'number',val:6})
+                disciplineCountHist.value = await countItem('discipline_id','tutors',{parameter:'number',val:7})
+                disciplineCountObz.value = await countItem('discipline_id','tutors',{parameter:'number',val:8})
+                disciplineCountGeo.value = await countItem('discipline_id','tutors',{parameter:'number',val:9})
+
+                // IOM INFO
+                countIom.value = await countItem('id','count_iom',{parameter:'none'})
+                disciplineCountRYAI.value = await countItem('dis_id','count_iom',{parameter:'number',val:1})
+                disciplineCountLitI.value = await countItem('dis_id','count_iom',{parameter:'number',val:2})
+                disciplineCountMathI.value = await countItem('dis_id','count_iom',{parameter:'number',val:3})
+                disciplineCountHimI.value = await countItem('dis_id','count_iom',{parameter:'number',val:4})
+                disciplineCountBioI.value = await countItem('dis_id','count_iom',{parameter:'number',val:5})
+                disciplineCountPhizI.value = await countItem('dis_id','count_iom',{parameter:'number',val:6})
+                disciplineCountHistI.value = await countItem('dis_id','count_iom',{parameter:'number',val:7})
+                disciplineCountObzI.value = await countItem('dis_id','count_iom',{parameter:'number',val:8})
+                disciplineCountGeoI.value = await countItem('dis_id','count_iom',{parameter:'number',val:9})
+
+                //REPORT INFO
+                countReport.value = await countItem('id', 'report', {parameter: 'none'})
+                loading.value = false
             })
 
 
             currentTime.value = getDateCurrent()
-            // console.log(optionStudents.value)
             return {
                 currentTime,
+                loading,
                 countStudents,
                 optionStudents,
                 achkhoy,
@@ -342,14 +394,56 @@
                 woman,
                 ageBefore25,
                 ageInterval25to35,
+                ageInterval35to45,
+                ageInterval45to55,
+                ageInterval55to65,
+                ageMore65,
+                tutorCount,
+                disciplineCountRYAS,
+                disciplineCountLitS,
+                disciplineCountMathS,
+                disciplineCountHimS,
+                disciplineCountBioS,
+                disciplineCountPhizS,
+                disciplineCountHistS,
+                disciplineCountObzS,
+                disciplineCountGeoS,
+                // TUTOR
+                tutorCount,
+                disciplineCountRYA,
+                disciplineCountLit,
+                disciplineCountMath,
+                disciplineCountHim,
+                disciplineCountBio,
+                disciplineCountPhiz,
+                disciplineCountHist,
+                disciplineCountObz,
+                disciplineCountGeo,
+                // IOM
+                countIom,
+                disciplineCountRYAI,
+                disciplineCountLitI,
+                disciplineCountMathI,
+                disciplineCountHimI,
+                disciplineCountBioI,
+                disciplineCountPhizI,
+                disciplineCountHistI,
+                disciplineCountObzI,
+                disciplineCountGeoI,
+                // REPORT
+                countReport,
+
             }
         },
-        components: {}
+        components: {AppLoader}
     }
 </script>
 
 <style scoped>
-
+.content-loader {
+    position: relative;
+    display: flex;
+}
 .card-margin {
     margin-top: 1.5rem;
     margin-bottom: 1.875rem;
