@@ -5,7 +5,7 @@ export function useGroupForm(fn){
 
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
-            tutor:0
+            tutor:''
         }
     })
 

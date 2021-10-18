@@ -15,7 +15,7 @@
             <div class="modal-form" v-if="showModal">
                 <form @submit.prevent="onSubmit" id="form">
                     <div class="form-group">
-                        <label for="title">Название групп</label>
+                        <label for="title">Название группы</label>
                         <input type="text" :class="['form-control',{invalid:titleError}]" v-model="title"  id="title"  placeholder="Введите название группы">
                         <small v-if="titleError">{{titleError}}</small>
                     </div>
@@ -25,14 +25,14 @@
                         <small v-if="descriptionError">{{descriptionError}}</small>
                     </div>
                     <div class="form-group">
-                        <label>Автор</label>
-                        <select :class="['form-control',{invalid:tutorError}]" name="author" v-model="tutor">
-                            <option value=0>Вы</option>
-                            <option v-if="tutorsData" v-for="(item, index) in tutorsData"  :key="item.id"  :selected="item.id === tutor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
+                        <label>Тьютор</label>
+                        <select :class="['form-control',{invalid:tutorError}]" name="tutor" v-model="tutor">
+                            <option value=''>Выбрать из неназначенных тьюторов</option>
+                            <option v-if="tutorsData" v-for="(item, index) in tutorsData"  :key="item.id"  :value=item.user_id>{{item.name}} {{item.surname}} {{item.patronymic}}</option>
                         </select>
                         <small v-if="tutorError">{{mentorError}}</small>
                     </div>
-                    <button type="submit"  class="btn btn-primary"  :disabled="isSubmiting">Добавить задание в ИОМ</button>
+                    <button type="submit"  class="btn btn-primary"  :disabled="isSubmiting">Создать группу</button>
                     <button type="button"  class="btn btn-info" @click="showModal=false" >Отменить</button>
                 </form>
             </div>
@@ -55,25 +55,18 @@
             <h5 class="subtitle-page">Список </h5>
             <hr>
             <div class="row">
-
-                <div class="col-4">
+                <div class="col-4" v-for="(item, index) in groupsData" :key="item.id">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
+                            <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания: {{item.created_at}}</div>
+                            <h5 class="card-title">{{item.title}}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Тьютор: {{item.surname}} {{item.name}} {{item.patronymic}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{item.title_discipline}} </h6>
+                            <p class="card-text">{{item.description}}</p>
+                            <router-link :to="{path:`/group/${item.id}`}" class="btn-primary-outline" >Открыть</router-link>
+                            <button class="btn-danger-outline">Удалить</button>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-4">
-
-                </div>
-
-                <div class="col-4">
-
                 </div>
             </div>
 
@@ -81,43 +74,54 @@
 
         </div>
     </div>
-    
+    <transition  name="fade" appear>
+        <div class="modal-overlay" v-if="showModal" @click="showModal = false">
+        </div>
+    </transition>
 </template>
 
 <script>
 
     import {ref, onMounted, computed, watch} from 'vue'
     import {useStore} from 'vuex'
+    import {useRouter} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import {useGroupForm} from "../../../use/admin/group-form";
 
     export default {
         setup() {
             const store = useStore()
+            const router = useRouter()
             const loading = ref(true)
             const showModal = ref(false)
             const tutorsData = ref()
+            const groupsData = ref()
 
-            const createGroupModal = () => {
-                showModal.value = true
-            }
 
 
             onMounted(async()=>{
                 loading.value = true
-                // STUDENT INFO
+                // TUTORS DATA
+                tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
+                groupsData.value = await store.dispatch('admin/getGroups')
                 loading.value = false
             })
 
-            const submit = async() => {
+            const submit = async(values) => {
+                await store.dispatch('admin/createGroup', values)
+                tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
+                groupsData.value = await store.dispatch('admin/getGroups')
+                showModal.value = false
+                await router.push('/group')
 
             }
 
             return {
                 ...useGroupForm(submit),
                 loading,
-                createGroupModal,
                 showModal,
+                tutorsData,
+                groupsData
 
             }
         },
@@ -126,6 +130,27 @@
 </script>
 
 <style scoped>
+    .modal-overlay,.modal-overlay2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 98;
+        background-color: rgba(0,0,0, 0.5);
+    }
+
+    .modal-form{
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        width: 60%;
+        /*max-width:400px;*/
+        background-color: #edeef0;
+        padding: 60px 60px;
+    }
     .content-wallpaper, .student-menu {
         margin-top: 1.5rem;
         background-color: white;
@@ -150,6 +175,29 @@
     .create_iom_block_icon_create {
         font-size: 92px;
         color: grey;
+    }
+    .btn-primary-outline {
+        background-color: transparent;
+        border:1px solid rgba(69, 113, 163, 0.4) ;
+        padding:8px 25px;
+        color: #4571a3;
+        box-sizing: border-box;
+
+    }
+    .btn-primary-outline:hover {
+        border-color:#4571a3;
+        text-decoration: none;
+
+    }
+    .btn-danger-outline {
+        background-color: transparent;
+        border:1px solid rgba(255, 99, 71, 0.4);
+        padding: 5px 25px;
+        color: tomato;
+        margin-left: 1em;
+    }
+    .btn-danger-outline:hover {
+        border-color:tomato
     }
 
     .bi-folder-plus {
