@@ -134,6 +134,48 @@ export default {
             }
         },
 
+        async getGroupById ({dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getGroupById',payload)
+                return data.values
+            } catch(e){
+                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getFreeStudentsByDisciplineId({dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getFreeStudentsByDisciplineId',payload)
+                return data.values
+            } catch(e){
+                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getAppointedStudentsCurrentGroup({dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getAppointedStudentsCurrentGroup',payload)
+                return data.values
+            } catch(e){
+                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        }
+
 
     },
 

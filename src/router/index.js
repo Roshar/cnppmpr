@@ -15,6 +15,7 @@ import IomCreate from '../views/tutor/iom/create'
 import ExerciselistAndCreate from '../views/tutor/exercise/index'
 import udTask from '../views/tutor/exercise/udTask'
 import Group from '../views/admin/group'
+import SingleGroup from '../views/admin/group/single'
 import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
@@ -100,6 +101,17 @@ const routes = [
     path: '/group',
     name: 'group',
     component: Group,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/group/:id',
+    name: 'groupSingle',
+    component: SingleGroup,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,

@@ -69,9 +69,7 @@
                     </div>
                 </div>
             </div>
-
             <hr>
-
         </div>
     </div>
     <transition  name="fade" appear>
@@ -159,7 +157,7 @@
     .content-wallpaper {
         padding: 25px;
     }
-    .title-page {
+    .title-page, .subtitle-page {
         color: #4571a3;
     }
     .create_iom {
