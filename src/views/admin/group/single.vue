@@ -14,10 +14,7 @@
         <div class="modal-form" v-if="showModal">
             <div class="row">
                 <div class="col-12 ml-auto">
-
-                        <button class="btn-primary-outline"> ОТМЕНА </button>
-                
-
+                    <button class="btn-primary-outline" @click="showModal = false"> ОТМЕНА </button>
                 </div>
             </div>
             <div class="row">
@@ -184,6 +181,8 @@
                     return value === null ? 'нет' : 'да'
                 }
 
+
+
             onMounted(async()=>{
                 loading.value = true
                 areas.value = await store.dispatch('area/getAreas')
@@ -195,7 +194,6 @@
                     {tutorId:groupData.value['tutor_id'],
                              groupId:groupData.value['id']})
 
-                console.log(studentsFree.value)
                 title.value = groupData.value.title
                 description.value = groupData.value.description
                 created.value = groupData.value['created_at']
@@ -204,14 +202,24 @@
                 loading.value = false
             })
 
-            const submit = async(values) => {
-                await store.dispatch('admin/createGroup', values)
-                tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
-                groupsData.value = await store.dispatch('admin/getGroups')
-                showModal.value = false
-                await router.push('/group')
+            watch([area_value,gender_value], async (values) => {
 
-            }
+                if(values[0] !== '0' || values[1] !== '0') {
+                    studentsFree.value =  await store.dispatch('admin/getFreeStudentsByDisciplineId',
+                        {disId: groupData.value['id_dis'],
+                                areaId:area_value.value,
+                                gender: gender_value.value})
+                }else {
+                    studentsFree.value = await store.dispatch('admin/getFreeStudentsByDisciplineId',{disId: groupData.value['id_dis']})
+                }
+            })
+
+            // const submit = async(values) => {
+            //     await store.dispatch('admin/createGroup', values)
+            //     groupsData.value = await store.dispatch('admin/getGroups')
+            //     showModal.value = false
+            //     await router.push('/group')
+            // }
 
             return {
                 loading,

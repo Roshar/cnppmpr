@@ -137,7 +137,7 @@ export function useRegisterForm() {
 
         const onSubmit = handleSubmit(async values => {
             values.role = "student"
-            values.patronymic ? values.patronymic : " "
+            values.patronymic = values.patronymic ? values.patronymic : " "
             try{
                 await store.dispatch('auth/registration',values)
                 await  router.push('/auth')
