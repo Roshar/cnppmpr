@@ -3,9 +3,9 @@
         <div class="card page_info_wrap">
             <div class="card-body">
                 <div class="row messenger">
-                    <h3 v-if="!tutor.length">Вам еще не назначен тьютор</h3>
+                    <h3 v-if="!tutor">Вам еще не назначен тьютор</h3>
                     <div v-else class="col-12 chat">
-                        <h3>Тьютор: {{tutor}}</h3>
+                        <h3>Тьютор: {{tutorFullName}}</h3>
                         <div class="chat-space">
                             <ul v-if="messages.length" ref="messagesUl">
                                 <li
@@ -43,18 +43,22 @@
 
             const messagesUl = ref('');
             const message = ref('');
-            const dialog = computed(() => store.getters['messenger/getDialogByTutorId'](store.state['user'].userLink['user_id']));
 
-            const messages = computed(() => (dialog.value 
-                    ? store.getters['messenger/getMessagesByDialogId'](dialog.value.id)
-                    : ref('')
-                )
+            const tutor = computed(() => store.state['user'].userLink ?? ref('') 
+            );
+            const tutorFullName = computed(() => tutor.value
+                ? `${store.state['user'].userLink['surname']} ${store.state['user'].userLink['name']} ${store.state['user'].userLink['patronymic']}`
+                : ref('')
             );
 
-            const tutor = computed(() => (store.state['user'].userLink 
-                    ? `${store.state['user'].userLink['surname']} ${store.state['user'].userLink['name']} ${store.state['user'].userLink['patronymic']}`
-                    : ref('') 
-                )
+            const dialog = computed(() => store.getters['messenger/getDialogByTutorId'](tutor.value['user_id'])
+                    ?  store.getters['messenger/getDialogByTutorId'](tutor.value['user_id'])
+                    : ref('')
+            );
+
+            const messages = computed(() => dialog.value 
+                    ? store.getters['messenger/getMessagesByDialogId'](dialog.value.id)
+                    : ref('')
             );
 
             function sentMessage() {
@@ -62,13 +66,13 @@
                     store.commit('messenger/createDialog', {
                         id: uuidv4(), 
                         student_id: store.state['user'].userId,
-                        tutor_id: store.state['user'].userLink['user_id'],
+                        tutor_id: tutor['user_id'],
                         created_at: new Date(),
                         updated_at: new Date()
                     });
                 }
 
-                store.commit('messenger/addMessage', {
+                store.commit('messenger/sentMessage', {
                     dialog_id: dialog.value.id,
                     id: uuidv4(),
                     text: message.value,
@@ -79,10 +83,12 @@
             }
 
             onUpdated(() => {
-                messagesUl.value.scrollTo({
-                    top: messagesUl.value.scrollHeight,
-                    behavior: "smooth"
-                })
+                if(messagesUl.value){
+                    messagesUl.value.scrollTo({
+                        top: messagesUl.value.scrollHeight,
+                        behavior: "smooth"
+                    })
+                }
             })
 
             return {
@@ -91,6 +97,7 @@
                 messages,
                 message,
                 tutor,
+                tutorFullName,
                 
                 sentMessage
             }

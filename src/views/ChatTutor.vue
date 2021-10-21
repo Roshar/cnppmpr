@@ -64,7 +64,7 @@
                                         <strong>{{new Date(message.created_at).toLocaleTimeString().slice(0, -3)}}</strong>
                                 </li>
                             </ul>
-                            <div v-else>Отправьте первое сообщение чтобы начать диалог</div>
+                            <div v-else class="without-msg">Отправьте первое сообщение чтобы начать диалог</div>
 
                             <div class="input-form">
                                 <textarea v-model="message" class="messenger-input" placeholder="Введите сообщение"></textarea>
@@ -94,11 +94,10 @@
             const student = ref('');
 
             const students = computed(() => store.getters['messenger/getContactsOfStudents']);
-            const dialogs = computed(() => store.getters['messenger/getDialogs']);
-            const messages = computed(() => (dialog.value 
+            const dialogs = computed(() => store.getters['messenger/getDialogs'] ?? ref(''));
+            const messages = computed(() => dialog.value 
                     ? store.getters['messenger/getMessagesByDialogId'](dialog.value.id)
                     : ref('')
-                )
             );
 
             const message = ref('');
@@ -109,15 +108,17 @@
             }
 
             function newDialogWindow(contact){
-                dialog.value = dialogs.value.find(dialog => dialog.student_id == contact.user_id) ?? '';
+                dialog.value = dialogs.value.length ? dialogs.value.find(dialog => dialog.student_id == contact.user_id) : '';
                 student.value = contact;
                 isModal.value = false
             }
 
             function sentMessage() {
                 if (!dialog.value) {
+                    const newDialogId = uuidv4();
+                    dialog.value = newDialogId;
                     store.commit('messenger/createDialog', {
-                        id: uuidv4(), 
+                        id: newDialogId, 
                         student_id: student.value.user_id,
                         tutor_id: store.state['user'].userId,
                         created_at: new Date(),
@@ -125,8 +126,8 @@
                     });
                 }
 
-                store.commit('messenger/addMessage', {
-                    dialog_id: dialog.value.id,
+                store.commit('messenger/sentMessage', {
+                    dialog_id: dialog.value.id ?? dialog.value,
                     id: uuidv4(),
                     text: message.value,
                     created_at: new Date(),
@@ -229,6 +230,10 @@
         min-height: 50vh;
         max-height: 70vh;
         height: auto;
+    }
+
+    .without-msg{
+        color: #FFF;
     }
 
     .input-form{
