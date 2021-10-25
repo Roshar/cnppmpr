@@ -16,7 +16,49 @@ export default {
                 const {data} = await axios.post('/api/admin/getUserCount', payload)
                 return data.values
             } catch(e){
-                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getUsersActive ({dispatch},payload) {
+            try {
+
+                if(payload.filter){
+                    if(payload.areaId == '0' && payload.disId == '0' && payload.gender == '0' ) {
+                        const {data} = await axios.post('/api/admin/getUsersActive', payload)
+                        return data.values
+                    }else if(payload.areaId != '0' && payload.disId != '0' && payload.gender != '0') {
+                        const {data} = await axios.post('/api/admin/getUsersWithDisAreaGenderFilter', payload)
+                        return data.values
+                    }else if(payload.areaId != '0' && payload.disId == '0' && payload.gender == '0'){
+                        const {data} = await axios.post('/api/admin/getUsersWithAreaFilter', payload)
+                        return data.values
+                    }else if(payload.areaId == '0' && payload.disId != '0' && payload.gender == '0') {
+                        const {data} = await axios.post('/api/admin/getUsersWithDisFilter', payload)
+                        return data.values
+                    }else if(payload.areaId == '0' && payload.disId == '0' && payload.gender != '0') {
+                        const {data} = await axios.post('/api/admin/getUsersWithGenderFilter', payload)
+                        return data.values
+                    }else if(payload.areaId == '0' && payload.disId != '0' && payload.gender != '0') {
+                        const {data} = await axios.post('/api/admin/getUsersWithDisGenderFilter', payload)
+                        return data.values
+                    }else if(payload.areaId != '0' && payload.disId != '0' && payload.gender == '0') {
+                        const {data} = await axios.post('/api/admin/getUsersWithDisAreaFilter', payload)
+                        return data.values
+                    }else if(payload.areaId != '0' && payload.disId == '0' && payload.gender != '0') {
+                        const {data} = await axios.post('/api/admin/getUsersWithAreaGenderFilter', payload)
+                        return data.values
+                    }
+                }else {
+                    const {data} = await axios.post('/api/admin/getUsersActive', payload)
+                    return data.values
+                }
+
+            } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -30,7 +72,7 @@ export default {
                 const {data} = await axios.post('/api/admin/getTutorAndCheckAtFree')
                 return data.values
             } catch(e){
-                console.log(e)
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -44,7 +86,7 @@ export default {
                 const {data} = await axios.post('/api/admin/getOptionFromStudents',payload)
                 return data.values
             } catch(e){
-                console.log(e)
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -56,7 +98,24 @@ export default {
         async activationById ({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/activationById',payload)
-                console.log('dfdf')
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async deactivationById ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/deactivationById',payload)
+
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'
@@ -71,12 +130,63 @@ export default {
             }
         },
 
+        async getUsersWithBanStatus ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getUsersWithBanStatus',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async deleteIom ({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/deleteIom',payload)
                 return data.values
             } catch(e){
-                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getProfile ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getProfile',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getDependenciesStudent ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getDependenciesStudent',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getIomByStudentAndTutor ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getIomByStudentAndTutor',payload)
+                return data.values
+            } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -90,7 +200,6 @@ export default {
                 const {data} = await axios.post('/api/admin/getLastUsers',payload)
                 return data.values
             } catch(e){
-                console.log(e)
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -104,7 +213,6 @@ export default {
                 const {data} = await axios.post('/api/admin/getReportCount')
                 return data.values
             } catch(e){
-                console.log(e)
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -115,7 +223,7 @@ export default {
 
         async liveSearch ({dispatch},payload) {
             try {
-                console.log(payload)
+
                 if(payload.areaId == 0 && payload.disId == 0){
                     const {data} = await axios.post('/api/admin/liveSearchInput',payload)
                     return data.values
@@ -130,7 +238,7 @@ export default {
                     return data.values
                 }
             } catch(e){
-                console.log(e)
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -147,7 +255,24 @@ export default {
                     type: 'primary'
                 }, {root: true})
             } catch(e){
-                console.log(e)
+
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async addUserInGroupAndTutor({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/addUserInGroupAndTutor',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -161,7 +286,7 @@ export default {
                 const {data} = await axios.post('/api/admin/getGroups')
                 return data.values
             } catch(e){
-                console.log(e)
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -170,12 +295,14 @@ export default {
             }
         },
 
+
+
         async getGroupById ({dispatch}, payload) {
             try {
                 const {data} = await axios.post('/api/admin/getGroupById',payload)
                 return data.values
             } catch(e){
-                console.log(e)
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -189,7 +316,7 @@ export default {
                 const {data} = await axios.post('/api/admin/getFreeStudentsByDisciplineId',payload)
                 return data.values
             } catch(e){
-                console.log(e)
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -203,7 +330,7 @@ export default {
                 const {data} = await axios.post('/api/admin/getAppointedStudentsCurrentGroup',payload)
                 return data.values
             } catch(e){
-                console.log(e)
+
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'

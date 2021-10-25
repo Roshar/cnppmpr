@@ -174,11 +174,27 @@ export default {
 
         async confirmRole({commit, dispatch, state}, payload) {
             try {
-                // console.log(state.role)
                 const user = {'token':state.token}
                 const {data} =  await axios.post('/api/get/role', user)
-                commit('setRole', data.values.role)
-                commit('setStatus', data.values.status)
+                if(data) {
+                    commit('setRole', data.values.role)
+                    commit('setStatus', data.values.status)
+                }else {
+                    commit('setRole', null)
+                    commit('setStatus', null)
+                }
+
+            } catch (e) {
+                console.log(e)
+            }
+        },
+
+
+        // проверка статуса при обновлении
+        async checkRoleByToken({state}, payload) {
+            try {
+                const {data} =  await axios.post('/api/get/role', payload)
+                return data;
             } catch (e) {
                 console.log(e)
             }
@@ -213,7 +229,7 @@ export default {
 
         async confirmCode({commit, dispatch, state}, payload) {
             try {
-                await axios.post('/api/auth/confirmcode',payload)
+                 await axios.post('/api/auth/confirmcode',payload)
             } catch(e) {
 
             }

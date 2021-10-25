@@ -71,6 +71,11 @@
                     </div>
                 </div>
                 <div class="form-group mb-3">
+                    <label for="term">Укажите дату рождения </label>
+                    <input type="date" id="term" name="birthday" v-model="birthday">
+                    <small v-if="birthdayError">{{birthdayError}}</small>
+                </div>
+                <div class="form-group mb-3">
                     <div class="form-group">
                         <label for="phone" style="color:grey; font-style: italic"> Введите секретный код  </label>
                         <input type="tel" :class="['form-control',{invalid:codeError}]" name="code" id="code" v-model="code"  @blur="codeBlur" placeholder="код">

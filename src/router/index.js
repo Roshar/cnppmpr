@@ -4,11 +4,22 @@ import Auth from '../views/Auth'
 import Home from '../views/Home.vue'
 import Active from '../views/Active'
 import AdminConfirm from '../views/AdminConfirm'
+import StudentTutorConfirm from '../views/StudentTutorConfirm'
 import Register from "../views/authForms/Register";
 import IomTutor from '../views/tutor/iom/index'
 import IomAdmin from '../views/admin/iom/index'
 import StudentAdmin from '../views/admin/student'
 import StudentTutor from '../views/tutor/student'
+import StudentProfileAdmin from '../views/admin/student/profile'
+import StudentProfileTutor from '../views/admin/student/profile'
+import SearchAdmin from '../views/admin/student/search'
+import LastAdmin from '../views/admin/student/last'
+import conAdmin from '../views/admin/conversation'
+import conTutor from '../views/tutor/conversation'
+import chatAdmin from '../views/admin/conversation/chat'
+import chatTutor from '../views/tutor/conversation/chat'
+import banAdmin from '../views/admin/student/ban'
+import banTutor from '../views/tutor/student/ban'
 import NotificationAdmin from '../views/admin/notification/index'
 import NotificationTutor from '../views/tutor/notification/index'
 import IomCreate from '../views/tutor/iom/create'
@@ -20,6 +31,7 @@ import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
 import {before} from '../api/checkroleIom'
+import {checkAccess} from '../api/checkActivePage'
 import {beforeAdmin} from '../api/checkRoleAdmin'
 
 const routes = [
@@ -28,32 +40,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: async (to, from, next) => {
-      try{
-         await store.dispatch('auth/confirmRole')
-        const roleAuth = store.state['auth'].role
-        if(roleAuth == 'student' || roleAuth == 'tutor'  && store.state['auth'].status == 'on') {
-          to.meta.layout = await store.state['auth'].role
-          await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
-          next()
-        } else if (roleAuth == 'admin'  && store.state['auth'].status == 'null') {
-          to.meta.layout = await store.state['auth'].role
-          await store.dispatch('user/getAdminData',localStorage.getItem('jwt-token'))
-          next('/adminconfirm?token='+store.state['auth'].token)
-        }else if (roleAuth == 'admin'  && store.state['auth'].status == 'on') {
-          to.meta.layout = await store.state['auth'].role
-          await store.dispatch('user/getAdminData',localStorage.getItem('jwt-token'))
-          next()
-        } else if (store.state['auth'].role && store.state['auth'].status == 'null') {
-          next('/active?token='+store.state['auth'].token)
-        } else {
-          console.log('нет подтверждения роли')
-          next('/auth?message=auth')
-        }
-      } catch(e){
-        console.log('Ошибка подтверждения')
-      }
-    },
+    beforeEnter: checkAccess(),
     meta:{
       auth: true,
       role: store.state['auth'].role,
@@ -91,6 +78,98 @@ const routes = [
       }
     },
     beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/student/profile/:userId',
+    name: 'userProfile',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return StudentProfileAdmin
+        case "tutor":
+          return StudentProfileTutor
+      }
+    },
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/ban',
+    name: 'ban',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return banAdmin
+        case "tutor":
+          return banTutor
+      }
+    },
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+  {
+    path: '/conversations',
+    name: 'conversations',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return conAdmin
+        case "tutor":
+          return conTutor
+      }
+    },
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/conversations/:chat/:user',
+    name: 'conversationsChats',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return chatAdmin
+        case "tutor":
+          return chatTutor
+      }
+    },
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+
+  {
+    path: '/search',
+    name: 'search',
+    component: SearchAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+      role: store.state['auth'].role,
+    },
+  },
+  {
+    path: '/last',
+    name: 'last',
+    component: LastAdmin,
+    beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
       role: store.state['auth'].role,
@@ -194,25 +273,38 @@ const routes = [
     }
   },
 
+  // {
+  //   path: '/active',
+  //   name: 'Active',
+  //   component: Active,
+  //   meta:{
+  //     layout:'auth',
+  //     auth:false
+  //   }
+  // },
+
   {
-    path: '/active',
-    name: 'Active',
-    component: Active,
+    path: '/adminconfirm',
+    name: 'AdminConfirm',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return AdminConfirm
+        case "tutor":
+          return StudentTutorConfirm
+        case "student":
+          return StudentTutorConfirm
+        default:
+          return StudentTutorConfirm
+      }
+    },
     meta:{
       layout:'auth',
       auth:false
     }
   },
 
-  {
-    path: '/adminconfirm',
-    name: 'AdminConfirm',
-    component: AdminConfirm,
-    meta:{
-      layout:'auth',
-      auth:false
-    }
-  },
+
 
   {
     path: '/notifications',

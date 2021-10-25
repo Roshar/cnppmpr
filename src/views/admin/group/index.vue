@@ -1,14 +1,6 @@
 <template>
     <div class="col-3">
-        <div class="student-menu">
-            <nav class="colorlib-main-menu" role="navigation">
-                <ul class="navbar-menu">
-                    <li><router-link to="/students"  class="router-link" href="#">Обучающиеся</router-link></li>
-                    <li><router-link to="/group"  class="router-link " href="#">Учебные группы</router-link></li>
-                    <li><router-link to="/ban"  class="router-link" href="#"> Заблокированные </router-link></li>
-                </ul>
-            </nav>
-        </div>
+        <admin-student-menu></admin-student-menu>
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
@@ -85,6 +77,7 @@
     import {useRouter} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import {useGroupForm} from "../../../use/admin/group-form";
+    import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
 
     export default {
         setup() {
@@ -123,7 +116,7 @@
 
             }
         },
-        components: {AppLoader}
+        components: {AppLoader,AdminStudentMenu}
     }
 </script>
 

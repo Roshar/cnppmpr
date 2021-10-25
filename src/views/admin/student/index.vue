@@ -1,24 +1,20 @@
 <template>
     <div class="col-3">
-        <div class="student-menu">
-                <nav class="colorlib-main-menu" role="navigation">
-                    <ul class="navbar-menu">
-                        <li><router-link to="/students"  class="router-link" >Обучающиеся</router-link></li>
-                        <li><router-link to="/group"  class="router-link" >Учебные группы</router-link></li>
-                        <li><router-link to="/ban"  class="router-link" href="#"> Заблокированные </router-link></li>
-                    </ul>
-                </nav>
-        </div>
+        <admin-student-menu></admin-student-menu>
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
             <h4 class="title-page">Обучающиеся</h4>
             <hr>
-            <h5 class="subtitle-page">Поисковик </h5>
+            <h5 class="subtitle-page">Отсортировать по параметрам </h5>
             <div class="row">
                 <div class="col-4">
-                    <label> Найти по имени или фамилию</label>
-                    <input type="text" class="form-control" v-model="searchValue"  placeholder="Введите имя или фамилию">
+                    <label> Пол</label>
+                    <select class="form-control" name="gender" v-model="gender_value">
+                        <option value="0">Выбрать пол</option>
+                        <option value="man">Муж</option>
+                        <option value="woman">Жен</option>
+                    </select>
                 </div>
                 <div class="col-4">
                     <label > Район</label>
@@ -36,68 +32,48 @@
                 </div>
             </div>
             <hr>
-            <div class="search-students" v-if="search">
-                <h5 >Результат поиска </h5>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">№</th>
-                        <th scope="col">ФИО</th>
-                        <th scope="col">Школа</th>
-                        <th scope="col">Район</th>
-                        <th scope="col">Предмет</th>
-                        <th scope="col">Дата рождения</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(item, index) in students">
-                        <th scope="row">{{index+1}}</th>
-                        <td>{{item.name}} {{item.surname}}</td>
-                        <td>{{item.school_name}}</td>
-                        <td>{{item.title_area}}</td>
-                        <td>{{item.title_discipline}}</td>
-                        <td>{{item.birthday}}</td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="content-wallpaper">
-                    <h5 >Последние зарегистрировавшиеся студенты </h5>
+                <app-loader v-if="loading"></app-loader>
+                <div class="content-wallpaper" v-else>
+                    <div class="row">
+                        <div class="col-4"> <h5 >Список обучающихся(активированные)</h5></div>
+                        <div class="col-4"> <span>Общее количество: {{countNum}}</span></div>
+                    </div>
+
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th scope="col">№</th>
-                            <th scope="col">ФИО</th>
-                            <th scope="col">Школа</th>
-                            <th scope="col">Район</th>
-                            <th scope="col">Предмет</th>
-                            <th scope="col">Активация</th>
-                            <th scope="col">Дата регистрации</th>
-
-                        </tr>
+                            <tr>
+                                <th scope="col" style="width: 3%" >№</th>
+                                <th scope="col" style="width: 15%">ФИО</th>
+                                <th scope="col" style="width: 20%">Школа</th>
+                                <th scope="col" style="width: 15%">Район</th>
+                                <th scope="col" style="width: 15%">Предмет</th>
+                                <th scope="col" style="width: 7%">Дата регистрации</th>
+                                <th scope="col" style="width: 5%">Деактивация</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(item, index) in lastStudents" :key="item.user_id">
+                        <tr v-for="(item, index) in students" :key="item.user_id">
                             <th scope="row">{{index+1}}</th>
-                            <td>{{item.name}} {{item.surname}}</td>
+                            <td ><router-link :to="{path:`/student/profile/${item.user_id}`}" class="name_student_link"> {{item.name}} {{item.surname}}</router-link></td>
                             <td>{{item.school_name}}</td>
                             <td>{{item.title_area}}</td>
                             <td>{{item.title_discipline}}</td>
-                            {{activeStatus(item.status)}}
-                            <td> <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>
                             <td>{{item.created}}</td>
+                            <td>
+                                <div style="text-align: center" @click="deactivationUser(item.user_id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
+                                    </svg>
+                                </div>
+                            </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -108,6 +84,7 @@
     import {useStore} from 'vuex'
     import {useRouter} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
+    import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
     export default {
         setup() {
             const store = useStore()
@@ -116,7 +93,7 @@
             const search = ref(false)
             const discipline_value = ref("0")
             const area_value = ref("0")
-            const searchValue = ref()
+            const gender_value = ref("0")
             // STUDENTS DATA
             const currentTime = ref()
             const areas = ref()
@@ -125,51 +102,43 @@
             const lastStudents = ref()
             const btnActiveClass = ref()
             const btnActiveValue = ref()
+            const countNum = ref(0)
             const disabled = ref(false)
+            const deactivation = ref(false)
 
-            watch([searchValue,area_value,discipline_value], async (values) => {
-                search.value = true
-                console.log(values)
-                if(values[0] !== '') {
-                    students.value = await store.dispatch('admin/liveSearch',
-                        {param:searchValue.value,
+            watch([gender_value, area_value, discipline_value], async (values) => {
+                // search.value = true
+                if(values[0] !== '0' || values[1] !== '0' || values[2] !== '0' ) {
+                    students.value = await store.dispatch('admin/getUsersActive',
+                        {filter: true,
                                 tbl:'students',
                                 areaId: area_value.value,
-                                disId: discipline_value.value
+                                disId: discipline_value.value,
+                                gender: gender_value.value,
                                 })
+                    countNum.value = students.value.length ? students.value.length : 0
                 }else {
                     search.value = false
-                    students.value = []
+                    students.value = await store.dispatch('admin/getUsersActive',{filter: false, tbl:'students'})
+                    console.log(students.value.length)
+                    countNum.value = students.value.length ? students.value.length : 0
                 }
             })
 
-            const activeStatus = (val) => {
-                if(val === 'on') {
-                    btnActiveValue.value = 'Активирован'
-                    btnActiveClass.value = 'btn-primary-outline'
-                    disabled.value = true
-                }else {
-                    btnActiveValue.value = 'Активировать'
-                    btnActiveClass.value = 'btn-danger-outline'
-                    disabled.value = false
-                }
-            }
-
-            const activation = async (user) => {
-                    await store.dispatch('admin/activationById',{userId: user})
-                    lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                    await router.push('/students')
+            const deactivationUser = async (user) => {
+                await store.dispatch('admin/deactivationById',{userId: user})
+                students.value = await store.dispatch('admin/getUsersActive',{filter: false, tbl:'students'})
+                countNum.value = students.value.length ? students.value.length : 0
+                await router.push('/students')
             }
 
 
             onMounted(async()=>{
                 loading.value = true
-                // STUDENT INFO
                 areas.value = await store.dispatch('area/getAreas')
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
-                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                console.log(lastStudents.value)
-                //AREA INFO
+                students.value = await store.dispatch('admin/getUsersActive',{filter: false, tbl:'students'})
+                countNum.value = students.value.length ? students.value.length : 0
                 loading.value = false
             })
 
@@ -183,17 +152,18 @@
                 disciplines,
                 discipline_value,
                 area_value,
-                searchValue,
                 students,
                 lastStudents,
-                activeStatus,
                 btnActiveClass,
                 btnActiveValue,
                 disabled,
-                activation
+                deactivation,
+                deactivationUser,
+                gender_value,
+                countNum
             }
         },
-        components: {AppLoader}
+        components: {AppLoader,AdminStudentMenu}
     }
 </script>
 
@@ -206,8 +176,30 @@
     .content-wallpaper {
         padding: 25px;
     }
+    .name_student_link {
+        color: #2a5885;
+    }
+    .name_student_link:hover {
+        color: #2a5885;
+        font-weight: bold;
+        text-decoration: none;
+    }
     .title-page {
         color: #4571a3;
+    }
+    .bi-person-x-fill {
+        color: tomato;
+    }
+    .bi-person-x-fill:hover{
+        color: #ff3814;
+        cursor: pointer;
+    }
+    .bi-person-x-fill {
+        color: tomato;
+    }
+    .bi-person-x-fill:hover{
+        color: #ff3814;
+        cursor: pointer;
     }
     .center-content {
         width: 50%;
@@ -242,35 +234,7 @@
     .btn-danger-outline:hover {
         border-color:tomato
     }
-    .colorlib-main-menu {
-        background-color: white;
-        width: 100%;
-    }
-    .colorlib-main-menu ul {
-        list-style-type: none;
-        width: 100%;
-        padding: 0;
-    }
 
-    .colorlib-main-menu ul li .router-link {
-        display: block;
-        padding: 20px;
-        text-align: center;
-        color: #4571a3;
 
-    }
-    .colorlib-main-menu ul li .router-link:hover {
-        text-decoration: none;
-        background-color:rgba(192,192,192,0.1);
-        border-right: rgba(192,192,192,0.3) solid 5px;
-    }
-
-    .colorlib-main-menu ul li .active {
-        text-decoration: none;
-        background-color:rgba(192,192,192,0.1);
-        border-right: rgba(192,192,192,0.3) solid 5px;
-        color: #4571a3;
-        font-weight: 500;
-    }
 
 </style>

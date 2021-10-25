@@ -91,6 +91,13 @@ export function useRegisterTutorForm() {
                 .required('Необходимо указать ваш контактный номер (мобильный)')
         )
 
+        const {value:birthday, errorMessage: birthdayError, handleBlur:birthdayBlur} = useField(
+            'birthday',
+            yup
+                .string()
+                .trim()
+                .required('Необходимо указать дату рождения')
+        )
 
         const {value:code, errorMessage: codeError, handleBlur:codeBlur} = useField(
             'code',
@@ -123,6 +130,7 @@ export function useRegisterTutorForm() {
             surname,
             patronymic,
             discipline,
+            birthday,
             phone,
             code,
             gender,
@@ -135,6 +143,7 @@ export function useRegisterTutorForm() {
             phoneError,
             genderError,
             codeError,
+            birthdayError,
             lBlur,
             pBlur,
             cpBlur,
@@ -142,6 +151,7 @@ export function useRegisterTutorForm() {
             snBlur,
             disBlur,
             genderBlur,
+            birthdayBlur,
             codeBlur,
             onSubmit,
             isSubmiting,

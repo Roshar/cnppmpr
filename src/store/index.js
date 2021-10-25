@@ -9,6 +9,7 @@ import admin from './modules/admin.module'
 import notification from './modules/notification.module'
 import area from './modules/area.module'
 import discipline from './modules/discipline.module'
+import conversation from './modules/conversation.module'
 
 
 const plugins = []
@@ -56,6 +57,7 @@ export default createStore({
     admin,
     notification,
     area,
-    discipline
+    discipline,
+    conversation
   }
 })

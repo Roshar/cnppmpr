@@ -16,9 +16,10 @@
 
 <script>
     import AdminNavbarTop from '../components/AdminNavBarTop'
+    import AdminStudentMenu from "../components/adminMenu/AdminStudentMenu";
     import AppMessage from '../components/ui/AppMessage'
     export default {
-        components: {AdminNavbarTop,AppMessage}
+        components: {AdminNavbarTop,AppMessage,AdminStudentMenu}
     }
 </script>
 

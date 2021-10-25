@@ -6,10 +6,24 @@
         <nav class="navbar justify-content-end">
             <ul class="list-group list-group-horizontal list-top-menu-ul">
                 <li class="list-group-item list-group-item-action list-top-menu-li">
+                    <span v-if="requestFromUsers !== 0" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{requestFromUsers}}</span>
+                    <a href="#"  data-toggle="dropdown">Заявки </a>
+                    <ul class="dropdown-menu" v-if="requestFromUsers !== 0">
+                        <li v-if="requestStudents !== 0">
+                            <span  class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{requestStudents}}</span>
+                            <router-link :to="{path:`/students/request`}" style="font-size: .8em">Студенты</router-link>
+                        </li>
+                        <li v-if="requestTutors !== 0">
+                            <span  class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{requestTutors}}</span>
+                            <router-link :to="{path:`/tutors/request`}" style="font-size: .8em">Тьюторы</router-link>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-group-item list-group-item-action list-top-menu-li">
                     <a href="#"  data-toggle="dropdown">Категории </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <router-link :to="{path:`/students`}" style="font-size: .8em">Студенты</router-link>
+                            <router-link :to="{path:`/students/list`}" style="font-size: .8em">Студенты</router-link>
                             <router-link :to="{path:`/tutors`}" style="font-size: .8em">Тьюторы</router-link>
                             <router-link :to="{path:`/iom`}" style="font-size: .8em">ИОМ</router-link>
                             <router-link :to="{path:`/report`}" style="font-size: .8em">Отчеты</router-link>
@@ -18,7 +32,7 @@
                 </li>
                 <li class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationMessage" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{notificationMessage.length}}</span>
-                    <router-link to="/">Сообщения </router-link>
+                    <router-link to="/conversations">Сообщения </router-link>
                 </li>
                 <li  class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationAction.length" class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction.length}}</span>
@@ -54,9 +68,17 @@
             const router = useRouter()
             const notificationMessage = ref(false)
             const notificationAction = ref(false)
+            const requestFromUsers = ref(0)
+            const requestStudents = ref(0)
+            const requestTutors = ref(0)
 
             onMounted(async() => {
                 notificationAction.value = await store.dispatch('notification/getNotificationAction')
+                requestStudents.value = await store.dispatch('notification/getRequestStudents')
+                requestTutors.value = await store.dispatch('notification/getRequestTutors')
+                requestStudents.value = requestStudents.value ? requestStudents.value[0].id : 0
+                requestTutors.value = requestTutors.value ? requestTutors.value[0].id : 0
+                requestFromUsers.value = requestStudents.value + requestTutors.value
             })
 
             const onSubmit = handleSubmit(async values => {
@@ -70,7 +92,10 @@
             return {
                 onSubmit,
                 notificationMessage,
-                notificationAction
+                notificationAction,
+                requestFromUsers,
+                requestStudents,
+                requestTutors
             }
         }
     }

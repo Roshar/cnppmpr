@@ -2,7 +2,7 @@ import store from '../store'
 export function beforeAdmin () {
     const func = async (to, from, next) => {
         try{
-            await store.dispatch('auth/confirmRole')
+             await store.dispatch('auth/confirmRole')
             if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role == "admin" ) {
                 const role = await store.state['auth'].role
                 const LayoutName = {

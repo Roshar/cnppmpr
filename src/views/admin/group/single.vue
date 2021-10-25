@@ -1,14 +1,6 @@
 <template>
     <div class="col-3">
-        <div class="student-menu">
-            <nav class="colorlib-main-menu" role="navigation">
-                <ul class="navbar-menu">
-                    <li><router-link to="/students"  class="router-link" href="#">Обучающиеся</router-link></li>
-                    <li><router-link to="/group"  class="router-link " href="#">Учебные группы</router-link></li>
-                    <li><router-link to="/ban"  class="router-link" href="#"> Заблокированные </router-link></li>
-                </ul>
-            </nav>
-        </div>
+        <admin-student-menu></admin-student-menu>
     </div>
     <div class="col-9">
         <div class="modal-form" v-if="showModal">
@@ -60,7 +52,7 @@
                                     <td>{{item.surname}} {{item.name}} {{item.patronymic}} </td>
                                     <td>{{item.school_name}}</td>
                                     <td>{{item.title_area}}</td>
-                                    <td> <button class="btn-primary-outline" > Добавить </button></td>
+                                    <td> <button class="btn-primary-outline" type="button" @click="addInGroup(item.user_id)"> Добавить </button></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -154,7 +146,7 @@
     import {useRouter} from 'vue-router'
     import {useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import {useGroupForm} from "../../../use/admin/group-form";
+    import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
 
     export default {
         setup() {
@@ -169,6 +161,8 @@
             const groupData = ref()
             const title = ref()
             const description = ref()
+            const tutorId = ref()
+            const currentGroup = ref()
             const created = ref()
             const disciplineTitle = ref()
             //FILTER
@@ -177,10 +171,9 @@
             const area_value = ref("0")
 
             const name = ref()
-                const checkIom = (param,value) => {
+                const checkIom = (value) => {
                     return value === null ? 'нет' : 'да'
                 }
-
 
 
             onMounted(async()=>{
@@ -189,10 +182,14 @@
                 // TUTORS DATA
                 tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
                 groupData.value = await store.dispatch('admin/getGroupById',{groupId: route.params.id})
+                tutorId.value = groupData.value['tutor_id']
+                currentGroup.value = groupData.value['id']
+
                 studentsFree.value = await store.dispatch('admin/getFreeStudentsByDisciplineId',{disId: groupData.value['id_dis']})
                 studentsInGroup.value = await store.dispatch('admin/getAppointedStudentsCurrentGroup',
                     {tutorId:groupData.value['tutor_id'],
                              groupId:groupData.value['id']})
+                console.log(studentsInGroup.value)
 
                 title.value = groupData.value.title
                 description.value = groupData.value.description
@@ -214,12 +211,22 @@
                 }
             })
 
-            // const submit = async(values) => {
-            //     await store.dispatch('admin/createGroup', values)
-            //     groupsData.value = await store.dispatch('admin/getGroups')
-            //     showModal.value = false
-            //     await router.push('/group')
-            // }
+            const addInGroup = async(user) => {
+                const group = currentGroup.value
+                const tutor = tutorId.value
+                const student = user
+                await store.dispatch('admin/addUserInGroupAndTutor',{
+                    group,
+                    tutor,
+                    student
+                })
+                studentsInGroup.value = await store.dispatch('admin/getAppointedStudentsCurrentGroup',
+                    {tutorId:groupData.value['tutor_id'],
+                        groupId:groupData.value['id']})
+                showModal.value = false
+                await router.push(`/group/${route.params.id}`)
+            }
+
 
             return {
                 loading,
@@ -236,13 +243,11 @@
                 studentsInGroup,
                 gender_value,
                 area_value,
-                areas
-
-
-
+                areas,
+                addInGroup,
             }
         },
-        components: {AppLoader}
+        components: {AppLoader, AdminStudentMenu}
     }
 </script>
 
