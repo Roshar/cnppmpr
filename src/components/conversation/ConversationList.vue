@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div v-if="s_companions">
-                    <router-link  v-for="(item,index) in s_companions" :key="item.id" :to="{path:`/conversations/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
+                    <router-link  v-for="(item,index) in s_companions" :key="item.id" :to="{path:`/conversation/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
                         <div class="badge bg-success float-right">5</div>
                         <div class="d-flex align-items-start">
                             <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
@@ -56,10 +56,10 @@
 
 
 
-            watch([contacts],async(values)=> {
-                console.log(values)
-
-            })
+            // watch([contacts],async(values)=> {
+            //     console.log(values)
+            //
+            // })
 
             const checkOnline = (val,limit) => {
                 let currentDate = new Date();
@@ -77,28 +77,9 @@
             }
 
 
-            const setChat = async(conId,user,name,surname,avatar) => {
-                // const data =  await store.dispatch('conversation/getChat',{
-                //         token:localStorage.getItem('jwt-token'),
-                //         conId,
-                //         user,
-                //         name,
-                //         surname,
-                //         avatar
-                //     })
-                // chat.value = data.chatData
-                // console.log(chat.value)
-                // user_a.value = data['addressee_id']
-                // surname_a.value = data['addressee_surname']
-                // avatar_a.value = data['addressee_avatar']
-                // name_a.value = data['addressee_name']
-                // myAvatar.value = data.senderData[0].avatar
-
-                // console.log(activeChat1.value)
-            }
 
 
-            return { checkOnline,onlineClass, onlineStatus, setChat,
+            return { checkOnline,onlineClass, onlineStatus,
                     avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts}
         }
     }

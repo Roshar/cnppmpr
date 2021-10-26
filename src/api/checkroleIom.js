@@ -1,10 +1,11 @@
 import store from '../store'
 export function before () {
-const func = async (to, from, next) => {
+    return async (to, from, next) => {
         try{
+            console.log('in before ')
             await store.dispatch('auth/confirmRole')
             if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role !== "student" ) {
-                const role = await store.state['auth'].role
+                const role = store.state['auth'].role
                 const LayoutName = {
                     tutor: "TutorContext",
                     admin: "AdminContext"
@@ -21,6 +22,5 @@ const func = async (to, from, next) => {
             console.log('Ошибка подтверждения')
         }
     }
-    return func
 }
 

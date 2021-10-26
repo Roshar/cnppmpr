@@ -16,7 +16,6 @@
             const router = useRoute()
             const role = computed(() => store.state['auth'].role)
             const tpl = computed(() => `/`)
-
             return {
                 role
             }

@@ -130,14 +130,14 @@
 
             onMounted(async()=>{
                 loading.value = true
-                const data =  await store.dispatch('conversation/getChat',{
-                    token:localStorage.getItem('jwt-token'),
-                    conId:  route.params.chat,
-                    user:  route.params.user
-                })
-                senderData.value = data.senderData
-                chatData.value = data.chatData
-                addresseeData.value = data.addresseeData
+                    const data =  await store.dispatch('conversation/getChat',{
+                        token:localStorage.getItem('jwt-token'),
+                        conId:  route.params.chat,
+                        user:  route.params.user
+                    })
+                    senderData.value = data.senderData
+                    chatData.value = data.chatData
+                    addresseeData.value = data.addresseeData
 
 
                 companions.value =  await store.dispatch('conversation/getCompanions',

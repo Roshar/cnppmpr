@@ -41,14 +41,14 @@
                         </button>
                     </div>
                 </div>
-
             </form>
         </div>
         <app-loader v-if="loading"></app-loader>
         <div class="content-wallpaper">
-            <conversation-chat :s_companions="s_companions" :senderData="senderData" :chatData="chatData" :addresseeData="addresseeData" @open="showModal=true"/>
+            <conversation-list :s_companions="s_companions"   @open="showModal=true"/>
         </div>
     </div>
+
     <transition  name="fade" appear>
         <div class="modal-overlay" v-if="showModal" @click="showModal = false">
         </div>
@@ -56,12 +56,12 @@
 </template>
 
 <script>
-    import {ref, onMounted,  watch} from 'vue'
+    import {ref, onMounted, computed, watch} from 'vue'
     import {useStore} from 'vuex'
     import {useRouter, useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
-    import ConversationChat from "../../../components/conversation/ConversationChat";
+    import ConversationList from "../../../components/conversation/ConversationList";
     export default {
         setup() {
             const store = useStore()
@@ -74,16 +74,15 @@
             const searchContact = ref()
             const searchContactData = ref()
 
+            const banStudents = ref()
             const companions = ref()
             const s_companions = ref()
             const onlineClass = ref()
             const onlineStatus = ref()
-            const senderData = ref()
-            const addresseeData = ref()
-            const chatData = ref()
 
 
             const checkOnlineContact = (val,limit) => {
+
                 let currentDate = new Date();
                 let currentTIme = new Date(currentDate.getTime());
                 let fromSqlTime = new Date(val);
@@ -97,70 +96,43 @@
                     onlineStatus.value = 'в сети'
                 }
             }
-            // console.log(rid)
-            // watch(() => route.params, async(newId) => {
-            //     if(newId.user) {
-            //         console.log(newId)
-            //         const data1 =  await store.dispatch('conversation/getChat',{
-            //             token:localStorage.getItem('jwt-token'),
-            //             conId: newId.chat,
-            //             user: newId.user
-            //         })
-            //         senderData.value = data1.senderData
-            //         chatData.value = data1.chatData
-            //         addresseeData.value = data1.addresseeData
-            //         companions.value =  await store.dispatch('conversation/getCompanions',
-            //             {token: localStorage.getItem('jwt-token')})
-            //         s_companions.value = companions.value['studentsData']
-            //     }
-            // } );
-            // watch([searchContact,role],async (values) => {
-            //
-            //
-            //
-            //     if(values[0] && role.value !== ''){
-            //         searchContactData.value = await store.dispatch('conversation/searchUser',{
-            //             tbl: values[1],
-            //             searchValue: values[0]
-            //         })
-            //     }else {
-            //         searchContactData.value = []
-            //     }
-            // })
+
+            watch([searchContact,role],async (values) => {
+                if(values[0] && role.value !== ''){
+                    searchContactData.value = await store.dispatch('conversation/searchUser',{
+                        tbl: values[1],
+                        searchValue: values[0]
+                    })
+                }else {
+                    searchContactData.value = []
+                }
+            })
 
             onMounted(async()=>{
                 loading.value = true
-                const data =  await store.dispatch('conversation/getChat',{
-                    token:localStorage.getItem('jwt-token'),
-                    conId:  route.params.chat,
-                    user:  route.params.user
-                })
-                senderData.value = data.senderData
-                chatData.value = data.chatData
-                addresseeData.value = data.addresseeData
-
-
                 companions.value =  await store.dispatch('conversation/getCompanions',
                     {token: localStorage.getItem('jwt-token')})
                 s_companions.value = companions.value['studentsData']
                 loading.value = false
             })
 
-            // const createConversation = async (user) => {
-            //     await store.dispatch('conversation/createConversationWithoutInsert',{
-            //         token: localStorage.getItem('jwt-token'),
-            //         targetUserId: user
-            //     })
-            //     companions.value =  await store.dispatch('conversation/getCompanions',
-            //         {token: localStorage.getItem('jwt-token')})
-            //     s_companions.value = companions.value['studentsData']
-            //     showModal.value = false
-            //     await router.push('/conversations')
-            // }
+            const createConversation = async (user) => {
+                await store.dispatch('conversation/createConversationWithoutInsert',{
+                    token: localStorage.getItem('jwt-token'),
+                    targetUserId: user
+                })
+                companions.value =  await store.dispatch('conversation/getCompanions',
+                    {token: localStorage.getItem('jwt-token')})
+                s_companions.value = companions.value['studentsData']
+                showModal.value = false
+                await router.push('/conversations')
+            }
 
             return {
                 showModal,
                 loading,
+                banStudents,
+                ConversationList,
                 s_companions,
                 role,
                 searchContact,
@@ -168,13 +140,10 @@
                 checkOnlineContact,
                 onlineClass,
                 onlineStatus,
-                // createConversation,
-                senderData,
-                addresseeData,
-                chatData
+                createConversation,
             }
         },
-        components: {ConversationChat, AppLoader, AdminStudentMenu}
+        components: {ConversationList, AppLoader, AdminStudentMenu}
     }
 </script>
 
@@ -259,6 +228,19 @@
     .environment-in {
         color: #528c83 !important;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </style>

@@ -17,7 +17,6 @@ export default {
         // role: localStorage.getItem(ROLE),
         role: null,
         status: null,
-        layout: null,
         schoolsList: [],
         areasList: [],
         disciplineList: [],
@@ -77,12 +76,6 @@ export default {
         setSchools(state, list) {
             state.schoolsList = list
         },
-
-        addLayout(state,value) {
-            state.layout = value
-        },
-
-
         clearSchools(state) {
             state.schoolsList = []
         },
@@ -180,7 +173,6 @@ export default {
         // подтверждение роли пользователя
 
         async confirmRole({commit, dispatch, state}, payload) {
-
             try {
                 const user = {'token':state.token}
                 const {data} =  await axios.post('/api/get/role', user)

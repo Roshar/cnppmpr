@@ -23,10 +23,10 @@
                     <a href="#"  data-toggle="dropdown">Категории </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <router-link :to="{path:`/students/list`}" style="font-size: .8em">Студенты</router-link>
-                            <router-link :to="{path:`/tutors`}" style="font-size: .8em">Тьюторы</router-link>
-                            <router-link :to="{path:`/iom`}" style="font-size: .8em">ИОМ</router-link>
-                            <router-link :to="{path:`/report`}" style="font-size: .8em">Отчеты</router-link>
+                            <router-link :to="{path:`/students`}" style="font-size: .8em">Студенты</router-link>
+                            <router-link to="/" style="font-size: .8em">Тьюторы</router-link>
+                            <router-link to="/" style="font-size: .8em">ИОМ</router-link>
+                            <router-link to="/" style="font-size: .8em">Отчеты</router-link>
                         </li>
                     </ul>
                 </li>
@@ -36,7 +36,7 @@
                 </li>
                 <li  class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationAction.length" class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction.length}}</span>
-                    <a href="#"  data-toggle="dropdown">Уведомлений </a>
+                    <a href="#"  data-toggle="dropdown">Уведомления </a>
                     <ul v-if="notificationAction.length" class="dropdown-menu">
                         <li>
                             <router-link :to="{path:`/notifications`}" style="font-size: .8em">Запрос на удаление ИОМа</router-link>

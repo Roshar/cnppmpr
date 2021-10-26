@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div v-if="s_companions">
-                    <router-link  v-for="(item,index) in s_companions" :key="item.id" :to="{path:`/conversations/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
+                    <button  v-for="(item,index) in s_companions" :key="item.id"  @click="getRoom(item.id,item.target_user_id )" class="list-group-item list-group-item-action border-0">
                         <div class="badge bg-success float-right">5</div>
                         <div class="d-flex align-items-start">
                             <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
@@ -26,8 +26,9 @@
                                 </svg> {{onlineStatus}}</div>
                             </div>
                         </div>
-                    </router-link>
+                    </button>
                 </div>
+
                 <hr class="d-block d-lg-none mt-1 mb-0">
             </div>
 
@@ -49,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-{{chatData}}
+
                 <div class="position-relative">
                     <div class="chat-messages p-4" v-for="item in chatData" :key="item.id">
 
@@ -87,18 +88,19 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
 
     import {ref, watch} from "vue";
     import {useStore} from 'vuex'
+    import {useRoute, useRouter} from 'vue-router'
 
     export default {
         emits:['open'],
         props: ['s_companions','senderData','addresseeData','chatData'],
         setup() {
+            const router = useRouter()
             const store = useStore()
             const onlineClass = ref()
             const onlineStatus = ref()
@@ -111,11 +113,6 @@
             const chat = ref()
 
 
-
-            watch([contacts],async(values)=> {
-                console.log(values)
-
-            })
 
             const checkOnline = (val,limit) => {
                 let currentDate = new Date();
@@ -132,30 +129,15 @@
                 }
             }
 
-
-            const setChat = async(conId,user,name,surname,avatar) => {
-                // const data =  await store.dispatch('conversation/getChat',{
-                //         token:localStorage.getItem('jwt-token'),
-                //         conId,
-                //         user,
-                //         name,
-                //         surname,
-                //         avatar
-                //     })
-                // chat.value = data.chatData
-                // console.log(chat.value)
-                // user_a.value = data['addressee_id']
-                // surname_a.value = data['addressee_surname']
-                // avatar_a.value = data['addressee_avatar']
-                // name_a.value = data['addressee_name']
-                // myAvatar.value = data.senderData[0].avatar
-
-                // console.log(activeChat1.value)
+            const getRoom = async(rootId, targetUser) => {
+                console.log('getRoom')
+                await router.push(`/conversations/${rootId}/${targetUser}`)
             }
 
+        //:to="{path:`/conversation/${item.id}/${item.target_user_id}`}"
 
-            return { checkOnline,onlineClass, onlineStatus, setChat,
-                avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts}
+            return { checkOnline,onlineClass, onlineStatus,
+                avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts,getRoom }
         }
     }
 </script>

@@ -2,8 +2,10 @@ import store from '../store'
 export function checkAccess () {
     return  async (to, from, next) => {
         try{
-            await store.dispatch('auth/confirmRole')
+
+            const user = await store.dispatch('auth/confirmRole')
             const roleAuth = store.state['auth'].role
+            console.log(store.state['auth'])
             if((roleAuth === 'student' || roleAuth === 'tutor')  && store.state['auth'].status === 'on') {
                 console.log(store.state['auth'].status)
                 to.meta.layout = store.state['auth'].role

@@ -22,6 +22,7 @@ export default createStore({
   plugins,
   state(){
       return {
+        // layout: 'AdminContext',
         systemMessage: null
       }
   },
@@ -33,6 +34,10 @@ export default createStore({
     //Очистить сообщение об ошибке
     clearSystemMessage(state) {
       state.systemMessage = null
+    },
+
+    setLayout(state, payload) {
+      state.layout = payload
     }
 
   },
