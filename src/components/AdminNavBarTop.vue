@@ -24,7 +24,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <router-link :to="{path:`/students`}" style="font-size: .8em">Студенты</router-link>
-                            <router-link to="/" style="font-size: .8em">Тьюторы</router-link>
+                            <router-link to="/tutors" style="font-size: .8em">Тьюторы</router-link>
                             <router-link to="/" style="font-size: .8em">ИОМ</router-link>
                             <router-link to="/" style="font-size: .8em">Отчеты</router-link>
                         </li>

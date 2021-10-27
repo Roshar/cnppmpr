@@ -28,7 +28,7 @@
                     </div>
                     <div class="contacts">
                         <button  type="button" v-if="searchContactData" v-for="item in searchContactData" :key="item.id" class="list-group-item list-group-item-action border-0"
-                                 @click="createConversation(item.user_id,activeChat = true )">
+                                 @click="createConversation(item.user_id )">
                             <div class="d-flex align-items-start">
                                 <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
                                 <div class="flex-grow-1 ml-3">
@@ -46,7 +46,7 @@
         </div>
         <app-loader v-if="loading"></app-loader>
         <div class="content-wallpaper">
-            <conversation-chat :s_companions="s_companions" :senderData="senderData" :chatData="chatData" :addresseeData="addresseeData" @open="showModal=true"/>
+            <conversation-chat @sendMessage="sendMessage" :is="addresseeData"  :addresseeData="addresseeData" :s_companions="s_companions" :senderData="senderData" :chatData="chatData"  @open="showModal=true"/>
         </div>
     </div>
     <transition  name="fade" appear>
@@ -73,6 +73,7 @@
             const role = ref('')
             const searchContact = ref()
             const searchContactData = ref()
+            const chatParams = ref()
 
             const companions = ref()
             const s_companions = ref()
@@ -97,7 +98,22 @@
                     onlineStatus.value = 'в сети'
                 }
             }
-            // console.log(rid)
+
+            const sendMessage = async (msg) =>{
+                await store.dispatch('conversation/sendMessageInChat',{
+                    message: msg.message,
+                    targetUserId:msg.targetUserId
+                })
+                await store.dispatch('conversation/getChat',{
+                    token:localStorage.getItem('jwt-token'),
+                    conId:  route.params.chat,
+                    user:  route.params.user
+                })
+                chatData.value = store.getters['conversation/getChat']
+
+
+            }
+
             // watch(() => route.params, async(newId) => {
             //     if(newId.user) {
             //         console.log(newId)
@@ -114,53 +130,57 @@
             //         s_companions.value = companions.value['studentsData']
             //     }
             // } );
-            // watch([searchContact,role],async (values) => {
-            //
-            //
-            //
-            //     if(values[0] && role.value !== ''){
-            //         searchContactData.value = await store.dispatch('conversation/searchUser',{
-            //             tbl: values[1],
-            //             searchValue: values[0]
-            //         })
-            //     }else {
-            //         searchContactData.value = []
-            //     }
-            // })
 
+            watch([searchContact,role],async (values) => {
+                if(values[0] && role.value !== ''){
+                    searchContactData.value = await store.dispatch('conversation/searchUser',{
+                        tbl: values[1],
+                        searchValue: values[0]
+                    })
+                }else {
+                    searchContactData.value = []
+                }
+            })
             onMounted(async()=>{
                 loading.value = true
-                const data =  await store.dispatch('conversation/getChat',{
+                companions.value =  await store.dispatch('conversation/getCompanions')
+                companions.value =  await store.dispatch('conversation/getCompanions')
+                await store.dispatch('conversation/getChat',{
                     token:localStorage.getItem('jwt-token'),
                     conId:  route.params.chat,
                     user:  route.params.user
                 })
-                senderData.value = data.senderData
-                chatData.value = data.chatData
-                addresseeData.value = data.addresseeData
-
-
-                companions.value =  await store.dispatch('conversation/getCompanions',
-                    {token: localStorage.getItem('jwt-token')})
-                s_companions.value = companions.value['studentsData']
+                senderData.value = store.getters['conversation/getSender']
+                chatData.value = store.getters['conversation/getChat']
+                addresseeData.value = store.getters['conversation/getAddressee']
+                s_companions.value = store.getters['conversation/getCompanions']
                 loading.value = false
             })
 
-            // const createConversation = async (user) => {
-            //     await store.dispatch('conversation/createConversationWithoutInsert',{
-            //         token: localStorage.getItem('jwt-token'),
-            //         targetUserId: user
-            //     })
-            //     companions.value =  await store.dispatch('conversation/getCompanions',
-            //         {token: localStorage.getItem('jwt-token')})
-            //     s_companions.value = companions.value['studentsData']
-            //     showModal.value = false
-            //     await router.push('/conversations')
-            // }
+            const createConversation = async (user) => {
+                chatParams.value = await store.dispatch('conversation/createConversationWithoutInsert',{
+                    targetUserId: user
+                })
+                companions.value =  await store.dispatch('conversation/getCompanions')
+                await store.dispatch('conversation/getChat',{
+                    token:localStorage.getItem('jwt-token'),
+                    conId:  chatParams.value.conId,
+                    user:  chatParams.value.targetUserId
+                }).then(()=> {
+                    senderData.value = store.getters['conversation/getSender']
+                    chatData.value = store.getters['conversation/getChat']
+                    addresseeData.value = store.getters['conversation/getAddressee']
+                    s_companions.value = store.getters['conversation/getCompanions']
+                })
+
+                await router.push(`/conversations/${chatParams.value.conId}/${chatParams.value.targetUserId}`)
+                showModal.value = false
+            }
 
             return {
                 showModal,
                 loading,
+                sendMessage,
                 s_companions,
                 role,
                 searchContact,
@@ -168,7 +188,7 @@
                 checkOnlineContact,
                 onlineClass,
                 onlineStatus,
-                // createConversation,
+                createConversation,
                 senderData,
                 addresseeData,
                 chatData

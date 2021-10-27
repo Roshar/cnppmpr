@@ -2,17 +2,12 @@ import store from '../store'
 export function before () {
     return async (to, from, next) => {
         try{
-            console.log('in before ')
             await store.dispatch('auth/confirmRole')
-            if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role !== "student" ) {
-                const role = store.state['auth'].role
-                const LayoutName = {
-                    tutor: "TutorContext",
-                    admin: "AdminContext"
-                }
-                to.meta.layout = LayoutName[role]
+            const authResult = store.state['auth']
+            if(authResult.role && authResult.status == 'on' && authResult.role !== "student" ) {
+                store.commit('setLayout',authResult.role)
                 next()
-            } else if(store.state['auth'].role && store.state['auth'].status == 'on' && store.state['auth'].role === "student") {
+            } else if(authResult.role && authResult.status == 'on' && authResult.role === "student") {
                 console.log('404')
                 next('/404')
             } else {

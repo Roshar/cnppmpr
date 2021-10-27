@@ -6,7 +6,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container-fluid">
         <app-message />
         <div class="row">
             <div class="col-3">

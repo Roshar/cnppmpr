@@ -9,7 +9,7 @@ const LOGIN = 'login'
 const USERID = 'userId'
 
 export default {
-    //для экспорта модуля  в  глобальный store, например: store.dispatch('auth/login')
+
     namespaced: true,
 
     state: {

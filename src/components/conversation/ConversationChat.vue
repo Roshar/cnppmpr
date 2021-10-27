@@ -15,7 +15,9 @@
                     </div>
                 </div>
                 <div v-if="s_companions">
-                    <button  v-for="(item,index) in s_companions" :key="item.id"  @click="getRoom(item.id,item.target_user_id )" class="list-group-item list-group-item-action border-0">
+
+
+                    <button v-for="(item,index) in s_companions" :key="item.id"  @click="getRoom(item.id, item.target_user_id)"   class="list-group-item list-group-item-action border-0">
                         <div class="badge bg-success float-right">5</div>
                         <div class="d-flex align-items-start">
                             <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
@@ -35,13 +37,13 @@
             <div class="col-12 col-lg-7 col-xl-9"  >
 
                 <div class="py-2 px-4 border-bottom d-none d-lg-block">
-                    <div class="d-flex align-items-center py-1">
-                        <div class="position-relative">
-                            <img :src="avatar_a" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                    <div class="d-flex align-items-center py-1" v-if="addresseeData">
+                        <div class="position-relative" >
+                            <img  :src="addresseeData[0]['avatar']" class="rounded-circle mr-1" alt="Иван" width="40" height="40">
                         </div>
                         <div class="flex-grow-1 pl-3">
-                            <strong>{{name_a}} {{surname_a}}</strong>
-                            <div class="text-muted small"><em>{{onlineStatus}}</em></div>
+                            <strong>{{addresseeData[0].name}} {{addresseeData[0].surname}}</strong>
+                            <div class="text-muted small">был: <em>{{addresseeData[0]['auth_update']}}</em></div>
                         </div>
                         <div>
                             <button class="btn btn-primary btn-lg mr-1 px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone feather-lg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button>
@@ -54,9 +56,8 @@
                 <div class="position-relative">
                     <div class="chat-messages p-4" v-for="item in chatData" :key="item.id">
 
-                        <div v-if="item.source_user != user_a" class="chat-message-right  pb-4">
+                        <div v-if="item.source_user == senderData[0]['user_id']" class="chat-message-right  pb-4">
                             <div>
-                                <img :src="myAvatar" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
                                 <div class="text-muted small text-nowrap mt-2">{{item.created_date}}</div>
                             </div>
                             <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
@@ -64,14 +65,12 @@
                                 {{item['body']}}
                             </div>
                         </div>
-
-                        <div class="chat-message-left pb-4" v-else>
+                        <div class="chat-message-left pb-4" v-if="item.source_user == addresseeData[0]['user_id']">
                             <div>
-                                <img :src="avatar_a" class="rounded-circle mr-1"  width="40" height="40">
                                 <div class="text-muted small text-nowrap mt-2">{{item.created_date}}</div>
                             </div>
                             <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                                <div class="font-weight-bold mb-1">{{name_a}} {{surname_a}}</div>
+                                <div class="font-weight-bold mb-1">{{addresseeData[0].name}} {{addresseeData[0].surname}}</div>
                                 {{item['body']}}
                             </div>
                         </div>
@@ -80,8 +79,8 @@
 
                 <div class="flex-grow-0 py-3 px-4 border-top">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Type your message">
-                        <button class="btn btn-primary">Send</button>
+                        <input type="text" class="form-control" @keydown.enter="sendMsg" v-model="message" placeholder="Сообщение">
+                        <button class="btn btn-primary"  @click="sendMsg">Отправить</button>
                     </div>
                 </div>
 
@@ -97,11 +96,13 @@
     import {useRoute, useRouter} from 'vue-router'
 
     export default {
-        emits:['open'],
+        emits:['open','sendMessage'],
         props: ['s_companions','senderData','addresseeData','chatData'],
-        setup() {
+        setup(_,{emit}) {
             const router = useRouter()
+            const route = useRoute()
             const store = useStore()
+            const targetUserId = ref(route.params.user)
             const onlineClass = ref()
             const onlineStatus = ref()
             const name_a = ref()
@@ -111,7 +112,7 @@
             const myAvatar = ref()
             const contacts = ref()
             const chat = ref()
-
+            const message = ref()
 
 
             const checkOnline = (val,limit) => {
@@ -129,15 +130,23 @@
                 }
             }
 
-            const getRoom = async(rootId, targetUser) => {
-                console.log('getRoom')
-                await router.push(`/conversations/${rootId}/${targetUser}`)
+            const getRoom = (rootId, targetUser) => {
+                //TODO use vue for get chat without redirect
+                window.location.href = `/conversations/${rootId}/${targetUser}`;
             }
 
-        //:to="{path:`/conversation/${item.id}/${item.target_user_id}`}"
+            const sendMsg = async() => {
+                if(message.value.trim().length > 0) {
+                    emit('sendMessage', {
+                        message: message.value,
+                        targetUserId: targetUserId.value
+                    })
+                    message.value = ''
+                }
+            }
 
             return { checkOnline,onlineClass, onlineStatus,
-                avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts,getRoom }
+                avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts,getRoom, sendMsg,message}
         }
     }
 </script>

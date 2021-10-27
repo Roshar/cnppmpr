@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div v-if="s_companions">
-                    <router-link  v-for="(item,index) in s_companions" :key="item.id" :to="{path:`/conversation/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
+                    <router-link  v-for="(item,index) in s_companions" :key="item.id" :to="{path:`/conversations/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
                         <div class="badge bg-success float-right">5</div>
                         <div class="d-flex align-items-start">
                             <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
@@ -46,20 +46,14 @@
             const store = useStore()
             const onlineClass = ref()
             const onlineStatus = ref()
-            const name_a = ref()
-            const surname_a = ref()
-            const avatar_a = ref()
-            const user_a = ref()
-            const myAvatar = ref()
             const contacts = ref()
-            const chat = ref()
+            const role = ref('')
 
 
+            watch([contacts],async(values)=> {
+                console.log(values)
 
-            // watch([contacts],async(values)=> {
-            //     console.log(values)
-            //
-            // })
+            })
 
             const checkOnline = (val,limit) => {
                 let currentDate = new Date();
@@ -79,8 +73,7 @@
 
 
 
-            return { checkOnline,onlineClass, onlineStatus,
-                    avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts}
+            return { checkOnline,onlineClass, onlineStatus, role,contacts}
         }
     }
 </script>

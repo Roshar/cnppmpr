@@ -22,7 +22,7 @@ export default createStore({
   plugins,
   state(){
       return {
-        // layout: 'AdminContext',
+        layout: null,
         systemMessage: null
       }
   },

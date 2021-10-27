@@ -10,6 +10,7 @@ import IomTutor from '../views/tutor/iom/index'
 import IomAdmin from '../views/admin/iom/index'
 import StudentAdmin from '../views/admin/student'
 import StudentTutor from '../views/tutor/student'
+import Tutors from '../views/admin/tutor'
 import StudentProfileAdmin from '../views/admin/student/profile'
 import StudentProfileTutor from '../views/admin/student/profile'
 import SearchAdmin from '../views/admin/student/search'
@@ -31,6 +32,7 @@ import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
 import {before} from '../api/checkroleIom'
+import {withoutIsAuth} from '../api/withoutIsAuth'
 import {checkAccess} from '../api/checkActivePage'
 import {beforeAdmin} from '../api/checkRoleAdmin'
 
@@ -81,6 +83,17 @@ const routes = [
       auth: true,
     },
   },
+
+  {
+    path: '/tutors',
+    name: 'tutors',
+    component:Tutors,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
 
   {
     path: '/student/profile/:userId',
@@ -151,25 +164,6 @@ const routes = [
     }
   },
 
-
-  // {
-  //   path: '/conversation/:chat',
-  //   name: 'conversationsChats',
-  //   component: () => {
-  //     switch (store.state['auth'].role) {
-  //       case "admin":
-  //         return chatAdmin
-  //       case "tutor":
-  //         return chatTutor
-  //     }
-  //   },
-  //   beforeEnter: before(),
-  //   meta:{
-  //     auth: true,
-  //     role: store.state['auth'].role,
-  //   },
-  // },
-
   {
     path: '/search',
     name: 'search',
@@ -179,6 +173,7 @@ const routes = [
       auth: true,
     },
   },
+
   {
     path: '/last',
     name: 'last',
@@ -273,8 +268,8 @@ const routes = [
     path: '/auth',
     name: 'Auth',
     component: Auth,
+    beforeEnter:withoutIsAuth('auth'),
     meta:{
-      layout:'auth',
       auth:false
     }
   },
@@ -292,6 +287,7 @@ const routes = [
   {
     path: '/adminconfirm',
     name: 'AdminConfirm',
+    beforeEnter:withoutIsAuth('auth'),
     component: () => {
       switch (store.state['auth'].role) {
         case "admin":
@@ -305,11 +301,9 @@ const routes = [
       }
     },
     meta:{
-      layout:'auth',
       auth:false
     }
   },
-
 
 
   {
@@ -334,8 +328,8 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: () => import('../views/authForms/Register.vue'),
+    beforeEnter:withoutIsAuth('auth'),
     meta:{
-      layout:'auth',
       auth:false
     }
   },
@@ -344,6 +338,7 @@ const routes = [
     path: '/404',
     name: 'NotFound',
     component: NotFound,
+    beforeEnter:withoutIsAuth('NotFound'),
     meta:{
       auth:false,
       layout: 'NotFound'
@@ -354,6 +349,7 @@ const routes = [
     path: '/regtutor',
     name: 'Regtutor',
     component: ()=> import('../views/authForms/Regtutor.vue'),
+    beforeEnter:withoutIsAuth('auth'),
     meta:{
       layout:'auth',
       auth:false
@@ -364,8 +360,8 @@ const routes = [
     path: '/regadmin',
     name: 'RegAdmin',
     component: ()=> import('../views/authForms/Regadmin.vue'),
+    beforeEnter:withoutIsAuth('auth'),
     meta:{
-      layout:'auth',
       auth:false
     }
   },
@@ -374,8 +370,8 @@ const routes = [
     path: '/recovery',
     name: 'Recovery',
     component: ()=> import('../views/Recovery.vue'),
+    beforeEnter:withoutIsAuth('auth'),
     meta:{
-      layout:'auth',
       auth:false
     }
   }
