@@ -16,7 +16,34 @@
                 </div>
                 <div v-if="s_companions">
                     <router-link  v-for="(item,index) in s_companions" :key="item.id" :to="{path:`/conversations/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
-                        <div class="badge bg-success float-right">5</div>
+                        <div class="d-flex align-items-start">
+                            <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                            <div class="flex-grow-1 ml-3">
+                                {{item.name}} {{item.surname}} {{checkOnline(item['auth_update'],5)}}
+                                <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" :class="onlineClass" viewBox="0 0 16 16">
+                                    <circle cx="8" cy="8" r="8"/>
+                                </svg> {{onlineStatus}}</div>
+                            </div>
+                        </div>
+                    </router-link>
+                </div>
+                <div v-if="t_companions">
+                    <router-link  v-for="(item,index) in t_companions" :key="item.id" :to="{path:`/conversations/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
+
+                        <div class="d-flex align-items-start">
+                            <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                            <div class="flex-grow-1 ml-3">
+                                {{item.name}} {{item.surname}} {{checkOnline(item['auth_update'],5)}}
+                                <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" :class="onlineClass" viewBox="0 0 16 16">
+                                    <circle cx="8" cy="8" r="8"/>
+                                </svg> {{onlineStatus}}</div>
+                            </div>
+                        </div>
+                    </router-link>
+                </div>
+                <div v-if="a_companions">
+                    <router-link  v-for="(item,index) in a_companions" :key="item.id" :to="{path:`/conversations/${item.id}/${item.target_user_id}`}" class="list-group-item list-group-item-action border-0">
+
                         <div class="d-flex align-items-start">
                             <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
                             <div class="flex-grow-1 ml-3">
@@ -41,7 +68,7 @@
 
     export default {
         emits:['open'],
-        props: ['s_companions'],
+        props: ['s_companions','t_companions','a_companions'],
         setup() {
             const store = useStore()
             const onlineClass = ref()

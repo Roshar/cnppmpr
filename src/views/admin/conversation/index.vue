@@ -45,7 +45,10 @@
         </div>
         <app-loader v-if="loading"></app-loader>
         <div class="content-wallpaper">
-            <conversation-list :s_companions="s_companions" @open="showModal=true" > </conversation-list>
+            <conversation-list :s_companions="s_companions"
+                               :t_companions="t_companions"
+                               :a_companions="a_companions"
+                               @open="showModal=true" > </conversation-list>
         </div>
     </div>
     <transition  name="fade" appear>
@@ -73,6 +76,8 @@
             const searchContactData = ref()
             const companions = ref()
             const s_companions = ref()
+            const t_companions = ref()
+            const a_companions = ref()
             const onlineClass = ref()
             const onlineStatus = ref()
             const chatParams = ref()
@@ -121,7 +126,10 @@
             onMounted(async()=>{
                 loading.value = true
                 companions.value =  await store.dispatch('conversation/getCompanions')
-                s_companions.value = store.getters['conversation/getCompanions']
+                s_companions.value = store.getters['conversation/getCompanionsStudent']
+                t_companions.value = store.getters['conversation/getCompanionsTutor']
+                a_companions.value = store.getters['conversation/getCompanionsAdmin']
+                console.log(s_companions.value)
                 loading.value = false
             })
 
@@ -130,7 +138,9 @@
                     targetUserId: user
                 })
                 companions.value =  await store.dispatch('conversation/getCompanions')
-                s_companions.value = store.getters['conversation/getCompanions']
+                s_companions.value = store.getters['conversation/getCompanionsStudent']
+                t_companions.value = store.getters['conversation/getCompanionsTutor']
+                a_companions.value = store.getters['conversation/getCompanionsAdmin']
                 showModal.value = false
                 await router.push(`/conversations/${chatParams.value.conId}/${chatParams.value.targetUserId}`)
             }
@@ -140,6 +150,8 @@
                 loading,
                 ConversationList,
                 s_companions,
+                t_companions,
+                a_companions,
                 role,
                 searchContact,
                 searchContactData,

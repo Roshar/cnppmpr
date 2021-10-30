@@ -182,6 +182,20 @@ export default {
             }
         },
 
+        async getDependenciesTutor ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getDependenciesTutor',payload)
+                console.log(data.values)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async getIomByStudentAndTutor ({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/getIomByStudentAndTutor',payload)
@@ -250,6 +264,42 @@ export default {
         async createGroup({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/createGroup',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async deleteGroup({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/deleteGroup',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async deleteInGroup({dispatch},payload) {
+            try {
+                console.log('start')
+                const {data} = await axios.post('/api/admin/deleteInGroup',payload)
+
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'

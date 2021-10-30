@@ -114,16 +114,23 @@
                             <th scope="col">Район</th>
                             <th scope="col">Наличие ИОМа</th>
                             <th scope="col">Завершившие обучение</th>
+                            <th scope="col">Удалить из группы</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="(item, index) in studentsInGroup" :key="item.user_id">
                             <th scope="row">{{index+1}}</th>
-                            <td>{{item.surname}} {{item.name}} {{item.patronymic}} </td>
+                            <td> <router-link :to="{path:`/student/profile/${item.user_id}`}">{{item.surname}} {{item.name}} {{item.patronymic}} </router-link></td>
                             <td>{{item.school_name}}</td>
                             <td>{{item.title_area}}</td>
                             <td> {{checkIom(item.isset_iom)}}</td>
                             <td>{{checkIom(item.finish_iom)}}</td>
+                            <td><button class="btn" @click="deleteInGroup(item.user_id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
+                                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                    <path fill-rule="evenodd" d="M12.146 5.146a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button></td>
                         </tr>
                         </tbody>
                     </table>
@@ -175,9 +182,19 @@
                     return value === null ? 'нет' : 'да'
                 }
 
+            const deleteInGroup = async (id) => {
+                await store.dispatch('admin/deleteInGroup',{
+                    user: id,
+                    groupId:route.params.id
+                })
+                groupData.value = await store.dispatch('admin/getGroupById',{groupId: route.params.id})
+                studentsInGroup.value = await store.dispatch('admin/getAppointedStudentsCurrentGroup',
+                    {tutorId:groupData.value['tutor_id'],
+                        groupId:groupData.value['id']})
+                await router.push('/group/'+route.params.id)
+            }
 
-            onMounted(async()=>{
-                loading.value = true
+            const load = async() => {
                 areas.value = await store.dispatch('area/getAreas')
                 // TUTORS DATA
                 tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
@@ -188,14 +205,18 @@
                 studentsFree.value = await store.dispatch('admin/getFreeStudentsByDisciplineId',{disId: groupData.value['id_dis']})
                 studentsInGroup.value = await store.dispatch('admin/getAppointedStudentsCurrentGroup',
                     {tutorId:groupData.value['tutor_id'],
-                             groupId:groupData.value['id']})
-                console.log(studentsInGroup.value)
+                        groupId:groupData.value['id']})
 
                 title.value = groupData.value.title
                 description.value = groupData.value.description
                 created.value = groupData.value['created_at']
                 disciplineTitle.value = groupData.value['title_discipline']
                 name.value = groupData.value.surname +' '+ groupData.value.name +' '+ groupData.value.patronymic
+            }
+
+            onMounted(async()=>{
+                loading.value = true
+                await load()
                 loading.value = false
             })
 
@@ -245,6 +266,7 @@
                 area_value,
                 areas,
                 addInGroup,
+                deleteInGroup
             }
         },
         components: {AppLoader, AdminStudentMenu}
@@ -331,6 +353,12 @@
         border-color:#4571a3;
         text-decoration: none;
 
+    }
+    .bi-person-x {
+        color: tomato;
+    }
+    .bi-person-x:hover {
+        color: #F35B40;
     }
     .btn-danger-outline {
         background-color: transparent;

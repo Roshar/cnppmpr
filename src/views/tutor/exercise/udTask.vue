@@ -44,7 +44,7 @@
             <button type="button" @click="showModal = true" class="btn btn-warning" >Изменить задание </button>
             <button type="button" @click="deleteTask" class="btn btn-danger">Удалить это задание </button>
             <div class="content-task" v-if="!showModal">
-                <request-task :taskData="taskData"  :currentMentor="currentMentor"  :path="route.params" v-else></request-task>
+                <request-task :taskData="taskData"  :currentMentor="currentMentor"  :path="route.params" ></request-task>
             </div>
         </div>
     </div>

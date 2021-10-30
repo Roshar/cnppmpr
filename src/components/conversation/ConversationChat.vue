@@ -14,11 +14,8 @@
                         </svg>
                     </div>
                 </div>
-                <div v-if="s_companions">
-
-
+                <div v-if="a_companions">
                     <button v-for="(item,index) in s_companions" :key="item.id"  @click="getRoom(item.id, item.target_user_id)"   class="list-group-item list-group-item-action border-0">
-                        <div class="badge bg-success float-right">5</div>
                         <div class="d-flex align-items-start">
                             <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
                             <div class="flex-grow-1 ml-3">
@@ -30,7 +27,32 @@
                         </div>
                     </button>
                 </div>
-
+                <div v-if="t_companions">
+                    <button v-for="(item,index) in t_companions" :key="item.id"  @click="getRoom(item.id, item.target_user_id)"   class="list-group-item list-group-item-action border-0">
+                        <div class="d-flex align-items-start">
+                            <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                            <div class="flex-grow-1 ml-3">
+                                {{item.name}} {{item.surname}} {{checkOnline(item['auth_update'],5)}}
+                                <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" :class="onlineClass" viewBox="0 0 16 16">
+                                    <circle cx="8" cy="8" r="8"/>
+                                </svg> {{onlineStatus}}</div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div v-if="s_companions">
+                    <button type="button" v-for="(item,index) in a_companions" :key="item.id"  @click="getRoom(item.id, item.target_user_id)"   class="list-group-item list-group-item-action border-0">
+                        <div class="d-flex align-items-start">
+                            <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                            <div class="flex-grow-1 ml-3">
+                                {{item.name}} {{item.surname}} {{checkOnline(item['auth_update'],5)}}
+                                <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" :class="onlineClass" viewBox="0 0 16 16">
+                                    <circle cx="8" cy="8" r="8"/>
+                                </svg> {{onlineStatus}}</div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
                 <hr class="d-block d-lg-none mt-1 mb-0">
             </div>
 
@@ -97,7 +119,7 @@
 
     export default {
         emits:['open','sendMessage'],
-        props: ['s_companions','senderData','addresseeData','chatData'],
+        props: ['s_companions','t_companions','a_companions','senderData','addresseeData','chatData'],
         setup(_,{emit}) {
             const router = useRouter()
             const route = useRoute()
@@ -113,6 +135,10 @@
             const contacts = ref()
             const chat = ref()
             const message = ref()
+
+            watch(()=>route.params, (val)=>{
+                targetUserId.value = val.user
+            })
 
 
             const checkOnline = (val,limit) => {
@@ -131,9 +157,11 @@
             }
 
             const getRoom = (rootId, targetUser) => {
-                //TODO use vue for get chat without redirect
+                // //TODO use vue for get chat without redirect
+                //
                 window.location.href = `/conversations/${rootId}/${targetUser}`;
             }
+
 
             const sendMsg = async() => {
                 if(message.value.trim().length > 0) {

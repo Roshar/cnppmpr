@@ -3,7 +3,30 @@
         <admin-student-menu></admin-student-menu>
     </div>
     <div class="col-9">
+
         <div class="content-wallpaper">
+            <div class="modal-form2" v-if="showModalDelete">
+                <div class="modal-dialog modal-confirm">
+                    <div class="modal-content">
+                        <div class="modal-header flex-column">
+                            <div class="icon-box">
+                                <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="currentColor" class="bi bi-cloud-lightning-rain" viewBox="0 0 16 16">
+                                    <path d="M2.658 11.026a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm-7.5 1.5a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm-.753-8.499a5.001 5.001 0 0 0-9.499-1.004A3.5 3.5 0 1 0 3.5 10H13a3 3 0 0 0 .405-5.973zM8.5 1a4 4 0 0 1 3.976 3.555.5.5 0 0 0 .5.445H13a2 2 0 0 1 0 4H3.5a2.5 2.5 0 1 1 .605-4.926.5.5 0 0 0 .596-.329A4.002 4.002 0 0 1 8.5 1zM7.053 11.276A.5.5 0 0 1 7.5 11h1a.5.5 0 0 1 .474.658l-.28.842H9.5a.5.5 0 0 1 .39.812l-2 2.5a.5.5 0 0 1-.875-.433L7.36 14H6.5a.5.5 0 0 1-.447-.724l1-2z"/>
+                                </svg></i>
+                            </div>
+                            <h4 class="modal-title w-100">Вы уверены?</h4>
+                            <button type="button" class="close"  @click="cancelDelete" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p> <span style="color: tomato"> <strong>Важно!</strong></span>  После удаления группы вы не сможете вернуть данные. </p>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary"  @click="cancelDelete" data-dismiss="modal">Одуматься</button>
+                            <button type="button" @click="deleteGroupDanger" class="btn btn-danger">А, черт! Удаляем</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-form" v-if="showModal">
                 <form @submit.prevent="onSubmit" id="form">
                     <div class="form-group">
@@ -24,8 +47,10 @@
                         </select>
                         <small v-if="tutorError">{{mentorError}}</small>
                     </div>
-                    <button type="submit"  class="btn btn-primary"  :disabled="isSubmiting">Создать группу</button>
-                    <button type="button"  class="btn btn-info" @click="showModal=false" >Отменить</button>
+                    <div class="row">
+                        <div class="col-10"><button type="submit"  class="btn btn-outline-primary-send" :disabled="isSubmiting">Создать группу</button></div>
+                        <div class="col-2"><button type="button" style="float: right" class="btn btn-outline-secondary"  @click="showModal=false" >Отменить</button></div>
+                    </div>
                 </form>
             </div>
             <h4 class="title-page">Учебные группы</h4>
@@ -56,7 +81,7 @@
                             <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{item.title_discipline}} </h6>
                             <p class="card-text">{{item.description}}</p>
                             <router-link :to="{path:`/group/${item.id}`}" class="btn-primary-outline" >Открыть</router-link>
-                            <button class="btn-danger-outline">Удалить</button>
+                            <button class="btn-danger-outline" @click="getIdForDelete(item.id)">Удалить</button>
                         </div>
                     </div>
                 </div>
@@ -65,7 +90,7 @@
         </div>
     </div>
     <transition  name="fade" appear>
-        <div class="modal-overlay" v-if="showModal" @click="showModal = false">
+        <div class="modal-overlay" v-if="showModal || showModalDelete" @click="clearFade">
         </div>
     </transition>
 </template>
@@ -85,10 +110,33 @@
             const router = useRouter()
             const loading = ref(true)
             const showModal = ref(false)
+            const showModalDelete = ref(false)
             const tutorsData = ref()
             const groupsData = ref()
+            const deleteId = ref()
 
+            const deleteGroupDanger = async() =>{
+                if(deleteId.value) {
+                    await store.dispatch('admin/deleteGroup', {id:deleteId.value})
+                    deleteId.value = ''
+                    tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
+                    groupsData.value = await store.dispatch('admin/getGroups')
+                    showModalDelete.value = false
+                }
+            }
+            const cancelDelete = () => {
+                deleteId.value = ''
+                showModalDelete.value = false
+            }
+            const getIdForDelete = async(id) => {
+                showModalDelete.value = true
+                deleteId.value = id
+            }
 
+            const clearFade = () => {
+                showModal.value = false
+                showModalDelete.value = false
+            }
 
             onMounted(async()=>{
                 loading.value = true
@@ -97,6 +145,7 @@
                 groupsData.value = await store.dispatch('admin/getGroups')
                 loading.value = false
             })
+
 
             const submit = async(values) => {
                 await store.dispatch('admin/createGroup', values)
@@ -111,8 +160,13 @@
                 ...useGroupForm(submit),
                 loading,
                 showModal,
+                showModalDelete,
                 tutorsData,
-                groupsData
+                groupsData,
+                deleteGroupDanger,
+                clearFade,
+                cancelDelete,
+                getIdForDelete
 
             }
         },
@@ -121,6 +175,75 @@
 </script>
 
 <style scoped>
+
+    .modal-dialog.modal-confirm {
+        padding: 0;
+        margin: 0;
+    }
+
+    .modal-header.flex-column {
+        padding: 10px;
+    }
+
+    .btn-outline-primary-send{
+        color: #fff;
+        background-color: #4571a3;
+        border-color: #4571a3;
+    }
+
+    .modal-confirm .icon-box {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        z-index: 9;
+        text-align: center;
+        border: none
+    }
+    .modal-confirm .icon-box svg {
+        color: #f15e5e;
+        font-size: 46px;
+        display: inline-block;
+        margin-top: 13px;
+    }
+    .modal-confirm .btn, .modal-confirm .btn:active {
+        color: #fff;
+        border-radius: 4px;
+        background: #60c7c1;
+        text-decoration: none;
+        transition: all 0.4s;
+        line-height: normal;
+        min-width: 120px;
+        border: none;
+        min-height: 40px;
+        border-radius: 3px;
+        margin: 0 5px;
+    }
+    .modal-confirm .btn-secondary {
+        background: #c1c1c1;
+    }
+    .modal-confirm .btn-secondary:hover, .modal-confirm .btn-secondary:focus {
+        background: #a8a8a8;
+    }
+    .modal-confirm .btn-danger {
+        background: #f15e5e;
+    }
+    .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+        background: #ee3535;
+    }
+    .modal-confirm .close {
+        position: absolute;
+        top: 15px;
+        right: 12px;
+    }
+    .modal-confirm h4 {
+        text-align: center;
+        font-size: 26px;
+        margin: 30px 0 -10px;
+    }
+
+
+
+
     .modal-overlay,.modal-overlay2 {
         position: absolute;
         top: 0;
@@ -141,6 +264,16 @@
         /*max-width:400px;*/
         background-color: #edeef0;
         padding: 60px 60px;
+    }
+
+    .modal-form2{
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        /*max-width:400px;*/
+        background-color: #edeef0;
     }
     .content-wallpaper, .student-menu {
         margin-top: 1.5rem;

@@ -4,6 +4,7 @@ import user from './modules/user.module'
 import iom from './modules/iom.module'
 import tutor from './modules/tutor.module'
 import library from './modules/library.module'
+import globalLibrary from './modules/globalLibrary.module'
 import tag from './modules/tag.module'
 import admin from './modules/admin.module'
 import notification from './modules/notification.module'
@@ -63,6 +64,7 @@ export default createStore({
     notification,
     area,
     discipline,
-    conversation
+    conversation,
+    globalLibrary
   }
 })

@@ -1,14 +1,16 @@
 import * as yup from 'yup'
 import {useField, useForm} from 'vee-validate'
 
-export function useLibraryForm(fn){
+export function useLibraryForm(fn,data){
 
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
-            tag:1,
-            mentor:0
+            category: '',
+            discipline:''
         }
     })
+
+    // console.log(kk.value)
 
     const {value:title, errorMessage: titleError, handleBlur:titleBlur} = useField(
         'title',
@@ -30,9 +32,16 @@ export function useLibraryForm(fn){
             .trim()
     )
 
+    const {value:category, errorMessage: catError, handleBlur:catBlur} = useField(
+        'category',
+        yup
+            .string()
+            .trim()
+            .required('Обязательное поле')
+    )
 
-    const {value:tag, errorMessage: tagError, handleBlur:tagBlur} = useField(
-        'tag',
+    const {value:discipline, errorMessage: dError, handleBlur:dBlur} = useField(
+        'discipline',
         yup
             .string()
             .trim()
@@ -45,15 +54,18 @@ export function useLibraryForm(fn){
         title,
         description,
         link,
-        tag,
+        category,
+        discipline,
         titleError,
         descriptionError,
+        dError,
         linkError,
-        tagError,
+        catError,
         titleBlur,
         descriptionBlur,
         linkBlur,
-        tagBlur,
+        dBlur,
+        catBlur,
         onSubmit,
         isSubmiting,
     }

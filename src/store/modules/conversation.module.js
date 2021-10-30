@@ -7,6 +7,8 @@ export default {
     state: {
         token: localStorage.getItem(TOKEN_KEY),
         s_companions: null,
+        t_companions: null,
+        a_companions: null,
         chatData: null,
         senderData: null,
         addresseeData: null,
@@ -15,10 +17,15 @@ export default {
 
     mutations: {
 
-        setCompanions (state, values) {
+        setCompanionsStudents (state, values) {
             state.s_companions = values
         },
-
+        setCompanionsTutors (state, values) {
+            state.t_companions = values
+        },
+        setCompanionsAdmins (state, values) {
+            state.a_companions = values
+        },
         setChat(state, values) {
             state.chatData = values
         },
@@ -57,7 +64,7 @@ export default {
                     sendBody: payload.message,
                     targetUserId: payload.targetUserId,
                     token: state.token,
-                    link: 'dfffdfgg'
+                    link: ''
                 })
             } catch(e){
                 dispatch('setSystemMessage', {
@@ -84,7 +91,9 @@ export default {
         async getCompanions ({commit, dispatch, state}) {
             try {
                 const {data} = await axios.post('/api/conversation/getCompanions',{token: state.token})
-                 commit('setCompanions',data.values['studentsData'])
+                 commit('setCompanionsStudents',data.values['studentsData'])
+                 commit('setCompanionsTutors',data.values['tutorsData'])
+                 commit('setCompanionsAdmins',data.values['adminsData'])
 
             } catch(e){
                 dispatch('setSystemMessage', {
@@ -111,28 +120,6 @@ export default {
                 throw new Error()
             }
         },
-
-        // async getChat ({dispatch,commit},payload) {
-        //     return new Promise(resolve => {
-        //        const {data} = axios.post('/api/conversation/getChat',payload)
-        //     }).then((resolve)=>{
-        //         console.log(resolve)
-        //         // commit('setChat',data.values.chatData)
-        //         // commit('setSender',data.values.senderData)
-        //         // commit('setAddressee',data.values.addresseeData)
-        //         // commit('setAvatar',data.values.addresseeData)
-        //     })
-        //     // try {
-        //     //
-        //     // } catch(e){
-        //     //     dispatch('setSystemMessage', {
-        //     //         value: e.message,
-        //     //         type: 'danger'
-        //     //     }, {root: true})
-        //     //     throw new Error()
-        //     // }
-        // },
-
 
         async searchUser ({dispatch},payload) {
             try {
@@ -164,8 +151,14 @@ export default {
     },
 
     getters: {
-        getCompanions(state) {
+        getCompanionsStudent(state) {
             return state['s_companions']
+        },
+        getCompanionsTutor(state) {
+            return state['t_companions']
+        },
+        getCompanionsAdmin(state) {
+            return state['a_companions']
         },
         getChat(state) {
             return state.chatData

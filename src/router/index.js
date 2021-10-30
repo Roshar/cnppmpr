@@ -11,7 +11,15 @@ import IomAdmin from '../views/admin/iom/index'
 import StudentAdmin from '../views/admin/student'
 import StudentTutor from '../views/tutor/student'
 import Tutors from '../views/admin/tutor'
+
+import Tag from '../views/admin/tag'
+import GlobalLibrary from '../views/admin/library'
+import GlobalLibraryShow from '../views/admin/library/show'
+import GlobalLibraryCreate from '../views/admin/library/create'
+import GlobalLibraryEdit from '../views/admin/library/edit'
+
 import StudentProfileAdmin from '../views/admin/student/profile'
+import TutorProfile from '../views/admin/tutor/profile'
 import StudentProfileTutor from '../views/admin/student/profile'
 import SearchAdmin from '../views/admin/student/search'
 import LastAdmin from '../views/admin/student/last'
@@ -88,6 +96,16 @@ const routes = [
     path: '/tutors',
     name: 'tutors',
     component:Tutors,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/tutor/profile/:userId',
+    name: 'tutorProfile',
+    component:TutorProfile,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
@@ -183,6 +201,74 @@ const routes = [
       auth: true,
     },
   },
+
+  // tag admin START -----//////////////////////////////////////////
+
+  {
+    path: '/tag',
+    name: 'tag',
+    component: Tag,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/tag/:id',
+    name: 'tagId',
+    component: Tag,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  // tag admin END -----//////////////////////////////////////////
+
+  // library admin START -----//////////////////////////////////////////
+
+  {
+    path: '/global_library',
+    name: 'globalLibrary',
+    component: GlobalLibrary,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/global_library/:id',
+    name: 'globalLibraryShow',
+    component: GlobalLibraryShow,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/global_library/create',
+    name: 'globalLibraryCreate',
+    component: GlobalLibraryCreate,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/global_library/edit/:id',
+    name: 'globalLibraryEdit',
+    component: GlobalLibraryEdit,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  // library admin END -----//////////////////////////////////////////
 
   {
     path: '/group',

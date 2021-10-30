@@ -46,7 +46,13 @@
         </div>
         <app-loader v-if="loading"></app-loader>
         <div class="content-wallpaper">
-            <conversation-chat @sendMessage="sendMessage" :is="addresseeData"  :addresseeData="addresseeData" :s_companions="s_companions" :senderData="senderData" :chatData="chatData"  @open="showModal=true"/>
+            <conversation-chat @sendMessage="sendMessage" :is="addresseeData"
+                               :addresseeData="addresseeData"
+                               :s_companions="s_companions"
+                               :t_companions="t_companions"
+                               :a_companions="a_companions"
+                               :senderData="senderData"
+                               :chatData="chatData"  @open="showModal=true"/>
         </div>
     </div>
     <transition  name="fade" appear>
@@ -77,6 +83,8 @@
 
             const companions = ref()
             const s_companions = ref()
+            const t_companions = ref()
+            const a_companions = ref()
             const onlineClass = ref()
             const onlineStatus = ref()
             const senderData = ref()
@@ -153,7 +161,9 @@
                 senderData.value = store.getters['conversation/getSender']
                 chatData.value = store.getters['conversation/getChat']
                 addresseeData.value = store.getters['conversation/getAddressee']
-                s_companions.value = store.getters['conversation/getCompanions']
+                s_companions.value = store.getters['conversation/getCompanionsStudent']
+                t_companions.value = store.getters['conversation/getCompanionsTutor']
+                a_companions.value = store.getters['conversation/getCompanionsAdmin']
                 loading.value = false
             })
 
@@ -170,7 +180,9 @@
                     senderData.value = store.getters['conversation/getSender']
                     chatData.value = store.getters['conversation/getChat']
                     addresseeData.value = store.getters['conversation/getAddressee']
-                    s_companions.value = store.getters['conversation/getCompanions']
+                    s_companions.value = store.getters['conversation/getCompanionsStudent']
+                    t_companions.value = store.getters['conversation/getCompanionsTutor']
+                    a_companions.value = store.getters['conversation/getCompanionsAdmin']
                 })
 
                 await router.push(`/conversations/${chatParams.value.conId}/${chatParams.value.targetUserId}`)
@@ -182,6 +194,8 @@
                 loading,
                 sendMessage,
                 s_companions,
+                t_companions,
+                a_companions,
                 role,
                 searchContact,
                 searchContactData,
