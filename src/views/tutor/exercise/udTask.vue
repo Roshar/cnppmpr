@@ -115,6 +115,7 @@
                 tag_id.value = taskData.value['tag_id']
                 //term.value = taskData.value.term.split(".").reverse().join("-");
                 term.value = taskData.value.term
+                console.log(term.value)
                 mentor.value = taskData.value.mentor
                 link.value = taskData.value.link
                 id_exercise.value = taskData.value['id_exercises']

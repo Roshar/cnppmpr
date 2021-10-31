@@ -11,6 +11,8 @@ import IomAdmin from '../views/admin/iom/index'
 import StudentAdmin from '../views/admin/student'
 import StudentTutor from '../views/tutor/student'
 import Tutors from '../views/admin/tutor'
+import TutorProfileEdit from '../views/tutor/editProfile'
+import AdminProfileEdit from '../views/admin/editProfile'
 
 import Tag from '../views/admin/tag'
 import GlobalLibrary from '../views/admin/library'
@@ -68,6 +70,24 @@ const routes = [
           return IomTutor
       }
 
+    },
+    beforeEnter: before(),
+    meta:{
+      auth: true,
+    },
+  },
+
+
+  {
+    path: '/editProfile',
+    name: 'tutorProfileEdit',
+    component: () => {
+      switch (store.state['auth'].role) {
+        case "admin":
+          return AdminProfileEdit
+        case "tutor":
+          return TutorProfileEdit
+      }
     },
     beforeEnter: before(),
     meta:{

@@ -143,7 +143,6 @@
 
             })
 
-
             const updateItem = async(status) => {
                 if(status == 'cancel') {
                     await router.push('/global_library')

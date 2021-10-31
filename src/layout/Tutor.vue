@@ -9,20 +9,17 @@
     <div class="container-fluid">
         <app-message />
         <div class="row">
-            <div class="col-3">
-                <tutor-navbar-left-main/>
-            </div>
             <router-view/>
         </div>
     </div>
 </template>
 
 <script>
-    import TutorNavbarLeftMain from '../components/TutorNavbarLeftMain.vue'
     import TutorNavbarTop from '../components/TutorNavbarTop.vue'
     import AppMessage from '../components/ui/AppMessage'
+    import TutorMainMenu from "../components/tutorMenu/TutorMainMenu";
     export default {
-        components: {TutorNavbarLeftMain,TutorNavbarTop,AppMessage}
+        components: {TutorNavbarTop, AppMessage,TutorMainMenu }
     }
 </script>
 

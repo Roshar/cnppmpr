@@ -36,7 +36,25 @@ export default {
                 throw new Error()
                 console.log("not module user")
             }
-        }
+        },
+
+        async updateTutorProfile ({commit, dispatch, state}, payload) {
+            try {
+
+                const {data} = await axios.post('/api/user/updateTutorProfile',payload )
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'premier'
+                }, {root: true})
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
     },
 
     getters: {

@@ -89,7 +89,22 @@ export default {
                 throw new Error()
                 console.log("not module user")
             }
+        },
+        async changeAvatar ({commit, state}, payload) {
+            try {
+                console.log(payload)
+               const {data} = await axios.post('https://api-ap.cloudinary.com/v1_1/govzalla-ru/image/upload',payload)
+                console.log(data)
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+                console.log("not module user")
+            }
         }
+
     },
 
     getters: {

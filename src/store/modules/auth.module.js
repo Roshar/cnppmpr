@@ -180,7 +180,6 @@ export default {
         // подтверждение роли пользователя
 
         async confirmRole({commit, dispatch, state}, payload) {
-
             try {
                 const user = {'token':state.token}
                 const {data} =  await axios.post('/api/get/role', user)
