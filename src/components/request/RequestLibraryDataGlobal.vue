@@ -1,22 +1,18 @@
 <template>
-        <div class="modal-form" v-if="showModalLib">
-            <div class="content-wallpaper">
-                <div class="row">
-                    <div class="col-12">
+    <div class="modal-form" v-if="showModalLibGlobal">
+        <div class="content-wallpaper">
+            <div class="row">
+                <div class="col-12">
                 <span style="float:right" @click="$emit('closeLib')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                       <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
                       <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
                     </svg>
                 </span>
-                    </div>
                 </div>
+            </div>
             <div class="row">
-                <div class="col-6">
-                    <label> Найти задание по названию</label>
-                    <input type="text" class="form-control" placeholder="Начните вводить название" v-model="title">
-                </div>
-                <div class="col-6">
+                <div class="col-12">
                     <label> Найти по категории</label>
                     <select class="form-control" v-model="tag">
                         <option value=""> Все</option>
@@ -28,7 +24,7 @@
 
             <div class="row">
                 <div class="col-12" >
-                    <h5 >Список из моей библиотеки</h5>
+                    <h5 >Список из глобальной библиотеки</h5>
                     <table class="table table-sm">
                         <thead>
                         <tr>
@@ -40,7 +36,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(item, index) in execLib" :key="item.id" >
+                        <tr v-for="(item, index) in execLibGlobal" :key="item.id" >
                             <th scope="row">{{index +1}}</th>
                             <td>{{item['title']}}</td>
                             <td> {{shortContent(item['description'])}}</td>
@@ -62,19 +58,17 @@
     import {useRoute} from 'vue-router'
     import {useRouter} from 'vue-router'
     export default {
-        emits: ['update:modelValue','closeLib'],
-        props: ['modelValue','tagsData','showModalLib','execLib'],
+        emits: ['update:modelValue','closeLibGlobal'],
+        props: ['modelValue','tagsData','showModalLibGlobal','execLibGlobal'],
         setup(_,{emit}) {
-            const title = ref()
             const tag = ref()
             const term = ref()
             const store = useStore()
             const route = useRoute()
             const router = useRouter()
-            watch([title,tag], values => {
+            watch([tag], values => {
                 emit('update:modelValue', {
-                    title: values[0],
-                    tag: values [1]
+                    tag: values [0]
                 })
             })
             const addTaskFromLib = async (id) => {
@@ -82,13 +76,12 @@
                     id: id,
                     iomId: route.params.id
                 }
-                await store.dispatch('iom/addExerciseFromLib',{token:localStorage.getItem('jwt-token'),values})
+                await store.dispatch('iom/addExerciseFromLibGlobal',{token:localStorage.getItem('jwt-token'),values})
                 await store.dispatch('iom/getExercisesByIomId',route.params)
-                emit('closeLib')
+                emit('closeLibGlobal')
                 await router.push(`/iom/${route.params.id}/exercise`)
             }
             return{
-                title,
                 tag,
                 addTaskFromLib,
                 shortContent,

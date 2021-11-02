@@ -1,8 +1,11 @@
 import axios from '../../axios/request'
+
+
 const TOKEN_KEY = 'jwt-token'
 const ROLE = 'role'
 const USERID = 'userId'
 const MESSAGE = 'message'
+
 
 
 export default {
@@ -60,7 +63,6 @@ export default {
         async getUserData({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/getUserData',{user:payload} )
-                console.log(data.value)
                 commit('setUserData', data.values[0])
                 commit('setUserLink', data.values[1])
 
@@ -90,18 +92,20 @@ export default {
                 console.log("not module user")
             }
         },
-        async changeAvatar ({commit, state}, payload) {
+
+        async changeAvatar ({commit, dispatch, state}, payload) {
             try {
-                console.log(payload)
-               const {data} = await axios.post('https://api-ap.cloudinary.com/v1_1/govzalla-ru/image/upload',payload)
+                const {data} = await axios.post('/api/user/changeAvatar',payload)
                 console.log(data)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
             } catch(e){
                 dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
-                throw new Error()
-                console.log("not module user")
             }
         }
 

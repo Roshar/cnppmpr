@@ -33,6 +33,23 @@ export default {
             }
         },
 
+        async getLibraryDataByTutorDiscipline({commit, dispatch, state},payload) {
+            try {
+                commit('clearLibraryData')
+                const {data} = await axios.post('/api/admin/globalLibrary/getDataByTutorDiscipline',payload)
+                if(data.values.length){
+                    commit('setLibraryData',data.values)
+                }
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async getLibraryDataById({commit, dispatch, state}, payload) {
             try {
                 commit('clearLibraryData')

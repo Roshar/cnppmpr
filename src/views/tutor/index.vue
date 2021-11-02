@@ -15,7 +15,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex flex-column align-items-center text-center">
-                                                <img :src="avatar" alt="Тьютор" class="rounded-circle" width="150">
+                                                <img :src="avatar" alt="Тьютор" style="border-radius: .4rem" width="250">
                                                 <div class="mt-3">
                                                     <h4>{{name}}</h4>
                                                     <p class="text-secondary mb-1">Тьютор</p>
@@ -235,18 +235,19 @@
             const store = useStore()
             const router = useRouter()
             const route = useRoute()
-            const name = store.state['user'].userData.name;
-            const surname = store.state['user'].userData.surname;
-            const patronymic = store.state['user'].userData.patronymic;
-            const phone = store.state['user'].userData.phone;
-            const age = store.state['user'].userData.age;
-            const birthday = store.state['user'].userData.birthday;
-            const avatar = store.state['user'].userData.avatar;
-            const gender = store.state['user'].userData.gender;
-            const login = store.state['user'].userData.login;
-            const discipline = store.state['user'].userData['title_discipline'];
-            let students = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
-            let token = store.state['auth'].token
+            const name = ref();
+            const surname = ref();
+            const patronymic = ref();
+            const phone = ref();
+            const age = ref();
+            const birthday = ref();
+            const baseUrl = ref(process.env.VUE_APP_URL)
+            const avatar = ref();
+            const gender = ref();
+            const login = ref();
+            const discipline = ref();
+            let students = ref();
+            let token = store.state['auth'].token;
             let statData;
             const loading = ref(true)
             let countIom = ref()
@@ -264,12 +265,27 @@
                 await router.push(`/${r}`)
             }
 
+            const load = () => {
+                name.value = store.state['user'].userData.name;
+                surname.value = store.state['user'].userData.surname;
+                patronymic.value = store.state['user'].userData.patronymic;
+                phone.value = store.state['user'].userData.phone;
+                age.value = store.state['user'].userData.age;
+                birthday.value = store.state['user'].userData.birthday;
+                baseUrl.value = process.env.VUE_APP_URL
+                avatar.value = baseUrl.value +'/'+store.state['user'].userData.avatar;
+                gender.value = store.state['user'].userData.gender;
+                login.value = store.state['user'].userData.login;
+                discipline.value = store.state['user'].userData['title_discipline'];
+                students.value = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
+
+            }
 
             onMounted(async()=>{
                 loading.value = true
                 await store.dispatch('tutor/getFromTutorTbls',token)
                 statData = await store.state['tutor']
-                console.log(statData)
+                await load()
                 countIom.value = statData.statistics.countIom
                 studentIom.value = statData.statistics.studentIom
                 finishedIom.value = statData.statistics.finishedIom

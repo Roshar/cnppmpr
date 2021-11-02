@@ -1,19 +1,21 @@
 <template>
-    <div class="filter">
-        <h5>Поисковик</h5>
-        <div class="form-control">
-            <label> Найти задание по названию</label>
-            <input type="text" placeholder="Начните вводить название" v-model="title">
-        </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="content-wallpaper">
+                <label> Найти задание по названию</label>
+                <input type="text" class="form-control" placeholder="Начните вводить название" v-model="title">
+            </div>
 
-        <div class="form-control">
+        </div>
+        <div class="col-6">
             <label> Найти по категории</label>
-            <select v-model="tag">
+            <select class="form-control" v-model="tag">
                 <option value=""> Все</option>
                 <option  v-for="item in tagsData" :value="item['id_tag']">{{item['title_tag']}}</option>
             </select>
         </div>
     </div>
+    <hr>
 </template>
 
 <script>

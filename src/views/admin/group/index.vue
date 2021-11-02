@@ -3,7 +3,6 @@
         <admin-student-menu></admin-student-menu>
     </div>
     <div class="col-9">
-
         <div class="content-wallpaper">
             <div class="modal-form2" v-if="showModalDelete">
                 <div class="modal-dialog modal-confirm">

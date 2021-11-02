@@ -4,7 +4,7 @@
     </div>
     <div class="col-12" v-else>
         <h5 >Список заданий в вашем индивидуальном образовательном маршруте</h5>
-        <table class="table table-sm">
+        <table class="table ">
             <thead>
                 <tr>
                     <th scope="col">№</th>
@@ -19,20 +19,22 @@
             <tbody>
                 <tr v-for="(item, index) in exeData" :key="item['id_exercise']">
                     <th scope="row">{{index + 1}}</th>
-                    <td>{{item.title}}</td>
+                    <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" >{{item.title}}</router-link></td>
                     <td>{{shortContent(item.description, 100)}}</td>
                     <td>
                         <a href="{{item.link}}">{{item.link }}</a>
                     </td>
                     <td>{{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</td>
                     <td>{{item['title_tag']}}</td>
-                    <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-success">Открыть</router-link></td>
+                    <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-outline-open btn-block">Открыть</router-link></td>
                 </tr>
             </tbody>
         </table>
         <slot/>
     </div>
 </template>
+
+
 <script>
     import {shortContent} from "../../utils/shortContent";
     import {checkTerm} from '../../utils/checkTerm'
@@ -49,4 +51,27 @@
 
 <style scoped>
 
+    a{
+        color:#4571a3;
+        text-decoration: none;
+    }
+    a:hover{
+        color:#4571a3;
+        text-decoration: underline;
+    }
+
+.btn-outline-open{
+    color: #4571a3;
+    border-top:1px solid transparent;
+    border-left:1px solid transparent;
+    border-right:1px solid transparent;
+    border-bottom: 1px solid #4571a3;
+    transition: .2s linear;
+}
+.btn-outline-open:hover {
+    border-top:1px solid #4571a3;
+    border-left:1px solid #4571a3;
+    border-right:1px solid #4571a3;
+
+}
 </style>
