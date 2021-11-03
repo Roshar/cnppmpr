@@ -7,7 +7,6 @@ export function checkAccess () {
                 await store.dispatch('auth/confirmRole')
                 const roleAuth = store.state['auth'].role
                 if((roleAuth === 'student' || roleAuth === 'tutor')  && store.state['auth'].status === 'on') {
-                    console.log(roleAuth)
                     store.commit('setLayout',roleAuth)
                     await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
                     next()
@@ -28,7 +27,9 @@ export function checkAccess () {
                     next('/auth')
                 }
             }else {
+                store.commit('clearLayout')
                 next('/auth')
+
             }
 
 

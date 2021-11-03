@@ -63,6 +63,7 @@
     import {ref, onMounted} from 'vue'
     import {useStore} from 'vuex'
     import {useRouter} from 'vue-router'
+
     export default {
         setup(){
             const store = useStore()
@@ -85,6 +86,7 @@
             const onSubmit = handleSubmit(async values => {
                 try{
                     await store.dispatch('auth/logout')
+                    store.commit('clearLayout')
                     await  router.push('/auth')
                 }catch (e) {
 
@@ -96,7 +98,7 @@
                 notificationAction,
                 requestFromUsers,
                 requestStudents,
-                requestTutors
+                requestTutors,
             }
         }
     }

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+
     import TutorNavbarTop from '../components/TutorNavbarTop.vue'
     import AppMessage from '../components/ui/AppMessage'
     import TutorMainMenu from "../components/tutorMenu/TutorMainMenu";
@@ -23,7 +24,7 @@
     }
 </script>
 
-<style>
+<style >
 
     .own-size {
         max-width:1140px;

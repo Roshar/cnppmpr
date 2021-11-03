@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-body">
             <span style="font-style: italic;">Наименование: </span><h5 class="card-title">{{taskData.title}}</h5>
-            <span style="font-style: italic;">Описание: </span><p class="card-text">{{taskData.description}}</p>
+            <span style="font-style: italic;">Описание: </span> <div v-html="taskData.description"></div>
             <br>
             <span style="font-style: italic;">Автор:  </span><p class="card-text">{{currentMentor}}</p>
             <span style="font-style: italic;">Ссылка: </span><p class="card-text">{{taskData.link}}</p>

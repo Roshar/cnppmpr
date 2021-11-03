@@ -39,6 +39,11 @@ export default createStore({
 
     setLayout(state, payload) {
       state.layout = payload
+    },
+
+    clearLayout(state) {
+      console.log('clearLayout')
+      state.layout = null
     }
 
   },

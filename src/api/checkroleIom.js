@@ -4,6 +4,7 @@ export function before () {
         try{
             await store.dispatch('auth/confirmRole')
             const authResult = store.state['auth']
+            store.commit('clearLayout')
             if(authResult.role && authResult.status == 'on' && authResult.role !== "student" ) {
                 store.commit('setLayout',authResult.role)
                 next()

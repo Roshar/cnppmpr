@@ -1,8 +1,8 @@
 <template>
-    <component :is="layout" v-if="layout"> <router-view/></component>
+    <component v-if="layout" :is="layout" > </component>
 </template>
 <script>
-    import {computed} from 'vue'
+    import {computed, ref} from 'vue'
     import {useStore} from 'vuex'
     import {useRoute} from 'vue-router'
     import Main from './layout/Main.vue'
@@ -18,7 +18,6 @@
             const route = useRoute()
             const {state} = useStore()
             const layout = computed(()=> state.layout)
-            // const layout = computed(()=> route.meta.layout)
             return {
                 layout
             }

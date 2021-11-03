@@ -105,6 +105,7 @@ const routes = [
         case "tutor":
           return StudentTutor
       }
+
     },
     beforeEnter: before(),
     meta:{

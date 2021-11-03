@@ -74,13 +74,13 @@
                         <small v-if="titleError">{{titleError}}</small>
                     </div>
                     <div class="form-group">
-                        <label for="description">Краткое описание:</label>
-                        <textarea :class="['form-control',{invalid:descriptionError}]" id="description" v-model="description"  name="description" placeholder="Здесь вы можете добавить краткое описание"></textarea>
+                        <label >Краткое описание <i style="font-size: .8em">(необязательное поле)</i></label>
+                        <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
                         <small v-if="descriptionError">{{descriptionError}}</small>
                     </div>
                     <div class="form-group">
-                        <label for="link">Ссылка на задание</label>
-                        <input type="text" :class="['form-control',{invalid:linkError}]" v-model="link" id="link" name="link" placeholder="Введите название задания">
+                        <label for="link">Ссылка на задание <i style="font-size: .8em">(необязательное поле)</i></label>
+                        <input type="text" :class="['form-control',{invalid:linkError}]" v-model="link" id="link" name="link" placeholder="Вставьте ссылку">
                         <small v-if="linkError">{{linkError}}</small>
                     </div>
                     <div class="form-group">
@@ -100,6 +100,8 @@
                     </div>
                     <div class="form-group">
                         <label for="term">Срок выполнения </label>
+                        <br>
+                        <span> <i>Если дата будет указана раньше текущей, срок выполнения будет сохранен как "бессрочно" </i> </span>
                         <input type="date" class="form-control" id="term" name="term" v-model="term">
                         <small v-if="termError">{{termError}}</small>
                     </div>
@@ -159,10 +161,10 @@
 </template>
 
 <script>
+    import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
     import {ref,computed,onMounted,watch} from 'vue'
     import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
     import ExerciseTbl from "../../../components/request/RequestExerciseTbl";
-
     import RequestLibraryData from "../../../components/request/RequestLibraryData";
     import RequestLibraryDataGlobal from "../../../components/request/RequestLibraryDataGlobal";
     import AppLoader from "../../../components/ui/AppLoader";
@@ -189,6 +191,11 @@
             const filterLib = ref({})
             const filterLibGlobal = ref({})
             const termNot = ref(false)
+
+            const editor =  ClassicEditor
+            const editorConfig = {
+                removePlugins: ["EasyImage","ImageUpload","MediaEmbed"]
+                    }
 
 
             // Проверка текущего ИОМ : TRUE|FALSE
@@ -289,14 +296,24 @@
                 showModalOption,
                 showModalLibGlobal,
                 getConfirmDelete,
-                showModalDelete
+                showModalDelete,
+
+                editor,
+                editorConfig
+
             }
         },
-        components: {ExerciseTbl,AppLoader,RequestFilter,RequestLibraryData,RequestLibraryDataGlobal,TutorMainMenu}
+        components: {ExerciseTbl,
+                        AppLoader,
+                         RequestFilter,
+                            RequestLibraryData,
+                                RequestLibraryDataGlobal,
+                                    TutorMainMenu,
+                                      }
     }
 </script>
 
-<style scoped>
+<style scoped >
 
     .modal-dialog {
         padding: 0;

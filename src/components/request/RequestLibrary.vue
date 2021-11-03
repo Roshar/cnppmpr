@@ -4,14 +4,12 @@
     </div>
     <div class="col-12" v-else>
         <h5 >Список заданий </h5>
-        <table class="table table-sm">
+        <table class="table">
             <thead>
             <tr>
                 <th scope="col">№</th>
                 <th scope="col">Наименование</th>
                 <th scope="col">Краткое описание</th>
-                <th scope="col">Ссылка на задание</th>
-                <th scope="col">Срок</th>
                 <th scope="col">Тип</th>
                 <th scope="col">Действие</th>
             </tr>
@@ -19,14 +17,10 @@
             <tbody>
             <tr v-for="(item, index) in libraryData" :key="item['id_exercise']">
                 <th scope="row">{{index + 1}}</th>
-                <td>{{item.title}}</td>
+                <td><router-link :to="{ path: `/library/${item.id}`}" >{{item.title}}</router-link></td>
                 <td>{{shortContent(item.description, 100)}}</td>
-                <td>
-                    <a href="{{item.link}}">{{item.link }}</a>
-                </td>
-                <td>{{item['term']}}</td>
                 <td>{{item['title_tag']}}</td>
-                <td><router-link :to="{ path: `/library/${item.id}`}" class="btn btn-success">Открыть</router-link></td>
+                <td><router-link :to="{ path: `/library/${item.id}`}" class="btn btn-outline-open btn-block">Открыть</router-link></td>
             </tr>
             </tbody>
         </table>
@@ -48,4 +42,26 @@
 
 <style scoped>
 
+    a{
+        color:#4571a3;
+        text-decoration: none;
+    }
+    a:hover{
+        color:#4571a3;
+        text-decoration: underline;
+    }
+    .btn-outline-open{
+        color: #4571a3;
+        border-top:1px solid transparent;
+        border-left:1px solid transparent;
+        border-right:1px solid transparent;
+        border-bottom: 1px solid #4571a3;
+        transition: .2s linear;
+    }
+    .btn-outline-open:hover {
+        border-top:1px solid #4571a3;
+        border-left:1px solid #4571a3;
+        border-right:1px solid #4571a3;
+
+    }
 </style>

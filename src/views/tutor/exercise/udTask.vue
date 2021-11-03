@@ -13,12 +13,13 @@
                             <small v-if="titleError" class="form-text text-muted">Обязательное поле</small>
                         </div>
                         <div class="form-group">
-                            <label for="description">Краткое описание:</label>
-                            <textarea class="form-control" id="description" v-model="description"  name="description" placeholder="Здесь вы можете добавить краткое описание"></textarea>
+                            <label >Краткое описание <i style="font-size: .8em">(необязательное поле)</i></label>
+                            <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
+
                         </div>
                         <div class="form-group">
-                            <label for="link">Ссылка на задание</label>
-                            <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Введите название задания">
+                            <label for="link">Ссылка на задание <i style="font-size: .8em">(необязательное поле)</i></label>
+                            <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Вставьте ссылку">
                         </div>
                         <div class="form-group">
                             <label for="mentor">Автор</label>
@@ -38,7 +39,7 @@
                         <div class="form-group">
                             <label for="term">Срок выполнения </label>
                             <br>
-                            <span> <i>Есл дата будет указана раньше текущей, срок выполнения задания будет сохранен как "бессрочное" </i> </span>
+                            <span> <i>Если дата будет указана раньше текущей, срок выполнения будет сохранен как "бессрочно" </i> </span>
                             <input type="date" id="term" class="form-control" name="term"  v-model="term" >
                         </div>
                         <div class="row">
@@ -100,6 +101,7 @@
 </template>
 
 <script>
+
     import RequestTask from "../../../components/request/RequestTask";
     import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
     import AppLoader from "../../../components/ui/AppLoader";
@@ -111,6 +113,7 @@
 
 
     import {ref,computed,onMounted,watch} from 'vue'
+    import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
     export default {
         setup() {
             const route = useRoute()
@@ -134,6 +137,26 @@
             const tagError = ref()
             const tblA = ref([])
             let error = ref({})
+            const editor =  ClassicEditor
+            const editorConfig = {
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'alignment', '|',
+                        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
+                        'link', '|',
+                        'bulletedList', 'numberedList', 'todoList',
+                        'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor', '|',
+                        'code', 'codeBlock', '|',
+                        'insertTable', '|',
+                        'outdent', 'indent', '|',
+                         'blockQuote', '|',
+                        'undo', 'redo'
+                    ],
+                    shouldNotGroupWhenFull: true
+                }
+            }
+
             let errorSchemaRequired = {
                 title: true,
                 tag: true,
@@ -242,7 +265,9 @@
                 refund: () => {
                     router.push(`/iom/${route.params.id}/exercise`)
                 },
-                deleteTask
+                deleteTask,
+                editorConfig,
+                editor
             }
 
         },
