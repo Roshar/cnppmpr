@@ -56,7 +56,7 @@
                         <label for="gender"> Выберите ваш пол</label>
                         <select :class="['form-control',{invalid:genderError}]" name="gender"  v-model="gender"  required   @blur="genderBlur" id="gender">
                             <option value="">Выбрать</option>
-                            <option value="men">Муж</option>
+                            <option value="man">Муж</option>
                             <option value="woman">Жен</option>
                         </select>
                         <small v-if="genderError">{{genderError}}</small>

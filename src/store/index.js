@@ -11,6 +11,7 @@ import notification from './modules/notification.module'
 import area from './modules/area.module'
 import discipline from './modules/discipline.module'
 import conversation from './modules/conversation.module'
+import student from './modules/student.module'
 
 
 const plugins = []
@@ -70,6 +71,7 @@ export default createStore({
     area,
     discipline,
     conversation,
-    globalLibrary
+    globalLibrary,
+    student
   }
 })

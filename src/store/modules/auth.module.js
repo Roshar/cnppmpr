@@ -185,7 +185,6 @@ export default {
             try {
                 const user = {'token':state.token}
                 const {data} =  await axios.post('/api/get/role', user)
-                console.log(data.values)
                 if(data) {
                     commit('setRole', data.values.role)
                     commit('setStatus', data.values.status)

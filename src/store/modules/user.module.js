@@ -93,6 +93,7 @@ export default {
             }
         },
 
+
         async changeAvatar ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/changeAvatar',payload)

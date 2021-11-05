@@ -17,8 +17,7 @@
             <div class="row">
                 <div class="col-12">
                     <label > Содержание (описание)</label>
-                    <textarea type="text" :class="['form-control',{invalid:descriptionError}]" @blur="descriptionBlur"  v-model="description" name="description" ></textarea>
-                    <small v-if="descriptionError">{{descriptionError}}</small>
+                    <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
                 </div>
             </div>
             <div class="row">
@@ -63,6 +62,9 @@
     import {useRouter} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import AdminLibraryMenu from "../../../components/adminMenu/AdminLibraryMenu";
+    import EditorMain from "../../../components/editor/EditorMain";
+    import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+    import {mysqlEscape} from '../../../utils/mysqlEscape'
     export default {
         setup() {
             const store = useStore()
@@ -72,6 +74,42 @@
             // LIBRARY DATA
             const currentTime = ref()
             const disciplines = ref()
+            const description = ref()
+            const editor =  ClassicEditor
+            const editorConfig = {
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'alignment', '|',
+                        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
+                        'link', '|',
+                        'bulletedList', 'numberedList', 'todoList',
+                        'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor', '|',
+                        'code', 'codeBlock', '|',
+                        'insertTable', '|',
+                        'outdent', 'indent', '|',
+                        'blockQuote', '|',
+                        'undo', 'redo'
+                    ],
+                    shouldNotGroupWhenFull: true,
+                    link: {
+                        // Automatically add target="_blank" and rel="noopener noreferrer" to all external links.
+                        addTargetToExternalLinks: true,
+
+                        // Let the users control the "download" attribute of each link.
+                        decorators: [
+                            {
+                                mode: 'manual',
+                                label: 'Downloadable',
+                                attributes: {
+                                    download: 'download'
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+
 
             onMounted(async()=>{
                 loading.value = true
@@ -82,8 +120,9 @@
             })
 
             const onSubmit = async(values) => {
+                // console.log(values)
                 values.link = (values.link !== 'undefined') ? values.link : null
-                values.description = (values.description !== 'undefined') ? values.description : null
+                values.description = mysqlEscape(description.value)
                 await store.dispatch('globalLibrary/addInLibrary',{
                     values
                 })
@@ -96,10 +135,13 @@
                 currentTime,
                 loading,
                 disciplines,
+                description,
                 tag,
+                editorConfig,
+                editor
             }
         },
-        components: {AppLoader,AdminLibraryMenu}
+        components: {AppLoader,AdminLibraryMenu, EditorMain}
     }
 </script>
 

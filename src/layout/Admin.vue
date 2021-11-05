@@ -19,7 +19,12 @@
     import AdminStudentMenu from "../components/adminMenu/AdminStudentMenu";
     import AdminLibraryMenu from "../components/adminMenu/AdminLibraryMenu";
     import AppMessage from '../components/ui/AppMessage'
+
+
     export default {
+        setup() {
+
+        },
         components: {AdminNavbarTop,AppMessage,AdminStudentMenu,AdminLibraryMenu}
     }
 </script>

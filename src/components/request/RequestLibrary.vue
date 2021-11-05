@@ -18,7 +18,7 @@
             <tr v-for="(item, index) in libraryData" :key="item['id_exercise']">
                 <th scope="row">{{index + 1}}</th>
                 <td><router-link :to="{ path: `/library/${item.id}`}" >{{item.title}}</router-link></td>
-                <td>{{shortContent(item.description, 100)}}</td>
+                <td> {{shortContent(item.description)}}</td>
                 <td>{{item['title_tag']}}</td>
                 <td><router-link :to="{ path: `/library/${item.id}`}" class="btn btn-outline-open btn-block">Открыть</router-link></td>
             </tr>
@@ -33,8 +33,9 @@
     export default {
         props: ['libraryData'],
         setup() {
+
             return{
-                shortContent
+                shortContent,
             }
         }
     }

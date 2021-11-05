@@ -50,8 +50,8 @@
                         <tr v-for="(item, index) in library" :key="item.id">
                             <th scope="row">{{index+1}}</th>
                             <td> <router-link :to="{path:`/global_library/${item.id}`}">{{item.title}}</router-link></td>
-                            <td>{{item.description}}</td>
-                            <td>{{item['title_discipline']}}</td>
+                            <td v-html="item.description"></td>
+                            <td> {{item['title_discipline']}}</td>
                             <td>{{item['title_tag']}}</td>
                             <td>{{item['created_date']}}</td>
                             <td>

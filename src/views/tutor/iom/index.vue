@@ -22,7 +22,7 @@
                     </div>
                 </form>
             </div>
-            <h4 class="title-page">Ваша библиотека индивидуальных образовательных маршрутов</h4>
+            <h4 class="title-page">Моя библиотека индивидуальных образовательных маршрутов</h4>
             <app-loader v-if="loading"></app-loader>
             <div class="content-loader" v-else>
                 <hr>

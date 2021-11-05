@@ -1,6 +1,6 @@
 <template>
     <div class="col-2">
-        <h2> <router-link to="/">ЦНППМ</router-link></h2>
+        <h2> <router-link to="/">IT-GOVZALLA</router-link></h2>
     </div>
     <div class="col-10">
         <nav class="navbar justify-content-end">
@@ -11,11 +11,11 @@
                     <ul class="dropdown-menu" v-if="requestFromUsers !== 0">
                         <li v-if="requestStudents !== 0">
                             <span  class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{requestStudents}}</span>
-                            <router-link :to="{path:`/students/request`}" style="font-size: .8em">Студенты</router-link>
+                            <router-link :to="{path:`/last_student`}" style="font-size: .8em">Студенты</router-link>
                         </li>
                         <li v-if="requestTutors !== 0">
                             <span  class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{requestTutors}}</span>
-                            <router-link :to="{path:`/tutors/request`}" style="font-size: .8em">Тьюторы</router-link>
+                            <router-link :to="{path:`/last_tutor`}" style="font-size: .8em">Тьюторы</router-link>
                         </li>
                     </ul>
                 </li>
@@ -33,14 +33,14 @@
                 </li>
                 <li class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationMessage" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{notificationMessage.length}}</span>
-                    <router-link to="/conversations">Сообщения </router-link>
+                    <router-link to="/admin_conversations">Сообщения </router-link>
                 </li>
                 <li  class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationAction.length" class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction.length}}</span>
                     <a href="#"  data-toggle="dropdown">Уведомления </a>
                     <ul v-if="notificationAction.length" class="dropdown-menu">
                         <li>
-                            <router-link :to="{path:`/notifications`}" style="font-size: .8em">Запрос на удаление ИОМа</router-link>
+                            <router-link :to="{path:`/admin_notifications`}" style="font-size: .8em">Запрос на удаление ИОМа</router-link>
                         </li>
                     </ul>
                 </li>

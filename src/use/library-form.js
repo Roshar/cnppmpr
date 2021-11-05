@@ -5,8 +5,7 @@ export function useLibraryForm(fn,data){
 
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
-            category: '',
-            discipline:''
+            category: '1',
         }
     })
 
@@ -40,13 +39,6 @@ export function useLibraryForm(fn,data){
             .required('Обязательное поле')
     )
 
-    const {value:discipline, errorMessage: dError, handleBlur:dBlur} = useField(
-        'discipline',
-        yup
-            .string()
-            .trim()
-            .required('Обязательное поле')
-    )
 
     const onSubmit = handleSubmit(fn)
 
@@ -55,16 +47,13 @@ export function useLibraryForm(fn,data){
         description,
         link,
         category,
-        discipline,
         titleError,
         descriptionError,
-        dError,
         linkError,
         catError,
         titleBlur,
         descriptionBlur,
         linkBlur,
-        dBlur,
         catBlur,
         onSubmit,
         isSubmiting,

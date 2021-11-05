@@ -30,7 +30,7 @@
                         <button  type="button" v-if="searchContactData" v-for="item in searchContactData" :key="item.id" class="list-group-item list-group-item-action border-0"
                                  @click="createConversation(item.user_id )">
                             <div class="d-flex align-items-start">
-                                <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                                <img :src="baseUrl+'/'+item.avatar" class="rounded-circle mr-1"  width="40" height="40">
                                 <div class="flex-grow-1 ml-3">
                                     {{item.name}} {{item.surname}} {{checkOnlineContact(item['auth_update'], 5)}}
                                     <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" :class="onlineClass" fill="currentColor"  viewBox="0 0 16 16">
@@ -69,6 +69,7 @@
             const store = useStore()
             const router = useRouter()
             const route = useRoute()
+            const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const showModal = ref(false)
             const role = ref('')
@@ -142,12 +143,13 @@
                 t_companions.value = store.getters['conversation/getCompanionsTutor']
                 a_companions.value = store.getters['conversation/getCompanionsAdmin']
                 showModal.value = false
-                await router.push(`/conversations/${chatParams.value.conId}/${chatParams.value.targetUserId}`)
+                await router.push(`/admin_conversations/${chatParams.value.conId}/${chatParams.value.targetUserId}`)
             }
             return {
                 showModal,
                 checkOnline,
                 loading,
+                baseUrl,
                 ConversationList,
                 s_companions,
                 t_companions,

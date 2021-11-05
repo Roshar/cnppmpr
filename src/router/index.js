@@ -22,9 +22,10 @@ import GlobalLibraryEdit from '../views/admin/library/edit'
 
 import StudentProfileAdmin from '../views/admin/student/profile'
 import TutorProfile from '../views/admin/tutor/profile'
-import StudentProfileTutor from '../views/admin/student/profile'
+import StudentProfileTutor from '../views/tutor/student/profile'
 import SearchAdmin from '../views/admin/student/search'
-import LastAdmin from '../views/admin/student/last'
+import LastStudentAdmin from '../views/admin/student/last'
+import LastTutorAdmin from '../views/admin/tutor/last'
 import conAdmin from '../views/admin/conversation'
 import conTutor from '../views/tutor/conversation'
 import chatAdmin from '../views/admin/conversation/chat'
@@ -41,13 +42,23 @@ import SingleGroup from '../views/admin/group/single'
 import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
-import {before} from '../api/checkroleIom'
+import {beforeTutor} from '../api/checkroleIom'
 import {withoutIsAuth} from '../api/withoutIsAuth'
 import {checkAccess} from '../api/checkActivePage'
 import {beforeAdmin} from '../api/checkRoleAdmin'
 
+import EduMembers from '../views/tutor/edumembers'
+
 
 const routes = [
+
+  { path: '/:pathMatch(.*)*',
+    component: NotFound,
+    beforeEnter:withoutIsAuth('NotFound'),
+    meta:{
+      auth:false,
+      layout: 'NotFound'
+    }},
 
   {
     path: '/',
@@ -59,64 +70,25 @@ const routes = [
     },
   },
 
-  {
-    path: '/iom',
-    name: 'iom',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return IomAdmin
-        case "tutor":
-          return IomTutor
-      }
-
-    },
-    beforeEnter: before(),
-    meta:{
-      auth: true,
-    },
-  },
 
 
-  {
-    path: '/editProfile',
-    name: 'tutorProfileEdit',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return AdminProfileEdit
-        case "tutor":
-          return TutorProfileEdit
-      }
-    },
-    beforeEnter: before(),
-    meta:{
-      auth: true,
-    },
-  },
-
+//////////////////////////////////////////////////////////
+    // ADMIN ROUTES START
+//////////////////////////////////////////////////////////
   {
     path: '/students',
-    name: 'students',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return StudentAdmin
-        case "tutor":
-          return StudentTutor
-      }
-
-    },
-    beforeEnter: before(),
+    name: 'adminStudents',
+    component: StudentAdmin,
+    beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
     },
   },
 
   {
-    path: '/tutors',
-    name: 'tutors',
-    component:Tutors,
+    path: '/student/profile/:userId',
+    name: 'userProfile',
+    component: StudentProfileAdmin,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
@@ -133,19 +105,21 @@ const routes = [
     },
   },
 
+  {
+    path: '/tutors',
+    name: 'tutors',
+    component:Tutors,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
 
   {
-    path: '/student/profile/:userId',
-    name: 'userProfile',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return StudentProfileAdmin
-        case "tutor":
-          return StudentProfileTutor
-      }
-    },
-    beforeEnter: before(),
+    path: '/iom',
+    name: 'iom',
+    component: IomAdmin,
+    beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
     },
@@ -154,52 +128,30 @@ const routes = [
   {
     path: '/ban',
     name: 'ban',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return banAdmin
-        case "tutor":
-          return banTutor
-      }
-    },
-    beforeEnter: before(),
+    component: banAdmin,
+    beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
     },
   },
 
   {
-    path: '/conversations',
-    name: 'conversations',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return conAdmin
-        case "tutor":
-          return conTutor
-      }
-    },
-    beforeEnter: before(),
+    path: '/admin_conversations',
+    name: 'admin_conversations',
+    component: conAdmin,
+    beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
     },
   },
 
   {
-    path: '/conversations/:chat/:user',
-    name: 'conv',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return chatAdmin
-        case "tutor":
-          return chatTutor
-      }
-    },
-    beforeEnter: before(),
+    path: '/admin_conversations/:chat/:user',
+    name: 'admin_conv',
+    component: chatAdmin,
+    beforeEnter: beforeAdmin(),
     meta: {
       auth: true,
-      layout: 'AdminContext'
     }
   },
 
@@ -214,16 +166,24 @@ const routes = [
   },
 
   {
-    path: '/last',
-    name: 'last',
-    component: LastAdmin,
+    path: '/last_student',
+    name: 'last_student',
+    component: LastStudentAdmin,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
     },
   },
 
-  // tag admin START -----//////////////////////////////////////////
+  {
+    path: '/last_tutor',
+    name: 'last_tutor',
+    component: LastTutorAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
 
   {
     path: '/tag',
@@ -245,9 +205,6 @@ const routes = [
     },
   },
 
-  // tag admin END -----//////////////////////////////////////////
-
-  // library admin START -----//////////////////////////////////////////
 
   {
     path: '/global_library',
@@ -289,8 +246,6 @@ const routes = [
     },
   },
 
-  // library admin END -----//////////////////////////////////////////
-
   {
     path: '/group',
     name: 'group',
@@ -312,10 +267,70 @@ const routes = [
   },
 
   {
+    path: '/admin_notifications',
+    name: 'admin_notifications',
+    component: NotificationAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+//////////////////////////////////////////////////////////
+    // ADMIN ROUTES END
+//////////////////////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////////////////////////
+    // TUTOR ROUTES START
+//////////////////////////////////////////////////////////
+  {
+    path: '/my_students',
+    name: 'my_students',
+    component:StudentTutor,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/editProfileTutor',
+    name: 'tutorProfileEdit',
+    component:TutorProfileEdit,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/my_student/profile/:userId',
+    name: 'myStudentProfile',
+    component: StudentProfileTutor,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/my_iom',
+    name: 'my_iom',
+    component: IomTutor,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
     path: '/iom/create',
     name: '/iom/create',
     component: IomCreate,
-    beforeEnter: before(),
+    beforeEnter: beforeTutor(),
     meta:{
       auth: true,
     },
@@ -325,7 +340,17 @@ const routes = [
     path: '/iom/:id/exercise',
     name: 'addExercise',
     component: ExerciselistAndCreate,
-    beforeEnter: before(),
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/iom/:id/members',
+    name: 'iomMembers',
+    component: EduMembers,
+    beforeEnter: beforeTutor(),
     meta:{
       auth: true,
     },
@@ -335,7 +360,7 @@ const routes = [
     path: '/iom/:id/exercise/:task',
     name: 'updateDeleteOpen',
     component: udTask,
-    beforeEnter: before(),
+    beforeEnter: beforeTutor(),
     meta:{
       auth: true,
     },
@@ -345,7 +370,7 @@ const routes = [
     path: '/library',
     name: 'library',
     component: library,
-    beforeEnter: before(),
+    beforeEnter: beforeTutor(),
     meta:{
       auth: true,
     },
@@ -355,11 +380,17 @@ const routes = [
     path: '/library/:id',
     name: 'libraryUpdateDelete',
     component: libraryUD,
-    beforeEnter: before(),
+    beforeEnter: beforeTutor(),
     meta:{
       auth: true,
     },
   },
+
+//////////////////////////////////////////////////////////
+  // TUTOR ROUTES END
+//////////////////////////////////////////////////////////
+
+
 
   {
     path: '/help',
@@ -413,23 +444,7 @@ const routes = [
   },
 
 
-  {
-    path: '/notifications',
-    name: 'notifications',
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return NotificationAdmin
-        case "tutor":
-          return NotificationTutor
-      }
 
-    },
-    beforeEnter: before(),
-    meta:{
-      auth: true,
-    },
-  },
 
   {
     path: '/register',

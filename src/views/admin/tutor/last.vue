@@ -5,8 +5,7 @@
     <div class="col-9">
         <app-loader v-if="loading"></app-loader>
         <div class="content-wallpaper" v-else>
-            <h5 >Последние зарегистрировавшиеся слушатели </h5>
-
+            <h5 >Последние зарегистрировавшиеся тьюторы </h5>
             <div class="row">
                 <div class="col-6">
                     <label > Категория пользователей</label>
@@ -17,13 +16,12 @@
                     </select>
                 </div>
             </div>
+
             <table class="table">
                 <thead>
                 <tr>
                     <th scope="col">№</th>
                     <th scope="col">ФИО</th>
-                    <th scope="col">Школа</th>
-                    <th scope="col">Район</th>
                     <th scope="col">Предмет</th>
                     <th scope="col">Активация</th>
                     <th scope="col">Дата регистрации</th>
@@ -31,11 +29,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item, index) in lastStudents" :key="item.user_id">
+                <tr v-for="(item, index) in lastTutors" :key="item.user_id">
                     <th scope="row">{{index+1}}</th>
                     <td>{{item.name}} {{item.surname}}</td>
-                    <td>{{item.school_name}}</td>
-                    <td>{{item.title_area}}</td>
                     <td>{{item.title_discipline}}</td>
                     {{activeStatus(item.status)}}
                     <td> <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>
@@ -69,22 +65,18 @@
             const loading = ref(true)
             // STUDENTS DATA
             const currentTime = ref()
-            const areas = ref()
             const disciplines = ref()
-            const students = ref()
             const category = ref(route.path)
-            const lastStudents = ref()
+            const tutors = ref()
+            const lastTutors = ref()
             const btnActiveClass = ref()
             const btnActiveValue = ref()
             const disabled = ref(false)
             const deactivation = ref(false)
 
-
             const checkUser = () => {
                 router.push(category.value)
             }
-
-
 
 
             const activeStatus = (val) => {
@@ -103,22 +95,21 @@
 
             const deactivationUser = async (user) => {
                 await store.dispatch('admin/deactivationById',{userId: user})
-                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                await router.push('/last')
+                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
+                await router.push('/last_tutor')
             }
 
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
-                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                await router.push('/last')
+                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
+                await router.push('/last_tutor')
             }
 
             onMounted(async()=>{
                 loading.value = true
-                // STUDENT INFO
-                areas.value = await store.dispatch('area/getAreas')
+                // TUTOR INFO
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
-                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
                 //AREA INFO
                 loading.value = false
             })
@@ -128,10 +119,9 @@
             return {
                 currentTime,
                 loading,
-                areas,
                 disciplines,
-                students,
-                lastStudents,
+                tutors,
+                lastTutors,
                 activeStatus,
                 btnActiveClass,
                 btnActiveValue,

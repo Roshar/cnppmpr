@@ -4,10 +4,14 @@ export default {
     namespaced: true,
 
     state: {
-
+        studentsFromCurrentGroup: null
     },
 
     mutations: {
+
+        setAppointedStudentsCurrentGroup(state,values) {
+            state.studentsFromCurrentGroup = values
+        },
 
     },
     actions:{
@@ -375,9 +379,12 @@ export default {
             }
         },
 
-        async getAppointedStudentsCurrentGroup({dispatch}, payload) {
+        async getAppointedStudentsCurrentGroup({dispatch,commit}, payload) {
             try {
                 const {data} = await axios.post('/api/admin/getAppointedStudentsCurrentGroup',payload)
+                if(data.values) {
+                    commit('setAppointedStudentsCurrentGroup',data.values)
+                }
                 return data.values
             } catch(e){
 
@@ -393,6 +400,8 @@ export default {
     },
 
     getters: {
-
+        getAppointedStudentsCurrentGroup(state) {
+            return state.studentsFromCurrentGroup
+        }
     }
 }

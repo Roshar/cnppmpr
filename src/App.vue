@@ -17,7 +17,10 @@
         setup(){
             const route = useRoute()
             const {state} = useStore()
-            const layout = computed(()=> state.layout)
+            const layout = computed(()=> {
+                console.log(state.layout)
+                return state.layout
+            })
             return {
                 layout
             }

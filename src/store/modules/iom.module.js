@@ -10,8 +10,10 @@ export default {
     state: {
         userId: localStorage.getItem(USERID),
         iomData: null,
+        currentIomData: null,
         exercise: null,
         iomId: null,
+        finishedExercises: null,
         exerciseData: [],
         tblNames: [],
         taskData: []
@@ -25,8 +27,15 @@ export default {
         setIomData(state, iomData) {
             state.iomData = iomData
         },
+        setCurrentIomData(state, iomData) {
+            state.currentIomData = iomData
+        },
         setExercise(state, exercise) {
             state.exercise = exercise
+        },
+
+        setFinishedExercises(state, finishedExercises) {
+            state.finishedExercises = finishedExercises
         },
         setIssetStatusIom(state, iomId) {
             state.iomId = iomId
@@ -60,6 +69,42 @@ export default {
             }
         },
 
+        async getStatusFinished ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getStatusFinished',
+                    {token: localStorage.getItem('jwt-token'),
+                          studentId:payload.studentId,
+                          iomId: payload.iomId} )
+
+                if(data.values) {
+                    commit('setFinishedExercises',data.values)
+                }
+                console.log(state.iomData)
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getDataById ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getDataById',payload )
+                if(data.values) {
+                    commit('setCurrentIomData',data.values[0])
+                }
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async getMentor ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/iom/getMentor',payload )
@@ -73,7 +118,6 @@ export default {
                 throw new Error()
             }
         },
-
 
         // Создание ИОМа
         async addNewIom ({commit, dispatch, state}, payload) {
@@ -92,6 +136,9 @@ export default {
                 throw new Error()
             }
         },
+
+
+
         async getIomId ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/iom/issetIomId',{
@@ -112,7 +159,8 @@ export default {
         async getExercisesByIomId ({commit, dispatch, state}, payload) {
             try {
                 commit('clearExerciseData')
-                const {data} = await axios.post('/api/iom/getExercises',{token: localStorage.getItem('jwt-token'),payload})
+                const {data} = await axios.post('/api/iom/getExercises',
+                    {token: localStorage.getItem('jwt-token'),payload})
                 if(data.values.length){
                     commit('setExerciseData',data.values)
                 }
@@ -154,6 +202,7 @@ export default {
                 throw new Error()
             }
         },
+
         async addExerciseFromLib({ commit, dispatch}, payload) {
             try{
                 const {data} = await axios.post('/api/iom/addExerciseFromLib',payload)
@@ -221,6 +270,7 @@ export default {
                 throw new Error()
             }
         },
+
         async deleteIom({commit, dispatch}, payload) {
             try{
                 const {data} = await axios.post('/api/iom/deleteIom',payload)
@@ -242,7 +292,15 @@ export default {
     getters: {
         getExercisesByIomId(state) {
             return state.exerciseData
-        }
+        },
+        getCurrentIomData(state) {
+            return state.currentIomData
+        },
+
+        getStatusFinished(state) {
+            return state.finishedExercises
+        },
+
 
     }
 }

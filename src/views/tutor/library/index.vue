@@ -40,9 +40,9 @@
                     </div>
                     <div class="form-group">
                         <label for="link">Тип задания</label>
-                        <select :class="['form-control',{invalid:tagError}]"  name="tag" v-model="tag">
+                        <select :class="['form-control',{invalid:catError}]"  name="tag" v-model="category">
                             <option v-for="(item, index) in tagsData"  :key="item['id_tag']"   :value="item['id_tag']">{{item['title_tag']}}</option>
-                            <small v-if="tagError">{{tagError}}</small>
+                            <small v-if="catError">{{catError}}</small>
                         </select>
                     </div>
                     <div class="row">
@@ -82,6 +82,7 @@
      import {useRouter} from "vue-router";
      import {useRoute} from 'vue-router'
      import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+     import {mysqlEscape} from '../../../utils/mysqlEscape'
 
      export default {
          setup() {
@@ -92,6 +93,7 @@
              const showModal = ref(false)
              const filter = ref({})
              const tagsData = ref()
+             const description = ref()
 
              const editor =  ClassicEditor
              const editorConfig = {
@@ -112,8 +114,9 @@
                  .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
 
 
-             // Задания из текущего ИОМа
+             //Задания из текущего ИОМа
              const submit = async function (values)  {
+                 values.description = mysqlEscape(description.value)
                  await store.dispatch('library/addExercise',{
                      token: localStorage.getItem('jwt-token'),
                      values})
@@ -123,7 +126,7 @@
              }
 
              document.title = "Библиотека заданий"
-             return {...useLibraryForm(submit),showModal,close: () => showModal.value = false, libraryData, loading, filter, tagsData,editor, editorConfig}
+             return {...useLibraryForm(submit),showModal,close: () => showModal.value = false, description, libraryData, loading, filter, tagsData,editor, editorConfig}
          },
          components: {LibraryList,AppLoader,RequestFilter,TutorMainMenu}
      }

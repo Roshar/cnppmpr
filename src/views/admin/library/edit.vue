@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-12">
                         <label > Содержание (описание)</label>
-                        <textarea type="text" class="form-control" v-model="description" name="description" ></textarea>
+                        <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
 
                     </div>
                 </div>
@@ -71,6 +71,8 @@
     import AppLoader from "../../../components/ui/AppLoader";
     import AdminLibraryMenu from "../../../components/adminMenu/AdminLibraryMenu";
     import {requiredForm} from "../../../utils/requiredForm";
+    import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+    import {mysqlEscape} from '../../../utils/mysqlEscape'
     export default {
         setup() {
             const store = useStore()
@@ -91,6 +93,25 @@
             const tagError = ref()
             const titleError = ref()
             const disError = ref()
+            const editor =  ClassicEditor
+            const editorConfig = {
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'alignment', '|',
+                        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
+                        'link', '|',
+                        'bulletedList', 'numberedList', 'todoList',
+                        'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor', '|',
+                        'code', 'codeBlock', '|',
+                        'insertTable', '|',
+                        'outdent', 'indent', '|',
+                        'blockQuote', '|',
+                        'undo', 'redo'
+                    ],
+                    shouldNotGroupWhenFull: true
+                }
+            }
             let error = ref({})
             let errorSchemaRequired = {
                 title: true,
@@ -157,7 +178,7 @@
                         await store.dispatch('globalLibrary/updateInLibrary',{
                             id: id.value,
                             title: title.value,
-                            description: description.value,
+                            description: mysqlEscape(description.value),
                             link: link.value,
                             category: category.value,
                             discipline: discipline.value,
@@ -193,6 +214,8 @@
                 discipline,
                 errorSchemaRequired,
                 invalid,
+                editorConfig,
+                editor
 
             }
         },

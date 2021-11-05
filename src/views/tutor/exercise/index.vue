@@ -1,10 +1,10 @@
 <template>
     <div class="col-3">
-        <TutorMainMenu></TutorMainMenu>
+        <tutor-education-menu :iom-id="iomId" :current-iom="currentIomTitle"></tutor-education-menu>
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
-            <h4 class="title-page">Карта индивидуального образовательного маршрута </h4>
+            <h4 class="title-page">Карта индивидуального образовательного маршрута: {{currentIomTitle}} </h4>
             <hr>
             <div class="row">
                 <div class="col-3">
@@ -76,7 +76,7 @@
                     <div class="form-group">
                         <label >Краткое описание <i style="font-size: .8em">(необязательное поле)</i></label>
                         <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
-                        <small v-if="descriptionError">{{descriptionError}}</small>
+
                     </div>
                     <div class="form-group">
                         <label for="link">Ссылка на задание <i style="font-size: .8em">(необязательное поле)</i></label>
@@ -163,7 +163,7 @@
 <script>
     import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
     import {ref,computed,onMounted,watch} from 'vue'
-    import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
+    import TutorEducationMenu from "../../../components/tutorMenu/TutorEducationMenu";
     import ExerciseTbl from "../../../components/request/RequestExerciseTbl";
     import RequestLibraryData from "../../../components/request/RequestLibraryData";
     import RequestLibraryDataGlobal from "../../../components/request/RequestLibraryDataGlobal";
@@ -174,11 +174,14 @@
     import {useRouter} from "vue-router";
     import {useRoute} from 'vue-router'
     import {checkPossibilityDeleteIom} from "../../../api/checkPossibilityDeleteData";
+    import {mysqlEscape} from '../../../utils/mysqlEscape'
     export default {
         setup() {
             const store = useStore()
             const route = useRoute()
             const router = useRouter()
+            const currentIomTitle = ref()
+            const iomId = route.params.id
             const loading = ref(true)
             const tblA = ref([])
             const showModal = ref(false)
@@ -188,6 +191,7 @@
             const filter = ref({})
             const mentorsData = ref()
             const tagsData = ref()
+            const description = ref()
             const filterLib = ref({})
             const filterLibGlobal = ref({})
             const termNot = ref(false)
@@ -222,6 +226,14 @@
 
             onMounted(async()=>{
                 loading.value = true
+
+                await store.dispatch('iom/getDataById', {
+                    token: localStorage.getItem('jwt-token'),
+                    id: route.params.id
+                })
+                const iomData = store.getters['iom/getCurrentIomData']
+                currentIomTitle.value = iomData.title
+
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 await store.dispatch('library/getLibraryData',{token: localStorage.getItem('jwt-token')})
                 await store.dispatch('globalLibrary/getLibraryDataByTutorDiscipline',
@@ -270,6 +282,7 @@
             // Задания из текущего ИОМа
             const submit = async function (values)  {
                 values['iomId'] = route.params.id
+                values.description = mysqlEscape(description.value)
                 await store.dispatch('iom/addExercise',{tbl:tblA.value[0][0].subTypeTableIom,values})
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 showModal.value = false
@@ -297,9 +310,11 @@
                 showModalLibGlobal,
                 getConfirmDelete,
                 showModalDelete,
-
+                iomId,
                 editor,
-                editorConfig
+                editorConfig,
+                currentIomTitle,
+                description
 
             }
         },
@@ -308,7 +323,7 @@
                          RequestFilter,
                             RequestLibraryData,
                                 RequestLibraryDataGlobal,
-                                    TutorMainMenu,
+            TutorEducationMenu,
                                       }
     }
 </script>

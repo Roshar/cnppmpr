@@ -17,7 +17,7 @@
                 <div v-if="a_companions">
                     <button v-for="(item,index) in s_companions" :key="item.id"  @click="getRoom(item.id, item.target_user_id)"   class="list-group-item list-group-item-action border-0">
                         <div class="d-flex align-items-start">
-                            <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                            <img :src="baseUrl+'/'+item.avatar" class="rounded-circle mr-1"  width="40" height="40">
                             <div class="flex-grow-1 ml-3">
                                 {{item.name}} {{item.surname}} {{checkOnline(item['auth_update'],5)}}
                                 <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" :class="onlineClass" viewBox="0 0 16 16">
@@ -30,7 +30,7 @@
                 <div v-if="t_companions">
                     <button v-for="(item,index) in t_companions" :key="item.id"  @click="getRoom(item.id, item.target_user_id)"   class="list-group-item list-group-item-action border-0">
                         <div class="d-flex align-items-start">
-                            <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                            <img :src="baseUrl+'/'+item.avatar" class="rounded-circle mr-1"  width="40" height="40">
                             <div class="flex-grow-1 ml-3">
                                 {{item.name}} {{item.surname}} {{checkOnline(item['auth_update'],5)}}
                                 <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" :class="onlineClass" viewBox="0 0 16 16">
@@ -43,7 +43,7 @@
                 <div v-if="s_companions">
                     <button type="button" v-for="(item,index) in a_companions" :key="item.id"  @click="getRoom(item.id, item.target_user_id)"   class="list-group-item list-group-item-action border-0">
                         <div class="d-flex align-items-start">
-                            <img :src="item.avatar" class="rounded-circle mr-1"  width="40" height="40">
+                            <img :src="baseUrl+'/'+item.avatar" class="rounded-circle mr-1"  width="40" height="40">
                             <div class="flex-grow-1 ml-3">
                                 {{item.name}} {{item.surname}} {{checkOnline(item['auth_update'],5)}}
                                 <div class="small"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" :class="onlineClass" viewBox="0 0 16 16">
@@ -61,7 +61,7 @@
                 <div class="py-2 px-4 border-bottom d-none d-lg-block">
                     <div class="d-flex align-items-center py-1" v-if="addresseeData">
                         <div class="position-relative" >
-                            <img  :src="addresseeData[0]['avatar']" class="rounded-circle mr-1" alt="Иван" width="40" height="40">
+                            <img  :src="baseUrl+'/'+addresseeData[0]['avatar']" class="rounded-circle mr-1" alt="Иван" width="40" height="40">
                         </div>
                         <div class="flex-grow-1 pl-3">
                             <strong>{{addresseeData[0].name}} {{addresseeData[0].surname}}</strong>
@@ -124,6 +124,7 @@
             const router = useRouter()
             const route = useRoute()
             const store = useStore()
+            const baseUrl = ref(process.env.VUE_APP_URL)
             const targetUserId = ref(route.params.user)
             const onlineClass = ref()
             const onlineStatus = ref()
@@ -174,7 +175,7 @@
             }
 
             return { checkOnline,onlineClass, onlineStatus,
-                avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts,getRoom, sendMsg,message}
+                avatar_a,name_a,surname_a,user_a,chat, myAvatar,contacts,getRoom, sendMsg,message,baseUrl}
         }
     }
 </script>

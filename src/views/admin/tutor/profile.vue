@@ -33,7 +33,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex flex-column align-items-center text-center">
-                                            <img :src="avatar" alt="Слушатель" class="rounded-circle" width="150">
+                                            <img :src="avatar" alt="Тьютор" style="border-radius: .4rem" width="250">
                                             <div class="mt-3">
                                                 <h4>{{name}}</h4>
                                                 <p class="text-secondary mb-1">Тьютор</p>
@@ -134,7 +134,7 @@
                                                     <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics(reportsCount,studentsCount)" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
-                                                <div style="padding: 10px 0">Гендерная принадлежность</div>
+                                                <div style="padding: 10px 0">Гендерная принадлежность слушателей</div>
 
                                                 <small>Муж</small>
                                                 <div class="progress mb-3" style="height: 5px">
@@ -188,6 +188,7 @@
             const store = useStore()
             const router = useRouter()
             const route = useRoute()
+            const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const showModal = ref(false)
             // STUDENTS DATA
@@ -305,7 +306,7 @@
                 description.value = profile.value[0]['title_description']
                 discipline.value = profile.value[0]['title_discipline']
                 birthday.value = profile.value[0]['birthday']
-                avatar.value = profile.value[0]['avatar']
+                avatar.value = baseUrl.value +'/'+profile.value[0]['avatar'];
                 checkOnline(activeTime.value,15)
                 loading.value = false
 

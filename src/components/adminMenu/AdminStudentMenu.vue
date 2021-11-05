@@ -6,7 +6,7 @@
                     <li><router-link to="/group"  class="router-link" >Учебные группы</router-link></li>
                     <li><router-link to="/search"  class="router-link" >Поисковик</router-link></li>
                     <li><router-link to="/ban"  class="router-link" href="#"> Заблокированные </router-link></li>
-                    <li><router-link to="/last"  class="router-link" href="#"> Последние зарегистрировавшиеся  </router-link></li>
+                    <li><router-link to="/last_student"  class="router-link" href="#"> Последние зарегистрировавшиеся  </router-link></li>
                 </ul>
             </nav>
         </div>

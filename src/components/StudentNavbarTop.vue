@@ -1,6 +1,6 @@
 <template>
     <div class="col-2">
-        <h2>ЦНППМ</h2>
+        <h2>IT-GOVZALLA</h2>
     </div>
     <div class="col-10">
         <nav class="navbar justify-content-end">
@@ -12,7 +12,6 @@
                     <form @submit.prevent="onSubmit">
                         <button type="submit" class="btn auth-btn" > Выход </button>
                     </form>
-
                 </li>
             </ul>
         </nav>

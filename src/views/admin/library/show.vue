@@ -9,11 +9,11 @@
                 <div class="content-wallpaper">
                     <div class="body">
                         <h5>Описание</h5>
-                        <p v-if="description">{{description}}</p>
+                        <p v-if="description" v-html="description"></p>
                         <p v-else>Пусто</p>
                         <hr>
                         <h5>Ссылка</h5>
-                        <p v-if="link">{{link}}</p>
+                        <p v-if="link" > <a :href="link">{{link}}</a></p>
                         <p v-else>Пусто</p>
                         <hr>
                         <h5>Категория</h5>

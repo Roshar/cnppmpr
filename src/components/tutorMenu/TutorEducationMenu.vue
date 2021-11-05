@@ -3,17 +3,19 @@
         <nav class="colorlib-main-menu" role="navigation">
             <ul class="navbar-menu">
                 <li><router-link to="/"  class="router-link" >Моя страница</router-link></li>
-                <li><router-link :to="{name:'my_students'}"  class="router-link" >Слушатели</router-link></li>
+                <li><router-link :to="{path:`/iom/${iomId}/exercise`}"  class="router-link" > {{currentIom}} </router-link></li>
+                <li><router-link :to="{path:`/iom/${iomId}/members`}"  class="router-link" >Участники</router-link></li>
                 <li><router-link :to="{name:'my_iom'}"  class="router-link" >ИОМы</router-link></li>
-                <li><router-link to="/library"  class="router-link" > Библиотека заданий </router-link></li>
-                <li><router-link to="/report"  class="router-link" > Отчетность  </router-link></li>
             </ul>
         </nav>
     </div>
 </template>
 <script>
     export default {
+        props:['iomId','currentIom'],
+        setup() {
 
+        }
     }
 </script>
 

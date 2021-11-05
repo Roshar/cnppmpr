@@ -104,7 +104,7 @@ export default {
 
         async addInLibrary({commit, dispatch, state}, payload) {
             try {
-
+                console.log(payload)
                 const {data} = await axios.post('/api/admin/globalLibrary/addInLibrary',{
                         payload,
                         token: state.token

@@ -96,6 +96,7 @@ import {requiredForm} from '../../../utils/requiredForm'
 import {ref,computed,onMounted,watch} from 'vue'
 import RequestLibraryTask from "../../../components/request/RequestLibraryTask";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import {mysqlEscape} from '../../../utils/mysqlEscape'
 export default {
     setup() {
         const route = useRoute()
@@ -159,7 +160,7 @@ export default {
                 console.log('UPDATE')
                 await store.dispatch('library/updateExercise',{token: localStorage.getItem('jwt-token'),values:{
                         title:title.value,
-                        description:description.value,
+                        description:mysqlEscape(description.value),
                         tag:tag_id.value,
                         link:link.value,
                         id:id_exercise.value,

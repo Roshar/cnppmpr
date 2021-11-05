@@ -15,7 +15,6 @@
                         <div class="form-group">
                             <label >Краткое описание <i style="font-size: .8em">(необязательное поле)</i></label>
                             <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
-
                         </div>
                         <div class="form-group">
                             <label for="link">Ссылка на задание <i style="font-size: .8em">(необязательное поле)</i></label>
@@ -110,6 +109,7 @@
     import {useRouter} from 'vue-router'
     import {requiredForm} from '../../../utils/requiredForm'
     import {checkPossibilityDeleteData} from '../../../api/checkPossibilityDeleteData'
+    import {mysqlEscape} from '../../../utils/mysqlEscape'
 
 
     import {ref,computed,onMounted,watch} from 'vue'
@@ -224,7 +224,7 @@
                 if(Object.keys(error.value).length === 0) {
                     await store.dispatch('iom/updateExercise',{tbl:tblA.value[0][0].subTypeTableIom,values:{
                                         title:title.value,
-                                        description:description.value,
+                                        description:mysqlEscape(description.value),
                                         mentor:mentor.value,
                                         tag:tag_id.value,
                                         term:term.value,

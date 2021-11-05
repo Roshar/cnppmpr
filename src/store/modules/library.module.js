@@ -32,7 +32,6 @@ export default {
             }
         },
         async addExercise({ commit, dispatch}, payload) {
-            console.log(payload)
             try{
                 const {data} = await axios.post('/api/library/addExercise',payload)
                 dispatch('setSystemMessage', {
