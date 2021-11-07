@@ -35,7 +35,7 @@
             const router = useRouter()
             const route = useRoute()
             const login = ref()
-            const lError = ref() 
+            const lError = ref()
             const lErrorLength = ref()
 
             const sendRequest = async() => {
