@@ -63,7 +63,7 @@
                                                     <h6 class="mb-0">ФИО</h6>
                                                 </div>
                                                 <div class="col-sm-9 text-secondary">
-                                                    <span>{{name}} {{surname}} {{patronymic}}</span>
+                                                    <span> {{surname}} {{name}} {{patronymic}} </span>
                                                 </div>
                                             </div>
                                             <hr>
@@ -278,7 +278,6 @@
                 login.value = store.state['user'].userData.login;
                 discipline.value = store.state['user'].userData['title_discipline'];
                 students.value = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
-
             }
 
             onMounted(async()=>{

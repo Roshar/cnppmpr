@@ -2,25 +2,24 @@
     <div class="container-fluid own-bg">
         <div class="own-size">
             <div class="row">
-                <student-navbar-top/>
+               <student-navbar-top></student-navbar-top>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <student-navbar-left/>
-            </div>
+    <div class="container-fluid">
+        <app-message />
+        <div class="row justify-content-center">
             <router-view/>
         </div>
     </div>
 </template>
 
 <script>
-    import StudentNavbarLeft from '../components/StudentNavbarLeft.vue'
+    import StudentMainMenu from "../components/studentMenu/StudentMainMenu";
     import StudentNavbarTop from '../components/StudentNavbarTop.vue'
+    import AppMessage from '../components/ui/AppMessage'
     export default {
-        components: {StudentNavbarLeft,StudentNavbarTop}
+        components: {StudentMainMenu,StudentNavbarTop, AppMessage}
     }
 </script>
 

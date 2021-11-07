@@ -1,24 +1,22 @@
 <template>
     <div class="col-3">
-        <TutorMainMenu></TutorMainMenu>
+        <StudentMainMenu></StudentMainMenu>
     </div>
-
     <div class="col-9">
-
         <app-loader v-if="loading"></app-loader>
-        <div class="content-loader" >
+        <div class="content-loader" v-else>
             <div class="row">
                 <div class="col-12">
                     <div class="modal-form" v-if="showModal">
-                            <div class="row">
-                                <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
                                 <span style="float:right" @click="showModal=false"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                       <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
                                       <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
                                       </svg>
                                 </span>
-                                </div>
                             </div>
+                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <img v-if="previewSourceUrl" :src="previewSourceUrl" width="300" />
@@ -26,17 +24,17 @@
                         </div>
                         <form @submit.prevent="onSubmit" method="POST" enctype="multipart/form-data">
                             <div class="form-group">
-                                    <div class="form-group">
+                                <div class="form-group">
 
-                                        <div class="col-lg-10">
-                                            <input type="file"  class="filestyle"  @change="onFileSelected"
-                                                   data-classbutton="btn btn-default btn-lg"
-                                                   data-input="false" id="filestyle-0" tabindex="-1"
-                                                   style="position: fixed; left: -3500px;">
-                                            <div class="bootstrap-filestyle input-group">
-                                                <input type="text" class="form-control"  @click="sprint = true" :placeholder="previewSourceName">
+                                    <div class="col-lg-10">
+                                        <input type="file"  class="filestyle"  @change="onFileSelected"
+                                               data-classbutton="btn btn-default btn-lg"
+                                               data-input="false" id="filestyle-0" tabindex="-1"
+                                               style="position: fixed; left: -3500px;">
+                                        <div class="bootstrap-filestyle input-group">
+                                            <input type="text" class="form-control"  @click="sprint = true" :placeholder="previewSourceName">
 
-                                                <span class="input-group-btn" tabindex="0">
+                                            <span class="input-group-btn" tabindex="0">
                                                 <label for="filestyle-0" class="btn btn-default btn-lg" >
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" fill="currentColor" class="bi bi-card-image" viewBox="0 2 16 16">
                                                       <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
@@ -44,9 +42,9 @@
                                                     </svg>
                                                 </label>
                                             </span>
-                                            </div>
                                         </div>
                                     </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
@@ -59,18 +57,18 @@
                         </form>
                     </div>
                     <div class="content-wallpaper">
-                        <h5 >Редактировать профиль</h5>
+                        <h5 >Редактировать профиль </h5>
                         <div class="main-body">
                             <div class="row gutters-sm">
                                 <div class="col-md-4 mb-3">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex flex-column align-items-center text-center">
-                                                <img :src="avatar" alt="Тьютор" width="250">
+                                                <img :src="avatar" alt="Слушатель" style="border-radius: .4rem" width="250">
                                                 <div class="mt-3">
                                                     <h4>{{name}}</h4>
-                                                    <p class="text-secondary mb-1">Тьютор</p>
-                                                    <p class="text-muted font-size-sm">Возраст: {{ age}}{{declensionAge(age)}}</p>
+                                                    <p class="text-secondary mb-1">Слушатель</p>
+                                                    <p class="text-muted font-size-sm">Возраст:  {{age}}{{declensionAge(age)}}</p>
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <button class="btn btn-outline-primary btn-block" @click="showModal=true">Изменить фотографию</button>
@@ -86,20 +84,11 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card mb-3">
                                         <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <h6 class="mb-0">Имя</h6>
-                                                </div>
-                                                <div class="col-sm-9 text-secondary">
-                                                    <input type="text" class="form-control" id="name" name="name" v-model="name">
-                                                    <small v-if="nameError" style="color: tomato">Обязательное поле</small>
-                                                </div>
-                                            </div>
-                                            <hr>
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <h6 class="mb-0">Фамилия</h6>
@@ -112,13 +101,25 @@
                                             <hr>
                                             <div class="row">
                                                 <div class="col-sm-3">
-                                                    <h6 class="mb-0">Отчество</h6>
+                                                    <h6 class="mb-0">Имя</h6>
                                                 </div>
                                                 <div class="col-sm-9 text-secondary">
-                                                    <input type="text" class="form-control" v-model="patronymic">
+                                                    <input type="text" class="form-control" name="name" id="name" v-model="name">
+                                                    <small v-if="nameError" style="color: tomato">Обязательное поле</small>
                                                 </div>
                                             </div>
                                             <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Отчество</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    <input type="text" class="form-control" name="patronymic" id="patronymic" v-model="patronymic">
+                                                    <small v-if="patronymicError" style="color: tomato">Обязательное поле</small>
+                                                </div>
+                                            </div>
+                                            <hr>
+
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <h6 class="mb-0">Дата рождения</h6>
@@ -147,7 +148,7 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <hr>
+
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <h6 class="mb-0">Пол</h6>
@@ -170,7 +171,6 @@
                                             <hr>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -184,50 +184,57 @@
         </div>
     </transition>
 </template>
-<script>
-    import uniqid from 'uniqid'
-    import {useStore} from "vuex";
 
+<script>
+    import {useStore} from "vuex";
     import {useRouter, useRoute} from 'vue-router'
     import {declensionAge} from "../../utils/declensionAge"
-    import {ref,onMounted, watch} from 'vue'
+    import {ref, onMounted, watch} from 'vue'
     import AppLoader from "../../components/ui/AppLoader";
-    import AppUploader from '../../components/ui/AppUploader'
-    import TutorMainMenu from "../../components/tutorMenu/TutorMainMenu";
+    import StudentMainMenu from "../../components/studentMenu/StudentMainMenu";
+    import uniqid from "uniqid";
     import {requiredForm} from "../../utils/requiredForm";
 
 
     export default {
-        setup() {
 
+        setup() {
             const store = useStore()
             const router = useRouter()
             const route = useRoute()
+            const showModal = ref(false)
+            const name = ref();
+            const id = ref()
+            const surname = ref();
+            const patronymic = ref();
+            const phone = ref();
+            const issetIom = ref()
+            const age = ref();
+            const birthday = ref();
+            const baseUrl = ref(process.env.VUE_APP_URL)
+            const avatar = ref();
+            const gender = ref();
+            const login = ref();
+            const area = ref();
+            const school = ref();
+            const discipline = ref();
+            let students = ref();
+            let dependencies = ref()
+            let tutorId = ref()
+            let tutorFio = ref()
+            let birthdayConvert = ref()
+            let token = store.state['auth'].token;
+            let statData;
+            const classBtn = ref('btn btn-outline-primary btn-block')
             const previewSourceUrl = ref(null)
             const previewSourceName = ref('Выбрать фотографию')
-            const showModal = ref(false)
-            const baseUrl = ref(process.env.VUE_APP_URL)
-            const name = ref()
-            const surname = ref()
-            const patronymic = ref()
-            const phone = ref()
-            const age = ref()
-            const birthday = ref()
-            const birthdayConvert = ref()
-            const avatar = ref()
-            const gender = ref()
-            const login = ref()
-            const user_id = ref()
-            const classBtn = ref('btn btn-outline-primary btn-block')
             const nameError = ref(false)
             const surnameError = ref(false)
             const loginError = ref(false)
             const genderError = ref(false)
-            // const uploadImage;
-            let uploadImage;
-            const discipline = store.state['user'].userData['title_discipline'];
-            let students = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
             const loading = ref(true)
+            let uploadImage;
+
             let error = ref({})
             let errorSchemaRequired = {
                 name: true,
@@ -241,6 +248,13 @@
                 discipline: 'discipline',
             })
 
+            const goToModule = async(r) => {
+                await router.push(`/${r}`)
+            }
+
+            const genderVal = (val) => {
+                return (val == 'man') ? 'муж': 'жен'
+            }
 
             watch([name,surname,login,gender], (values)=>{
                 if(values[0] !== '') {
@@ -267,50 +281,50 @@
             })
 
             const updateItem = async(status) => {
-                    requiredForm('input',errorSchemaRequired,error)
-                    requiredForm('select',errorSchemaRequired,error)
-                    nameError.value = error.value?.name
-                    surnameError.value = error.value?.surname
-                    loginError.value = error.value?.login
+                requiredForm('input',errorSchemaRequired,error)
+                requiredForm('select',errorSchemaRequired,error)
+                nameError.value = error.value?.name
+                surnameError.value = error.value?.surname
+                loginError.value = error.value?.login
 
-                    if(Object.keys(error.value).length === 0) {
-                        await store.dispatch('tutor/updateTutorProfile',{
-                            token: localStorage.getItem('jwt-token'),
-                            name: name.value,
-                            surname: surname.value,
-                            patronymic: patronymic.value,
-                            birthday: birthdayConvert.value,
-                            gender: gender.value,
-                            login: login.value,
-                            phone: phone.value
-                        })
-                        await router.push('/')
-                    }
+                if(Object.keys(error.value).length === 0) {
+                    await store.dispatch('student/updateStudentProfile',{
+                        token: localStorage.getItem('jwt-token'),
+                        name: name.value,
+                        surname: surname.value,
+                        patronymic: patronymic.value,
+                        birthday: birthdayConvert.value,
+                        gender: gender.value,
+                        login: login.value,
+                        phone: phone.value
+                    })
+                    await router.push('/')
+                }
                 console.log(error.value)
 
-                    error.value = {}
+                error.value = {}
 
 
             }
 
-            const goToModule = async(r) => {
-                await router.push(`/${r}`)
-            }
-
-            const load = async() => {
-                user_id.value = store.state['user'].userData.user_id
+            const load = () => {
+                id.value = store.state['user'].userData.user_id;
                 name.value = store.state['user'].userData.name;
                 surname.value = store.state['user'].userData.surname;
                 patronymic.value = store.state['user'].userData.patronymic;
                 phone.value = store.state['user'].userData.phone;
                 age.value = store.state['user'].userData.age;
                 birthday.value = store.state['user'].userData.birthday;
-                birthdayConvert.value = store.state['user'].userData.birthdayConvert;
+                baseUrl.value = process.env.VUE_APP_URL
                 avatar.value = baseUrl.value +'/'+store.state['user'].userData.avatar;
                 gender.value = store.state['user'].userData.gender;
                 login.value = store.state['user'].userData.login;
+                school.value = store.state['user'].userData['school_name'];
+                area.value = store.state['user'].userData['title_area'];
+                birthdayConvert.value = store.state['user'].userData['birthdayConvert'];
+                discipline.value = store.state['user'].userData['title_discipline'];
+                students.value = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
             }
-
 
             const onFileSelected = (event) => {
                 uploadImage = event.target.files[0]
@@ -318,11 +332,15 @@
                 previewSourceUrl.value = URL.createObjectURL(uploadImage);
             }
 
+
             onMounted(async()=>{
                 loading.value = true
                 await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
                 await load()
+                loading.value = false
             })
+
+
 
             const onSubmit = async() => {
                 const ff = new FormData()
@@ -336,177 +354,55 @@
             }
 
 
+
             return{
                 name,
+                birthdayConvert,
                 surname,
                 patronymic,
+                school,
+                area,
                 phone,
-                baseUrl,
-                age,
+                discipline,
+                genderVal,
+                declensionAge,
                 onFileSelected,
                 previewSourceUrl,
                 previewSourceName,
                 onSubmit,
-                birthday,
                 avatar,
                 gender,
-                discipline,
-                students,
-                loading,
-                declensionAge,
-                login,
-                goToModule,
+                birthday,
                 classBtn,
                 surnameError,
                 nameError,
                 loginError,
                 genderError,
                 updateItem,
-                birthdayConvert,
-                showModal
+                age,
+                login,
+                goToModule,
+                showModal,
+                issetIom,
+                tutorId,
+                tutorFio
+
             }
         },
-        components:{AppLoader,TutorMainMenu, AppUploader}
+        components: {StudentMainMenu,AppLoader}
     }
 </script>
 
 <style  scoped>
 
-
-    gray-bg{
-        background:#eee;
+    .btn-outline-cancel {
+        color: tomato;
+        border-color: tomato;
     }
-    .pageloader {
-        position: fixed;
-        background-color: #2a5885;
-        top: 0%;
-        left: 0%;
-        width: 100%;
-        height: 100%;
-        z-index: 1000000;
-        opacity:1;
-        overflow: hidden;
-        display: table;
-    }
-    .loader {
-        text-align: center;
-        display: table-cell;
-        vertical-align: middle;
-    }
-    .loader span{
-        color: #ffffff;
-        font-weight: 300;
-        font-size: 60px;
-        display: block;
-        margin-top: 40px;
-    }
-    .sp-hydrogen {
-        width: 96px;
-        height: 96px;
-        clear: both;
-        margin: 60px auto;
-        position: relative;
-        border: 3px #ffffff solid;
-        border-radius: 50%;
-        -webkit-animation: spHydro 0.7s infinite linear;
-        animation: spHydro 0.7s infinite linear;
-    }
-    .sp-hydrogen:before, .sp-hydrogen:after {
-        content: '';
-        position: absolute;
-        width: 30px;
-        height: 30px;
+    .btn-outline-cancel:hover {
+        color: #fff;
         background-color: tomato;
-        border-radius: 50%;
-    }
-    .sp-hydrogen:before {
-        top: calc( 50% - 15px );
-        left: calc( 50% - 15px );
-    }
-    .sp-hydrogen:after {
-        top: -3px;
-        left: -3px;
-    }
-
-    @-webkit-keyframes spHydro {
-        from {
-            -webkit-transform: rotate(0deg);
-        }
-        to {
-            -webkit-transform: rotate(359deg);
-        }
-    }
-    @keyframes spHydro {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(359deg);
-        }
-    }
-
-
-
-    .animated {
-        -webkit-animation-duration: 1s;
-        animation-duration: 1s;
-        -webkit-animation-fill-mode: both;
-        animation-fill-mode: both;
-    }
-
-    .animated.infinite {
-        -webkit-animation-iteration-count: infinite;
-        animation-iteration-count: infinite;
-    }
-
-    @-webkit-keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-
-        100% {
-            opacity: 1;
-        }
-    }
-
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-
-        100% {
-            opacity: 1;
-        }
-    }
-
-    .fadeIn {
-        -webkit-animation-name: fadeIn;
-        animation-name: fadeIn;
-    }
-
-    @-webkit-keyframes fadeOut {
-        0% {
-            opacity: 1;
-        }
-
-        100% {
-            opacity: 0;
-        }
-    }
-
-    @keyframes fadeOut {
-        0% {
-            opacity: 1;
-        }
-
-        100% {
-            opacity: 0;
-        }
-    }
-
-    .fadeOut {
-        -webkit-animation-name: fadeOut;
-        animation-name: fadeOut;
+        border-color: tomato;
     }
 
     .modal-overlay,.modal-overlay2 {
@@ -544,14 +440,7 @@
         background-color: #4571a3;
         border-color: #4571a3;
     }
-    button:disabled,
-    button[disabled]{
-        color: #fff;
-        background: #d5d5d5;
-        padding: 7px;
-        border-radius: 0.3em;
-        border:none
-    }
+
     ul.ul-style {
         list-style-type: none;
         margin: 0;
@@ -672,15 +561,6 @@
         color: #fff;
         background-color: #4571a3;
         border-color: #4571a3;
-    }
-    .btn-outline-cancel {
-        color: tomato;
-        border-color: tomato;
-    }
-    .btn-outline-cancel:hover {
-        color: #fff;
-        background-color: tomato;
-        border-color: tomato;
     }
 
     .card.page_info_wrap {

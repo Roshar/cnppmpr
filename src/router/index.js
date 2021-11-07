@@ -13,6 +13,9 @@ import StudentTutor from '../views/tutor/student'
 import Tutors from '../views/admin/tutor'
 import TutorProfileEdit from '../views/tutor/editProfile'
 import AdminProfileEdit from '../views/admin/editProfile'
+import StudentProfileEdit from '../views/student/editProfile'
+import myCourse from '../views/student/course/index'
+import myTask from '../views/student/course/task'
 
 import Tag from '../views/admin/tag'
 import GlobalLibrary from '../views/admin/library'
@@ -43,6 +46,7 @@ import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
 import {beforeTutor} from '../api/checkroleIom'
+import {beforeStudent} from '../api/checkRoleStudent'
 import {withoutIsAuth} from '../api/withoutIsAuth'
 import {checkAccess} from '../api/checkActivePage'
 import {beforeAdmin} from '../api/checkRoleAdmin'
@@ -52,13 +56,25 @@ import EduMembers from '../views/tutor/edumembers'
 
 const routes = [
 
+
+
+  /**
+   PAGE NOT FOUND
+   **/
+
   { path: '/:pathMatch(.*)*',
+    name: '404',
     component: NotFound,
     beforeEnter:withoutIsAuth('NotFound'),
     meta:{
       auth:false,
       layout: 'NotFound'
     }},
+
+
+  /**
+   MAIN PAGE  HOME
+   **/
 
   {
     path: '/',
@@ -72,9 +88,13 @@ const routes = [
 
 
 
-//////////////////////////////////////////////////////////
-    // ADMIN ROUTES START
-//////////////////////////////////////////////////////////
+
+  /**
+   * //////////////////////////////////////////////////////////
+   // ADMIN ROUTES START
+   * /////////////////////////////////////////////////////////
+   **/
+
   {
     path: '/students',
     name: 'adminStudents',
@@ -276,16 +296,22 @@ const routes = [
     },
   },
 
-//////////////////////////////////////////////////////////
-    // ADMIN ROUTES END
-//////////////////////////////////////////////////////////
+  /**
+   * //////////////////////////////////////////////////////////
+   // ADMIN ROUTES END
+   * /////////////////////////////////////////////////////////
+   **/
 
 
 
 
-//////////////////////////////////////////////////////////
-    // TUTOR ROUTES START
-//////////////////////////////////////////////////////////
+
+  /**
+   * //////////////////////////////////////////////////////////
+   // TUTOR ROUTES START
+   * /////////////////////////////////////////////////////////
+   **/
+
   {
     path: '/my_students',
     name: 'my_students',
@@ -386,9 +412,65 @@ const routes = [
     },
   },
 
-//////////////////////////////////////////////////////////
-  // TUTOR ROUTES END
-//////////////////////////////////////////////////////////
+  /**
+   * //////////////////////////////////////////////////////////
+   // TUTOR ROUTES END
+   * /////////////////////////////////////////////////////////
+   **/
+
+
+
+
+
+
+  /**
+   * //////////////////////////////////////////////////////////
+   // STUDENT ROUTES START
+   * /////////////////////////////////////////////////////////
+   **/
+
+  {
+    path: '/editProfileStudent',
+    name: 'editProfileStudent',
+    component:StudentProfileEdit,
+    beforeEnter: beforeStudent(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/my_course',
+    name: 'myCourse',
+    component: myCourse,
+    beforeEnter: beforeStudent(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/my_course/:iomId/:taskId',
+    name: 'myTask',
+    component: myTask,
+    beforeEnter: beforeStudent(),
+    meta:{
+      auth: true,
+    },
+  },
+
+
+
+
+
+
+
+
+  /**
+   * //////////////////////////////////////////////////////////
+   // TUTOR ROUTES END
+   * /////////////////////////////////////////////////////////
+   **/
 
 
 
@@ -492,6 +574,16 @@ const routes = [
     path: '/recovery',
     name: 'Recovery',
     component: ()=> import('../views/Recovery.vue'),
+    beforeEnter:withoutIsAuth('auth'),
+    meta:{
+      auth:false
+    }
+  },
+
+  {
+    path: '/recovery/:link',
+    name: 'RecoveryLink',
+    component: ()=> import('../views/RecoveryLink.vue'),
     beforeEnter:withoutIsAuth('auth'),
     meta:{
       auth:false

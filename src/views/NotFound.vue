@@ -8,7 +8,7 @@
                     <div class="inner-circle"><i class="fa fa-home"></i><span>404</span></div>
                     <span class="inner-status">Вы потерялись</span>
                     <span class="inner-detail">
-                    Такая страница не нейден.
+                    Такая страница не нейдена
                     <router-link to="/" class="btn btn-info mtl"><i class="fa fa-home"></i>&nbsp;
                          Иду домой
                     </router-link>

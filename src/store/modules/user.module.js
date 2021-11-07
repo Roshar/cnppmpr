@@ -121,6 +121,9 @@ export default {
         },
         status(state) {
             return state.status
+        },
+        getUserLinks(state) {
+            return state.userLink
         }
     }
 }

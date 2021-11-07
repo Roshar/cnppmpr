@@ -213,6 +213,41 @@ export default {
             }
         },
 
+        async getExercisesByIomId ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getExercisesByIomId',
+                    {payload})
+                if(data.values.length){
+                    return data.values
+                }
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getStatusFinished ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getStatusFinished',
+                    {tutorId: payload.tutorId,
+                        studentId:payload.studentId,
+                        iomId: payload.iomId} )
+               if(data.values){
+                   return data.values
+               }
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async getLastUsers ({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/getLastUsers',payload)

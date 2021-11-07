@@ -250,11 +250,12 @@ export default {
             try {
                 if(payload.value) {
                     const {data} = await axios.post('/api/auth/recovery',{recovery:payload.value})
-                    commit('setLogin',payload.value)
+                    // commit('setLogin',payload.value)
                     dispatch('setSystemMessage', {
                         value: data.values.message,
                         type: 'primary'
                     }, {root: true})
+                    return data
                 }
             } catch(e){
                 dispatch('setSystemMessage', {

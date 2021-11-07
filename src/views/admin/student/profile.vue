@@ -36,7 +36,7 @@
                                                 <img :src="avatar" alt="слушатель" style="border-radius: .4rem" width="250">
                                                 <div class="mt-3">
                                                     <h4>{{name}}</h4>
-                                                    <p class="text-secondary mb-1">Обучающийся</p>
+                                                    <p class="text-secondary mb-1">Слушатель</p>
                                                     <p class="text-muted font-size-sm">Возраст: {{ age}}{{declensionAge(age)}}</p>
                                                     <p :class="onlineClass"> {{onlineStatus}}</p>
                                                     <button class="btn btn-outline-primary" @click="showModal=true">Отправить сообщение</button>
@@ -134,58 +134,42 @@
                                             <hr>
                                         </div>
                                     </div>
-                                    <div class="row gutters-sm">
-                                        <div class="col-sm-6 mb-3">
-                                            <div class="card h-100">
-                                                <div class="card-body">
-                                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                                                    <small>Web Design</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>Website Markup</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>One Page</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>Mobile Template</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>Backend API</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div v-if="iom">
+                                        <div class="row gutters-sm">
+                                            <div class="col-sm-12 mb-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body">
+                                                        <h5 style="text-align: center">Аналитика по прохождению ИОМа </h5>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6 mb-3">
+                                        <div class="row gutters-sm">
+                                            <div class="col-sm-12 mb-3">
+                                                <div class="card h-100">
+                                                    <div class="card-body">
+                                                        <h6 class="d-flex align-items-center mb-3">Количество заданий в ИОМ: {{iomInfo.length}}</h6>
+                                                        <small>Количество выполненых заданий</small>
+                                                        <div class="progress mb-3" style="height: 5px">
+                                                            <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics(finishedExercises.length,iomInfo.length)"></div>
+                                                        </div>
+                                                        <small>Задания с ожиданием проверки</small>
+                                                        <div class="progress mb-3" style="height: 5px">
+                                                            <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics(0,iomInfo.length)" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div v-else>
+                                        <div class="col-sm-12 mb-3" >
                                             <div class="card h-100">
                                                 <div class="card-body">
-                                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                                                    <small>Web Design</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>Website Markup</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>One Page</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>Mobile Template</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <small>Backend API</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
+                                                    <h5>
+                                                        Аналитика по индивидуальному образовательному маршруту недоступна
+                                                    </h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -278,6 +262,15 @@
                 return (val == 'man') ? 'муж': 'жен'
             }
 
+            const createGraphics = (currentValue, maxValue) => {
+                if(currentValue === 0 || maxValue === 0) {
+                    return 'width: 0%'
+                }else {
+                    let res = currentValue/maxValue * 100
+                    return 'width:' + String(res) + '%'
+                }
+            }
+
             const checkOnline = (val,limit) => {
                 let currentDate = new Date();
                 let currentTIme = new Date(currentDate.getTime());
@@ -309,6 +302,17 @@
                         { student:userId,
                                  tutor:tutorId.value})
                     issetIom.value = iom.value.length ? iom.value : []
+
+
+                    if(iom.value.length) {
+                        //get exercises from IOM
+                        iomInfo.value = await store.dispatch('admin/getExercisesByIomId',
+                            {tutorId:tutorId.value,
+                                    iomId:iom.value[0].iom_id})
+
+                        finishedExercises.value = await store.dispatch('admin/getStatusFinished',{tutorId: tutorId.value, studentId:userId,iomId:iom.value[0].iom_id})
+
+                    }
                 }
 
                 //USER INFO
@@ -341,6 +345,7 @@
                 showModal,
                 editProfile,
                 areas,
+                createGraphics,
                 currentUser,
                 disciplines,
                 students,

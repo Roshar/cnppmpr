@@ -1,4 +1,5 @@
 import axios from '../../axios/request'
+import router from '../../router/'
 const TOKEN = 'jwt-token'
 const MESSAGE = 'message'
 
@@ -12,6 +13,8 @@ export default {
         students: null,
         membersIom: null,
         freestudents: null,
+        exercisesFromMyIom: null,
+        tagsFromMyIom: null,
     },
 
     mutations: {
@@ -22,9 +25,18 @@ export default {
         setStatistics(state, statistics) {
             state.statistics = statistics
         },
+
+        setExercisesMyIom(state, value) {
+            state.exercisesFromMyIom = value
+        },
+
+        setExercisesTags(state, value) {
+            state.tagsFromMyIom = value
+        },
         setStudents(state, value) {
             state.students = value
         },
+
         setStudentsFromIom(state, value) {
             state.membersIom = value
         },
@@ -159,7 +171,7 @@ export default {
             }
         },
 
-        async deleteStudentFromIomEducation ({commit, dispatch, state}, payload) {
+        async deleteStudentFromIomEducation ({commit, dispatch,useRouter, state}, payload) {
             try {
                 const {data} = await axios.post('/api/student/deleteStudentFromIomEducation',
                     {token: localStorage.getItem('jwt-token'),
@@ -178,6 +190,84 @@ export default {
             }
         },
 
+        async updateStudentProfile ({commit, dispatch, state}, payload) {
+            try {
+
+                const {data} = await axios.post('/api/user/updateStudentProfile',payload )
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'premier'
+                }, {root: true})
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async checkIssetMyIom ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/checkIssetMyIom',
+                    {studentId: payload.studentId,
+                         tutorId: payload.tutorId,
+                        })
+                 return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        async getExercisesFromMyIom ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/getExercisesFromMyIom', payload)
+                console.log(data.values)
+                if(data.values) {
+                    commit('setExercisesMyIom',data.values[0])
+                    commit('setExercisesTags',data.values[1])
+                }
+                 return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        async getMyTaskById ({commit, dispatch, state }, payload) {
+            try {
+                const {data} = await axios.post('/api/student/getMyTaskById', payload)
+                 return data.values
+            } catch(e){
+                router.push({name:'404'})
+            }
+        },
+
+        async insertInReportWithoutFile ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/insertInReportWithoutFile', payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                router.push('/404')
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+
+
 
 
 
@@ -192,6 +282,14 @@ export default {
         },
         getFreeStudents(state) {
            return state.freestudents
+        },
+
+        getExercisesMyIom(state) {
+           return state.exercisesFromMyIom
+        },
+
+        getTagsMyIom(state) {
+           return state.tagsFromMyIom
         },
     }
 }
