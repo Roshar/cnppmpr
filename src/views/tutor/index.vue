@@ -241,7 +241,7 @@
             const phone = ref();
             const age = ref();
             const birthday = ref();
-            const baseUrl = ref(process.env.VUE_APP_URL)
+            const baseUrl = ref('https://it-govzalla-back.onrender.com')
             const avatar = ref();
             const gender = ref();
             const login = ref();
