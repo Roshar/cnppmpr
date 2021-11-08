@@ -45,6 +45,7 @@ import SingleGroup from '../views/admin/group/single'
 import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
+import Test from '../views/test'
 import {beforeTutor} from '../api/checkroleIom'
 import {beforeStudent} from '../api/checkRoleStudent'
 import {withoutIsAuth} from '../api/withoutIsAuth'
@@ -55,6 +56,17 @@ import EduMembers from '../views/tutor/edumembers'
 
 
 const routes = [
+
+
+  {
+    path: '/test',
+    name: 'test',
+    component: Test,
+    beforeEnter:withoutIsAuth('auth'),
+    meta:{
+      auth: false,
+    },
+  },
 
 
 
