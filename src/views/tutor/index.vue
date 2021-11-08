@@ -272,7 +272,6 @@
                 phone.value = store.state['user'].userData.phone;
                 age.value = store.state['user'].userData.age;
                 birthday.value = store.state['user'].userData.birthday;
-                baseUrl.value = process.env.VUE_APP_URL
                 avatar.value = baseUrl.value +'/'+store.state['user'].userData.avatar;
                 gender.value = store.state['user'].userData.gender;
                 login.value = store.state['user'].userData.login;
