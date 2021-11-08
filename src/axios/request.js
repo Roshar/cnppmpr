@@ -4,7 +4,7 @@ import router from '../router'
 
 const requestAxios = axios.create({
     // baseURL: process.env.VUE_APP_URL
-    baseURL: 'http://193.168.46.58:3500'
+    baseURL: 'https://it-govzalla-back.onrender.com'
 })
 
 requestAxios.interceptors.response.use(null,error => {
