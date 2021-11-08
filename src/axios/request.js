@@ -8,6 +8,7 @@ const requestAxios = axios.create({
 })
 
 requestAxios.interceptors.response.use(null,error => {
+    console.log('axios')
     if(error.response.status === 401) {
         router.push('/auth')
     }
