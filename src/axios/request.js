@@ -3,8 +3,8 @@ import router from '../router'
 
 
 const requestAxios = axios.create({
-    baseURL: process.env.VUE_APP_URL
-    // baseURL: 'https://it-govzalla-back.onrender.com'
+    // baseURL: process.env.VUE_APP_URL
+    baseURL: 'https://it-govzalla-back.onrender.com'
 })
 
 requestAxios.interceptors.response.use(null,error => {
