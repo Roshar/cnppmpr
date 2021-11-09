@@ -19,7 +19,6 @@ export default {
 
         async test({dispatch}) {
 
-            console.log('sfdfdfdf')
             try {
                 const {data} = await axios.post('/api/users')
                 return data.values ? data.values : []
