@@ -289,30 +289,30 @@
                 loading.value = true
                 const userId = route.params.userId
                 profile.value = await store.dispatch('admin/getProfile',{tbl:'students', userId:userId})
-                await store.dispatch('admin/getDependenciesStudent',{ userId:userId})
-                dependencies.value = store.getters['admin/getDependenciesData']
-
-                //DEPENDENCIES INFO
-                if(dependencies.value.length) {
-                    groupName.value  = dependencies.value[0]['title']
-                    tutorFio.value = dependencies.value[0]['surname'] + ' '+ dependencies.value[0]['name'][0]+'.'+dependencies.value[0]['patronymic'][0]+'.'
-                    tutorId.value = dependencies.value[0]['t_user_id']
-                    groupId.value = dependencies.value[0]['group_id']
-                    iom.value = dependencies.value = await store.dispatch('admin/getIomByStudentAndTutor',
-                        { student:userId,
-                            tutor:tutorId.value})
-                    issetIom.value = iom.value.length ? iom.value[0] : 'не назначен'
-
-                    if(iom.value.length) {
-                        await store.dispatch('iom/getExercisesByIomId',
-                            {token:localStorage.getItem('jwt-token'),id:iom.value[0].iom_id})
-                        iomInfo.value = store.getters['iom/getExercisesByIomId']
-                        await store.dispatch('iom/getStatusFinished',{studentId:userId,iomId:iom.value[0].iom_id})
-                        finishedExercises.value = store.getters['iom/getStatusFinished']
-
-
-                    }
-                }
+                // await store.dispatch('admin/getDependenciesStudent',{ userId:userId})
+                // dependencies.value = store.getters['admin/getDependenciesData']
+                //
+                // //DEPENDENCIES INFO
+                // if(dependencies.value.length) {
+                //     groupName.value  = dependencies.value[0]['title']
+                //     tutorFio.value = dependencies.value[0]['surname'] + ' '+ dependencies.value[0]['name'][0]+'.'+dependencies.value[0]['patronymic'][0]+'.'
+                //     tutorId.value = dependencies.value[0]['t_user_id']
+                //     groupId.value = dependencies.value[0]['group_id']
+                //     iom.value = dependencies.value = await store.dispatch('admin/getIomByStudentAndTutor',
+                //         { student:userId,
+                //             tutor:tutorId.value})
+                //     issetIom.value = iom.value.length ? iom.value[0] : 'не назначен'
+                //
+                //     if(iom.value.length) {
+                //         await store.dispatch('iom/getExercisesByIomId',
+                //             {token:localStorage.getItem('jwt-token'),id:iom.value[0].iom_id})
+                //         iomInfo.value = store.getters['iom/getExercisesByIomId']
+                //         await store.dispatch('iom/getStatusFinished',{studentId:userId,iomId:iom.value[0].iom_id})
+                //         finishedExercises.value = store.getters['iom/getStatusFinished']
+                //
+                //
+                //     }
+                // }
                 //USER INFO
                 surname.value = profile.value[0].surname
                 currentUser.value = profile.value[0]['user_id']
