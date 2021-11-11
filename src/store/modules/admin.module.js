@@ -4,10 +4,14 @@ export default {
     namespaced: true,
 
     state: {
-        studentsFromCurrentGroup: null
+        studentsFromCurrentGroup: null,
+        dependenciesData: null,
     },
 
     mutations: {
+        setDependenciesData(state, values) {
+            state.dependenciesData = values
+        },
 
         setAppointedStudentsCurrentGroup(state,values) {
             state.studentsFromCurrentGroup = values
@@ -173,15 +177,15 @@ export default {
             }
         },
 
-        async getDependenciesStudent ({dispatch},payload) {
+        async getDependenciesStudent ({dispatch, commit},payload) {
             try {
                 const {data} = await axios.post('/api/admin/getDependenciesStudent',payload)
+                commit('setDependenciesData',data.values)
                 return data.values
-                console.log(data.values)
             } catch(e){
                 console.log('Ошибка в getDependenciesStudent')
                 dispatch('setSystemMessage', {
-                    value: e.message(),
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
@@ -439,6 +443,9 @@ export default {
     getters: {
         getAppointedStudentsCurrentGroup(state) {
             return state.studentsFromCurrentGroup
+        },
+        getDependenciesData(state) {
+            return state.dependenciesData
         }
     }
 }

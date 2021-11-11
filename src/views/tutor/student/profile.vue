@@ -289,7 +289,8 @@
                 loading.value = true
                 const userId = route.params.userId
                 profile.value = await store.dispatch('admin/getProfile',{tbl:'students', userId:userId})
-                dependencies.value = await store.dispatch('admin/getDependenciesStudent',{ userId:userId})
+                await store.dispatch('admin/getDependenciesStudent',{ userId:userId})
+                dependencies.value = store.getters['admin/getDependenciesData']
 
                 //DEPENDENCIES INFO
                 if(dependencies.value.length) {
@@ -327,7 +328,7 @@
                 description.value = profile.value[0]['title_description']
                 discipline.value = profile.value[0]['title_discipline']
                 birthday.value = profile.value[0]['birthday']
-                // avatar.value = baseUrl.value +'/'+profile.value[0]['avatar']
+                avatar.value = baseUrl.value +'/'+profile.value[0]['avatar']
                 checkOnline(activeTime.value,15)
                 loading.value = false
             })
