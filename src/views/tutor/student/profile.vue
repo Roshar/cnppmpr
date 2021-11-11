@@ -260,8 +260,6 @@
                 }
             }
 
-
-
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
                 profile.value = await store.dispatch('admin/getUsersWithBanStatus',{tbl:'students'})
@@ -329,7 +327,7 @@
                 description.value = profile.value[0]['title_description']
                 discipline.value = profile.value[0]['title_discipline']
                 birthday.value = profile.value[0]['birthday']
-                avatar.value = baseUrl.value +'/'+profile.value[0]['avatar']
+                // avatar.value = baseUrl.value +'/'+profile.value[0]['avatar']
                 checkOnline(activeTime.value,15)
                 loading.value = false
             })

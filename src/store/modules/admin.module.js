@@ -177,9 +177,11 @@ export default {
             try {
                 const {data} = await axios.post('/api/admin/getDependenciesStudent',payload)
                 return data.values
+                console.log(data.values)
             } catch(e){
+                console.log('Ошибка в getDependenciesStudent')
                 dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
+                    value: e.message(),
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
