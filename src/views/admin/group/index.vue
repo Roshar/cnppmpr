@@ -70,22 +70,25 @@
             </div>
             <h5 class="subtitle-page">Список </h5>
             <hr>
-            <div class="row">
-                <div class="col-4" v-for="(item, index) in groupsData" :key="item.id">
-                    <div class="card">
-                        <div class="card-body">
-                            <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания: {{item.created_at}}</div>
-                            <h5 class="card-title">{{item.title}}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Тьютор: {{item.surname}} {{item.name}} {{item.patronymic}}</h6>
-                            <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{item.title_discipline}} </h6>
-                            <p class="card-text">{{item.description}}</p>
-                            <router-link :to="{path:`/group/${item.id}`}" class="btn-primary-outline" >Открыть</router-link>
-                            <button class="btn-danger-outline" @click="getIdForDelete(item.id)">Удалить</button>
+            <app-loader v-if="loading"></app-loader>
+            <div class="load-content" v-else>
+                <div class="row">
+                    <div class="col-4" v-for="(item, index) in groupsData" :key="item.id">
+                        <div class="card">
+                            <div class="card-body">
+                                <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания: {{item.created_at}}</div>
+                                <h5 class="card-title">{{item.title}}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Тьютор: {{item.surname}} {{item.name}} {{item.patronymic}}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{item.title_discipline}} </h6>
+                                <p class="card-text">{{item.description}}</p>
+                                <router-link :to="{path:`/group/${item.id}`}" class="btn-primary-outline" >Открыть</router-link>
+                                <button class="btn-danger-outline" @click="getIdForDelete(item.id)">Удалить</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <hr>
             </div>
-            <hr>
         </div>
     </div>
     <transition  name="fade" appear>
@@ -113,6 +116,7 @@
             const tutorsData = ref()
             const groupsData = ref()
             const deleteId = ref()
+
 
             const deleteGroupDanger = async() =>{
                 if(deleteId.value) {
