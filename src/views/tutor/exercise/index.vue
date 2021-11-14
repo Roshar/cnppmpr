@@ -137,7 +137,7 @@
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary"  @click="showModalDelete=false" data-dismiss="modal">Одуматься</button>
-                            <button type="button" @click="deleteIom" class="btn btn-danger">А, черт! Удаляем</button>
+                            <button type="button" @click="deleteIom" class="btn btn-danger">Удалить</button>
                         </div>
                     </div>
                 </div>
@@ -201,7 +201,6 @@
                 removePlugins: ["EasyImage","ImageUpload","MediaEmbed"]
                     }
 
-
             // Проверка текущего ИОМ : TRUE|FALSE
             // Получить все таблицы тьютора | Array
             const validIdIom = async() => {
@@ -257,13 +256,6 @@
                .filter(data => (filterLibGlobal.value.tag) ? filterLibGlobal.value.tag == data['tag_id'] : data))
 
 
-            //запрос на удаления
-
-            const getConfirmDelete = () => {
-
-            }
-
-
            // Удалить текущий ИОМ
             const deleteIom = async() => {
                 await checkPossibilityDeleteIom(store,{
@@ -276,7 +268,17 @@
                     },
                     userId: localStorage.getItem('USERID')
                 })
-                await router.push(`/iom/${route.params.id}/exercise/`)
+                let code = store.getters['iom/getCode']
+                showModalDelete.value = false
+                if(code) {
+                    await router.push(`/my_iom`)
+                    store.commit('iom/clearCode')
+                }else {
+                    await router.push(`/my_iom/${route.params.id}/exercise/`)
+                }
+
+
+
             }
 
             // Задания из текущего ИОМа
@@ -286,7 +288,7 @@
                 await store.dispatch('iom/addExercise',{tbl:tblA.value[0][0].subTypeTableIom,values})
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 showModal.value = false
-                await router.push(`/iom/${route.params.id}/exercise`)
+                await router.push(`/my_iom/${route.params.id}/exercise`)
             }
             document.title = "Менеджер индивидуальных образовательных маршрутов"
             return {
@@ -308,7 +310,6 @@
                 tagsData,
                 showModalOption,
                 showModalLibGlobal,
-                getConfirmDelete,
                 showModalDelete,
                 iomId,
                 editor,
@@ -329,6 +330,8 @@
 </script>
 
 <style scoped >
+
+
 
     .modal-dialog {
         padding: 0;

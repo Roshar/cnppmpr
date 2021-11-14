@@ -25,6 +25,8 @@ export default {
             }
         },
 
+
+
         async getRequestStudents ({dispatch}) {
             try {
                 const {data} = await axios.post('/api/notification/getRequestStudents')
@@ -33,6 +35,24 @@ export default {
                 console.log(e)
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async cancelRequest ({dispatch}, payload) {
+            try {
+               const {data} = await axios.post('/api/notification/cancelRequest',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
+            } catch(e){
+                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()

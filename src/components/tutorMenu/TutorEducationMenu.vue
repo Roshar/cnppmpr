@@ -3,8 +3,8 @@
         <nav class="colorlib-main-menu" role="navigation">
             <ul class="navbar-menu">
                 <li><router-link to="/"  class="router-link" >Моя страница</router-link></li>
-                <li><router-link :to="{path:`/iom/${iomId}/exercise`}"  class="router-link" > {{currentIom}} </router-link></li>
-                <li><router-link :to="{path:`/iom/${iomId}/members`}"  class="router-link" >Участники</router-link></li>
+                <li><router-link :to="{path:`/my_iom/${iomId}/exercise`}"  class="router-link" > {{currentIom}} </router-link></li>
+                <li><router-link :to="{path:`/my_iom/${iomId}/members`}"  class="router-link" >Участники</router-link></li>
                 <li><router-link :to="{name:'my_iom'}"  class="router-link" >ИОМы</router-link></li>
             </ul>
         </nav>

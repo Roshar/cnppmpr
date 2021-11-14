@@ -1,4 +1,4 @@
-export function shortContent (content,limit) {
+export function shortContent (content,limit=100) {
     content = content.trim();
     if( content.length <= limit) return content;
 
@@ -8,7 +8,9 @@ export function shortContent (content,limit) {
     if( lastSpace > 0) {
         content = content.substr(0, lastSpace);
     }
+
     return content + "...";
+
 }
 
 

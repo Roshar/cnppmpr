@@ -184,13 +184,13 @@
                 tag_id.value = taskData.value['tag_id']
                 //term.value = taskData.value.term.split(".").reverse().join("-");
                 term.value = taskData.value.term
-                console.log(term.value)
+
                 mentor.value = taskData.value.mentor
                 link.value = taskData.value.link
                 id_exercise.value = taskData.value['id_exercises']
                 loading.value = false
 
-                console.log(tagsData.value)
+
                 if(Object.keys(mentorsData.value).length !== 0) {
                     mentorsData.value.forEach((person) =>{
                         if(person.id === taskData.value.mentor){
@@ -211,7 +211,7 @@
                         student:tblA.value[0][0].student,
                     }
                 })
-                await router.push(`/iom/${route.params.id}/exercise/`)
+                await router.push(`/my_iom/${route.params.id}/exercise/`)
             }
 
             const onSubmit = async() => {
@@ -235,7 +235,7 @@
                     taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
                     taskData.value.term = taskData.value.term.split(".").reverse().join("-")
                                 showModal.value = false
-                                await router.push(`/iom/${route.params.id}/exercise/${route.params.task}`)
+                                await router.push(`/my_iom/${route.params.id}/exercise/${route.params.task}`)
                 }
                 error.value = {}
             }
@@ -263,7 +263,7 @@
                 mentorError,
                 open: () => showModal.value = true,
                 refund: () => {
-                    router.push(`/iom/${route.params.id}/exercise`)
+                    router.push(`/my_iom/${route.params.id}/exercise`)
                 },
                 deleteTask,
                 editorConfig,

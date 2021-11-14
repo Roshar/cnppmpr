@@ -90,10 +90,11 @@ export default {
 
         async getCompanions ({commit, dispatch, state}) {
             try {
-                const {data} = await axios.post('/api/conversation/getCompanions',{token: state.token})
-                 commit('setCompanionsStudents',data.values['studentsData'])
-                 commit('setCompanionsTutors',data.values['tutorsData'])
-                 commit('setCompanionsAdmins',data.values['adminsData'])
+                console.log('НАЧАЛО')
+                const {data} = await axios.post('/api/conversation/getCompanions',{token: localStorage.getItem('jwt-token')})
+                commit('setCompanionsStudents',data.values[0])
+                commit('setCompanionsTutors',data.values[1])
+                commit('setCompanionsAdmins',data.values[2])
 
             } catch(e){
                 dispatch('setSystemMessage', {

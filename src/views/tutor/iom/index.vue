@@ -50,8 +50,7 @@
                                 <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания:  {{item['created_at']}}</div>
                                 <h5 class="card-title">{{item.title}}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Количество заданий: {{item.countExercises}}</h6>
-                                <router-link :to="{ path: `/iom/${item['iom_id']}/exercise`}" class="btn-primary-outline" >Открыть</router-link>
-                                <button class="btn-danger-outline" @click="getIdForDelete(item.id)">Удалить</button>
+                                <router-link :to="{ path: `/my_iom/${item['iom_id']}/exercise`}" class="btn-primary-outline" >Открыть</router-link>
                             </div>
                         </div>
                     </div>

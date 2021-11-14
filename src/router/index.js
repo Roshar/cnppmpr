@@ -365,8 +365,8 @@ const routes = [
   },
 
   {
-    path: '/iom/create',
-    name: '/iom/create',
+    path: '/my_iom/create',
+    name: '/my_iom/create',
     component: IomCreate,
     beforeEnter: beforeTutor(),
     meta:{
@@ -375,7 +375,7 @@ const routes = [
   },
 
   {
-    path: '/iom/:id/exercise',
+    path: '/my_iom/:id/exercise',
     name: 'addExercise',
     component: ExerciselistAndCreate,
     beforeEnter: beforeTutor(),
@@ -385,7 +385,7 @@ const routes = [
   },
 
   {
-    path: '/iom/:id/members',
+    path: '/my_iom/:id/members',
     name: 'iomMembers',
     component: EduMembers,
     beforeEnter: beforeTutor(),
@@ -395,7 +395,7 @@ const routes = [
   },
 
   {
-    path: '/iom/:id/exercise/:task',
+    path: '/my_iom/:id/exercise/:task',
     name: 'updateDeleteOpen',
     component: udTask,
     beforeEnter: beforeTutor(),
@@ -422,6 +422,26 @@ const routes = [
     meta:{
       auth: true,
     },
+  },
+
+  {
+    path: '/tutor_conversations',
+    name: 'tutor_conversations',
+    component: conTutor,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/tutor_conversations/:chat/:user',
+    name: 'tutor_conv',
+    component: chatTutor,
+    beforeEnter: beforeTutor(),
+    meta: {
+      auth: true,
+    }
   },
 
   /**

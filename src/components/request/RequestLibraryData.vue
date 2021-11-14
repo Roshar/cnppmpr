@@ -43,7 +43,7 @@
                         <tr v-for="(item, index) in execLib" :key="item.id" >
                             <th scope="row">{{index +1}}</th>
                             <td>{{item['title']}}</td>
-                            <td> {{shortContent(item['description'])}}</td>
+                            <td> {{shortContent(clearHTML(item['description']),50)}}</td>
                             <td>{{item['title_tag']}}</td>
                             <td><button class="btn  btn-block btn-outline-primary-send" @click="addTaskFromLib(item.id)">Добавить</button></td>
                         </tr>
@@ -59,8 +59,10 @@
     import {ref,watch} from 'vue'
     import {useStore} from 'vuex'
     import {shortContent} from "../../utils/shortContent";
+    import {clearHTML} from "../../utils/clearHTML";
     import {useRoute} from 'vue-router'
     import {useRouter} from 'vue-router'
+
     export default {
         emits: ['update:modelValue','closeLib'],
         props: ['modelValue','tagsData','showModalLib','execLib'],
@@ -85,7 +87,7 @@
                 await store.dispatch('iom/addExerciseFromLib',{token:localStorage.getItem('jwt-token'),values})
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 emit('closeLib')
-                await router.push(`/iom/${route.params.id}/exercise`)
+                await router.push(`/my_iom/${route.params.id}/exercise`)
             }
             return{
                 title,
@@ -93,6 +95,7 @@
                 addTaskFromLib,
                 shortContent,
                 term,
+                clearHTML
             }
         }
     }

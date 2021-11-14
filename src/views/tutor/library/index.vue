@@ -31,23 +31,23 @@
                     <div class="form-group">
                         <label >Краткое описание <i style="font-size: .8em">(необязательное поле)</i></label>
                         <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
-                        <small v-if="descriptionError">{{descriptionError}}</small>
+
                     </div>
                     <div class="form-group">
                         <label for="link">Ссылка на задание <i style="font-size: .8em">(необязательное поле)</i></label>
-                        <input type="text" :class="['form-control',{invalid:linkError}]" v-model="link" id="link" name="link" placeholder="Вставьте ссылку">
-                        <small v-if="linkError">{{linkError}}</small>
+                        <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Вставьте ссылку">
                     </div>
                     <div class="form-group">
                         <label for="link">Тип задания</label>
                         <select :class="['form-control',{invalid:catError}]"  name="tag" v-model="category">
+                            <option value="">Выбрать категорию</option>
                             <option v-for="(item, index) in tagsData"  :key="item['id_tag']"   :value="item['id_tag']">{{item['title_tag']}}</option>
                             <small v-if="catError">{{catError}}</small>
                         </select>
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <button type="submit"  class="btn  btn-block btn-outline-primary-send"  :disabled="isSubmiting">Добавить задание в библиотеку</button>
+                            <button type="submit" class="btn  btn-block btn-outline-primary-send"  :disabled="isSubmiting">Добавить задание в библиотеку</button>
                         </div>
                         <div class="col-6">
                             <button type="button"  class="btn btn-block btn-outline-secondary" @click="showModal=false">Отменить</button>
@@ -55,6 +55,8 @@
                     </div>
                 </form>
             </div>
+
+
             <request-filter  v-model="filter" :tags-data="tagsData" ></request-filter>
             <app-loader v-if="loading"></app-loader>
             <div class="exercise-content" v-else>
@@ -77,12 +79,12 @@
      import LibraryList from "../../../components/request/RequestLibrary";
      import AppLoader from "../../../components/ui/AppLoader";
      import RequestFilter from "../../../components/request/RequestFilter";
-     import {useLibraryForm} from "../../../use/library-form";
      import {useStore} from 'vuex'
      import {useRouter} from "vue-router";
      import {useRoute} from 'vue-router'
      import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
      import {mysqlEscape} from '../../../utils/mysqlEscape'
+     import {useLibraryForm} from "../../../use/library-form";
 
      export default {
          setup() {
@@ -115,7 +117,9 @@
 
 
              //Задания из текущего ИОМа
-             const submit = async function (values)  {
+
+
+             const sub = async function (values)  {
                  values.description = mysqlEscape(description.value)
                  await store.dispatch('library/addExercise',{
                      token: localStorage.getItem('jwt-token'),
@@ -126,7 +130,7 @@
              }
 
              document.title = "Библиотека заданий"
-             return {...useLibraryForm(submit),showModal,close: () => showModal.value = false, description, libraryData, loading, filter, tagsData,editor, editorConfig}
+             return {...useLibraryForm(sub), showModal, close: () => showModal.value = false, description, libraryData, loading, filter, tagsData,editor, editorConfig}
          },
          components: {LibraryList,AppLoader,RequestFilter,TutorMainMenu}
      }

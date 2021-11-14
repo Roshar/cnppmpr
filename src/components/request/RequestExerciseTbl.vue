@@ -20,13 +20,13 @@
                 <tr v-for="(item, index) in exeData" :key="item['id_exercise']">
                     <th scope="row">{{index + 1}}</th>
                     <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" >{{item.title}}</router-link></td>
-                    <td v-html="shortContent(item.description, 100)"></td>
+                    <td>{{shortContent(clearHTML(item.description), 100)}}</td>
                     <td>
                         <a href="{{item.link}}">{{item.link }}</a>
                     </td>
                     <td>{{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</td>
                     <td>{{item['title_tag']}}</td>
-                    <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-outline-open btn-block">Открыть</router-link></td>
+                    <td><router-link :to="{ path: `/my_iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-outline-open btn-block">Открыть</router-link></td>
                 </tr>
             </tbody>
         </table>
@@ -37,13 +37,15 @@
 
 <script>
     import {shortContent} from "../../utils/shortContent";
+    import {clearHTML} from "../../utils/clearHTML";
     import {checkTerm} from '../../utils/checkTerm'
     export default {
         props: ['exeData'],
         setup() {
             return{
                 checkTerm,
-                shortContent
+                shortContent,
+                clearHTML
             }
         }
     }

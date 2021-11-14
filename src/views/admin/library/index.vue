@@ -50,7 +50,7 @@
                         <tr v-for="(item, index) in library" :key="item.id">
                             <th scope="row">{{index+1}}</th>
                             <td> <router-link :to="{path:`/global_library/${item.id}`}">{{item.title}}</router-link></td>
-                            <td v-html="item.description"></td>
+                            <td>{{shortContent(clearHTML(item.description),50)}}</td>
                             <td> {{item['title_discipline']}}</td>
                             <td>{{item['title_tag']}}</td>
                             <td>{{item['created_date']}}</td>
@@ -86,6 +86,8 @@
     import {useRouter} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import AdminLibraryMenu from "../../../components/adminMenu/AdminLibraryMenu";
+    import {shortContent} from '../../../utils/shortContent'
+    import {clearHTML} from '../../../utils/clearHTML'
     export default {
         setup() {
             const store = useStore()
@@ -156,7 +158,9 @@
                 deleteItem,
                 countNum,
                 tag,
-                editItem
+                editItem,
+                shortContent,
+                clearHTML
             }
         },
         components: {AppLoader,AdminLibraryMenu}

@@ -21,7 +21,7 @@
                             <textarea class="form-control"   cols="70" rows="6" id="description" v-model="messageBody"  name="message" placeholder="Добавьте сообщение"></textarea>
                         </div>
                         <button type="button"  class="btn btn-outline-primary-send" @click="sendMessage()">Отправить</button>
-                        <router-link to="/conversations" class="message_element_active" style="float:right;  text-decoration: underline;"> Перейти к диалогу</router-link>
+                        <router-link to="/admin_conversations" class="message_element_active" style="float:right;  text-decoration: underline;"> Перейти к диалогу</router-link>
                     </form>
                 </div>
                 <app-loader v-if="loading"></app-loader>

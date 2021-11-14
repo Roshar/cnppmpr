@@ -16,7 +16,8 @@ export default {
         finishedExercises: null,
         exerciseData: [],
         tblNames: [],
-        taskData: []
+        taskData: [],
+        code: null,
     },
 
     mutations: {
@@ -36,6 +37,13 @@ export default {
 
         setFinishedExercises(state, finishedExercises) {
             state.finishedExercises = finishedExercises
+        },
+        setCode(state,values) {
+            state.code = values
+        },
+
+        clearCode(state,values) {
+            state.code = null
         },
         setIssetStatusIom(state, iomId) {
             state.iomId = iomId
@@ -127,7 +135,7 @@ export default {
                     payload
                 } )
                 let iomId = data.values.iomId
-               await router.push({path: `/iom/${iomId}/exercise`})
+               await router.push({path: `/my_iom/${iomId}/exercise`})
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
@@ -274,6 +282,9 @@ export default {
         async deleteIom({commit, dispatch}, payload) {
             try{
                 const {data} = await axios.post('/api/iom/deleteIom',payload)
+                if(data.values.code) {
+                    commit('setCode', true)
+                }
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'
@@ -299,6 +310,10 @@ export default {
 
         getStatusFinished(state) {
             return state.finishedExercises
+        },
+
+        getCode(state) {
+            return state.code
         },
 
 

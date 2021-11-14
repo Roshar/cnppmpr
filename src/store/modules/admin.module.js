@@ -195,7 +195,7 @@ export default {
         async getDependenciesTutor ({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/getDependenciesTutor',payload)
-                console.log(data.values)
+                // console.log(data.values)
                 return data.values
             } catch(e){
                 dispatch('setSystemMessage', {

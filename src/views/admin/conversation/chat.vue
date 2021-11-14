@@ -67,7 +67,7 @@
     import {useRouter, useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
-    import ConversationChat from "../../../components/conversation/ConversationChat";
+    import ConversationChat from "../../../components/conversation/admin/ConversationChat";
     export default {
         setup() {
             const store = useStore()
@@ -76,12 +76,10 @@
             const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const showModal = ref(false)
-
             const role = ref('')
             const searchContact = ref()
             const searchContactData = ref()
             const chatParams = ref()
-
             const companions = ref()
             const s_companions = ref()
             const t_companions = ref()

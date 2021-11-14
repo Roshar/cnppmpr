@@ -78,6 +78,7 @@
             const editor =  ClassicEditor
             const editorConfig = {
                 toolbar: {
+
                     items: [
                         'heading', '|',
                         'alignment', '|',
@@ -120,7 +121,7 @@
             })
 
             const onSubmit = async(values) => {
-                // console.log(values)
+                console.log(values)
                 values.link = (values.link !== 'undefined') ? values.link : null
                 values.description = mysqlEscape(description.value)
                 await store.dispatch('globalLibrary/addInLibrary',{
@@ -146,6 +147,7 @@
 </script>
 
 <style scoped>
+
     .content-wallpaper, .student-menu {
         margin-top: 1.5rem;
         background-color: white;

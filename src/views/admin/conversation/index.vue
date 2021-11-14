@@ -63,7 +63,7 @@
     import {useRouter, useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
-    import ConversationList from "../../../components/conversation/ConversationList";
+    import ConversationList from "../../../components/conversation/admin/ConversationList";
     export default {
         setup() {
             const store = useStore()
@@ -130,7 +130,6 @@
                 s_companions.value = store.getters['conversation/getCompanionsStudent']
                 t_companions.value = store.getters['conversation/getCompanionsTutor']
                 a_companions.value = store.getters['conversation/getCompanionsAdmin']
-                console.log(s_companions.value)
                 loading.value = false
             })
 
