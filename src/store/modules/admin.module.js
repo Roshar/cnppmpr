@@ -180,10 +180,12 @@ export default {
         async getDependenciesStudent ({dispatch, commit},payload) {
             try {
                 const {data} = await axios.post('/api/admin/getDependenciesStudent',payload)
-                commit('setDependenciesData',data.values)
+                if(data.values.length) {
+                    commit('setDependenciesData',data.values)
+                }
                 return data.values
+
             } catch(e){
-                console.log('Ошибка в getDependenciesStudent')
                 dispatch('setSystemMessage', {
                     value: e.message,
                     type: 'danger'

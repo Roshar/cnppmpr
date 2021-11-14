@@ -290,30 +290,32 @@
                 loading.value = true
                 const userId = route.params.userId
                 profile.value = await store.dispatch('admin/getProfile',{tbl:'students', userId:userId})
-                dependencies.value = await store.dispatch('admin/getDependenciesStudent',{ userId:userId})
+                if(profile.value) {
+                    dependencies.value = await store.dispatch('admin/getDependenciesStudent',{ userId:userId})
+                    //DEPENDENCIES INFO
+                    if(dependencies.value.length) {
+                        groupName.value  = dependencies.value[0]['title']
+                        tutorFio.value = dependencies.value[0]['surname'] + ' '+ dependencies.value[0]['name'][0]+'.'+dependencies.value[0]['patronymic'][0]+'.'
+                        tutorId.value = dependencies.value[0]['t_user_id']
+                        groupId.value = dependencies.value[0]['group_id']
+                        iom.value = await store.dispatch('admin/getIomByStudentAndTutor',
+                            { student:userId,
+                                tutor:tutorId.value})
+                        issetIom.value = iom.value.length ? iom.value : []
 
-                //DEPENDENCIES INFO
-                if(dependencies.value.length) {
-                    groupName.value  = dependencies.value[0]['title']
-                    tutorFio.value = dependencies.value[0]['surname'] + ' '+ dependencies.value[0]['name'][0]+'.'+dependencies.value[0]['patronymic'][0]+'.'
-                    tutorId.value = dependencies.value[0]['t_user_id']
-                    groupId.value = dependencies.value[0]['group_id']
-                    iom.value = await store.dispatch('admin/getIomByStudentAndTutor',
-                        { student:userId,
-                                 tutor:tutorId.value})
-                    issetIom.value = iom.value.length ? iom.value : []
 
-
-                    if(iom.value.length) {
-                        //get exercises from IOM
-                        iomInfo.value = await store.dispatch('admin/getExercisesByIomId',
-                            {tutorId:tutorId.value,
+                        if(iom.value.length) {
+                            //get exercises from IOM
+                            iomInfo.value = await store.dispatch('admin/getExercisesByIomId',
+                                {tutorId:tutorId.value,
                                     iomId:iom.value[0].iom_id})
 
-                        finishedExercises.value = await store.dispatch('admin/getStatusFinished',{tutorId: tutorId.value, studentId:userId,iomId:iom.value[0].iom_id})
+                            finishedExercises.value = await store.dispatch('admin/getStatusFinished',{tutorId: tutorId.value, studentId:userId,iomId:iom.value[0].iom_id})
 
+                        }
                     }
                 }
+
 
                 //USER INFO
                 surname.value = profile.value[0].surname

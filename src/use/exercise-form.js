@@ -2,7 +2,7 @@ import * as yup from 'yup'
 import {useField, useForm} from 'vee-validate'
 
 export function useExerciseForm(fn){
-    console.log(fn)
+
 
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
