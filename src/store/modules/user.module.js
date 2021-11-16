@@ -97,11 +97,17 @@ export default {
         async changeAvatar ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/changeAvatar',payload)
-                console.log(data)
-                dispatch('setSystemMessage', {
-                    value: data.values.message,
-                    type: 'primary'
-                }, {root: true})
+                if(data.values.code === 400) {
+                    dispatch('setSystemMessage', {
+                        value: data.values.message,
+                        type: 'danger'
+                    }, {root: true})
+                }else {
+                    dispatch('setSystemMessage', {
+                        value: data.values.message,
+                        type: 'primary'
+                    }, {root: true})
+                }
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.message,

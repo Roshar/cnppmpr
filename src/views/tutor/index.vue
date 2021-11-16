@@ -15,7 +15,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex flex-column align-items-center text-center">
-                                                <img :src="avatar" alt="Тьютор" style="border-radius: .4rem" width="250">
+                                                <img :src="avatar" alt="Тьютор" id="image" style="border-radius: .4rem" width="250">
                                                 <div class="mt-3">
                                                     <h4>{{name}}</h4>
                                                     <p class="text-secondary mb-1">Тьютор</p>
@@ -287,8 +287,14 @@
                 countIom.value = statData.statistics.countIom
                 studentIom.value = statData.statistics.studentIom
                 finishedIom.value = statData.statistics.finishedIom
+
+
+
                 loading.value = false
             })
+
+
+
 
 
             return{

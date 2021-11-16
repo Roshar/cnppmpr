@@ -1,4 +1,12 @@
+@import '~cropperjs/dist/cropper.css';
 .ck-editor__editable {
     min-height: 350px;
     max-height: 370px;
 }
+.cropper-view-box,
+.cropper-face {
+    border-radius: 5%;
+
+}
+
+
