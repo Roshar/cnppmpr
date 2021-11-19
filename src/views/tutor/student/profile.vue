@@ -33,7 +33,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex flex-column align-items-center text-center">
-                                            <img :src="avatar" alt="Слушатель" class="rounded-circle" width="150">
+                                            <img :src="avatar" alt="Слушатель" style="border-radius: .4rem" width="250">
                                             <div class="mt-3">
                                                 <h4>{{name}}</h4>
                                                 <p class="text-secondary mb-1">Слушатель</p>

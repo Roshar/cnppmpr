@@ -43,7 +43,6 @@ export default createStore({
     },
 
     clearLayout(state) {
-      console.log('clearLayout')
       state.layout = null
     }
 
@@ -56,7 +55,7 @@ export default createStore({
       commit('setSystemMessage', message)
       setTimeout(() => {
         commit('clearSystemMessage')
-      }, 8000)
+      }, 3000)
     }
   },
   modules: {

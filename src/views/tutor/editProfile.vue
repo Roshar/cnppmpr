@@ -40,9 +40,9 @@
 
                                                     <span class="input-group-btn" tabindex="0">
                                                 <label for="filestyle-0" class="btn btn-default btn-lg" >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" fill="currentColor" class="bi bi-card-image" viewBox="0 2 16 16">
-                                                      <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                                                      <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z"/>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-camera" viewBox="0 2 16 16">
+                                                          <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
+                                                          <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
                                                     </svg>
                                                 </label>
                                             </span>
@@ -238,7 +238,6 @@
             const surnameError = ref(false)
             const loginError = ref(false)
             const genderError = ref(false)
-            // const uploadImage;
             let uploadImage;
             const discipline = store.state['user'].userData['title_discipline'];
             let students = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
@@ -268,6 +267,7 @@
             const fileChanged = (e) => {
                 const files = e.target.files || e.dataTransfer.files;
                 errorFormat.value = false
+                previewSourceName.value = files[0].name
                 if(files.length) {
                     selectedFile.value = files[0]
                     if(img.value) {
@@ -290,8 +290,8 @@
             const fileCleared = () => {
                 selectedFile.value = null
                 showModal.value = false
+                previewSourceName.value = 'Выбрать фотографию'
             }
-
 
             const updateItem = async(status) => {
                 requiredForm('input',errorSchemaRequired,error)
@@ -338,7 +338,6 @@
                 login.value = store.state['user'].userData.login;
 
             }
-
 
             onMounted(async()=>{
                 loading.value = true
@@ -403,6 +402,7 @@
                         ff.append('user', localStorage.getItem('jwt-token') )
                         selectedFile.value = null
                         imgSrc.value = null
+                        previewSourceName.value = 'Выбрать фотографию'
                         await store.dispatch('user/changeAvatar',ff)
                         await load()
                         await router.push('/')
@@ -432,7 +432,6 @@
                 avatar,
                 gender,
                 discipline,
-
                 imgSrc,
                 img,
                 imgInput,
@@ -461,11 +460,10 @@
 </script>
 
 <style  scoped>
-    /*.cropper-view-box,*/
-    /*.cropper-face {*/
-    /*    border-radius: 50%;*/
-    /*    max-width: 600px;*/
-    /*}*/
+
+    .bi-camera {
+        color: #4571a3;
+    }
 
     gray-bg{
         background:#eee;

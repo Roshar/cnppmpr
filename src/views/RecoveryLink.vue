@@ -7,19 +7,20 @@
                 <div class="form-group mb-3" >
                     <div class="form-group">
                         <input type="password" class="form-control" name="password" id="password" v-model="password"  placeholder="Введите новый пароль:">
-                        <small v-if="pError"> Обязательное поле</small>
+                        <small v-if="pError">  Обязательное поле</small>
+                        <small v-if="pLength">Пароль не должен быть меньше 4 символов</small>
                     </div>
                 </div>
                 <div class="form-group mb-3" >
                     <div class="form-group">
-                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" v-model="confirmPassword"  @blur="cpBlur" placeholder="Повторите пароль:">
+                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"  v-model="passwordConfirm" placeholder="Повторите пароль:">
                         <small v-if="cpError">Обязательное поле</small>
                         <small v-if="checkInput" > Пароль не совпадает </small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12" >
-                        <button  @click="onClick" class="btn auth-btn" > Сохранить новый пароль </button>
+                        <button  type="button" @click="onClick" class="btn auth-btn" > Сохранить новый пароль </button>
                     </div>
                 </div>
             </form>
@@ -33,7 +34,7 @@
 
     import {useStore} from "vuex";
     import {useRoute, useRouter} from "vue-router";
-    import {ref, onMounted} from 'vue'
+    import {ref, onMounted, watch} from 'vue'
 
     export default {
         setup() {
@@ -41,17 +42,47 @@
             const router = useRouter()
             const route = useRoute()
             const password = ref()
-            const passwordConfirm = ref()
-            const pError = ref()
-            const cpError = ref()
-            const checkInput = ref()
+            const passwordConfirm = ref('')
+            const pError = ref(false)
+            const cpError = ref(false)
+            const pLength = ref(false)
+            const checkInput = ref(false)
+
+            console.log(route.params.link)
+
+            watch([passwordConfirm,password], ()=>{
+                if(password.value.length < 4){
+                    pLength.value = true
+                }else {
+                    pLength.value = false
+                }
+                if(passwordConfirm.value != '' && (passwordConfirm.value !== password.value) ){
+                    checkInput.value = true
+                }else {
+                    checkInput.value = false
+                }
+            })
 
             const onClick = async() => {
+                if(password.value.length >= 4 && (passwordConfirm.value == password.value) ) {
+                    pError.value = false
+                    cpError.value = false
+                    await store.dispatch('auth/changepassword', {
+                        loginHash:route.params.link,
+                        password: password.value,
+                        confirmPassword: passwordConfirm.value
+                    })
+
+                }else {
+                    pError.value = true
+                    cpError.value = true
+                }
 
             }
 
+
             onMounted(async()=>{
-                console.log(route.params.link)
+                await store.dispatch('auth/recoverychecklink',{link:route.params.link})
             })
 
 
@@ -62,7 +93,8 @@
                 pError,
                 cpError,
                 checkInput,
-                onClick
+                onClick,
+                pLength
             }
         }
     }

@@ -1,6 +1,8 @@
 <template>
     <div class="col-3">
-        <h2> <router-link to="/">IT-GOVZALLA</router-link></h2>
+        <h2> <router-link to="/">
+            <img src="/itlogo.svg" alt="лого" > </router-link>
+        </h2>
     </div>
     <div class="col-9">
         <nav class="navbar justify-content-end">
@@ -19,10 +21,23 @@
                     </ul>
                 </li>
                 <li class="list-group-item list-group-item-action list-top-menu-li">
-                    <form @submit.prevent="onSubmit">
-                        <button type="submit" class="btn auth-btn" > Выход </button>
-                    </form>
-
+                    <div style="display: flex; align-items: center; " class="acc" data-toggle="dropdown">
+                        <span style="margin-right: .5em"><strong>{{name}}</strong></span>
+                        <div><img :src="avatar" alt="Админ" class="rounded-circle" width="36" height="36"  ></div>
+                        <span style="display:inline-block; margin-left: .5em">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"  class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                        </span>
+                    </div>
+                    <ul class="dropdown-menu my_account">
+                        <router-link to="/" style="font-size: .9em">Мой профиль</router-link>
+                        <li>
+                            <form @submit.prevent="onSubmit">
+                                <button type="submit" class=" btn-block my_account_btn"> Выход </button>
+                            </form>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>
@@ -36,13 +51,30 @@
     const {handleSubmit} = useForm()
     import {useStore} from 'vuex'
     import {useRouter} from 'vue-router'
-    import {ref} from "vue";
+    import {onMounted, ref} from "vue";
     export default {
         setup(){
             const store = useStore()
             const router = useRouter()
             const notificationMessage = ref(false)
             const notificationAction = ref(false)
+            const baseUrl = ref(process.env.VUE_APP_URL)
+            const myAccount = ref(null)
+            const avatar = ref(null)
+            const name = ref(null)
+            const requestStudents = ref(0)
+
+            onMounted(async() => {
+                myAccount.value = await store.dispatch('user/getTutorData',localStorage.getItem('jwt-token'))
+                console.log(myAccount.value)
+                avatar.value = baseUrl.value +'/'+myAccount.value[0].avatar
+                name.value = myAccount.value[0].name
+                // notificationAction.value = await store.dispatch('notification/getNotificationAction')
+                // requestStudents.value = await store.dispatch('notification/getRequestStudents')
+                // requestStudents.value = requestStudents.value ? requestStudents.value[0].id : 0
+                // requestTutors.value = requestTutors.value ? requestTutors.value[0].id : 0
+                // requestFromUsers.value = requestStudents.value + requestTutors.value
+            })
 
             const onSubmit = handleSubmit(async values => {
                 try{
@@ -55,13 +87,57 @@
             return {
                 onSubmit,
                 notificationMessage,
-                notificationAction
+                notificationAction,
+                avatar,
+                name
             }
         }
     }
 </script>
 
 <style scoped>
+    .navbar a{
+        min-height: 56px;
+        align-items: center;
+    }
+
+    .acc {
+        display: flex;
+        color: #5d5d5d;
+        padding: 10px 25px;
+    }
+
+    .acc:hover {
+        cursor: pointer;
+    }
+    .list-group-item{
+        padding: 0;
+    }
+
+    a:hover {
+        cursor: pointer;
+    }
+
+    .my_account a:hover, .my_account_btn:hover {
+        background-color: #f1f1f1;
+
+
+    }
+    ul.my_account {
+        border: 1px solid #dcdcdc;
+
+
+    }
+
+    .my_account_btn {
+        border: none;
+        display: flex;
+        color: #5d5d5d;
+        padding: 10px 25px;
+        background-color: transparent;
+        font-size: .9em;
+    }
+
 
     .list-top-menu-li{
         list-style-type: none;

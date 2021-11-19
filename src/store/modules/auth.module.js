@@ -1,4 +1,5 @@
 import axios from '../../axios/request'
+import router from "../../router";
 const TOKEN_KEY = 'jwt-token'
 const ROLE = 'role'
 const STATUS = 'status'
@@ -23,9 +24,10 @@ export default {
         disciplineList: [],
         code: localStorage.getItem(CODE),
         message: null,
-        recovery: localStorage.getItem(RECOVERY),
+        recovery: null,
         login: localStorage.getItem(LOGIN),
         userId: localStorage.getItem(USERID)
+
 
     },
 
@@ -47,8 +49,7 @@ export default {
             localStorage.setItem(CODE,code)
         },
         setCodeRecovery(state, recovery) {
-            state.code = recovery
-            localStorage.setItem(RECOVERY,recovery)
+            state.recovery = recovery
         },
         setMessage(state, message) {
             state.message = message
@@ -247,15 +248,25 @@ export default {
         // 1-й этап | восстановление пароля | отправка хэш-ссылки на почту
 
         async recovery({commit, dispatch, state}, payload) {
+
             try {
-                if(payload.value) {
-                    const {data} = await axios.post('/api/auth/recovery',{recovery:payload.value})
-                    // commit('setLogin',payload.value)
-                    dispatch('setSystemMessage', {
-                        value: data.values.message,
-                        type: 'primary'
-                    }, {root: true})
-                    return data
+                if(payload) {
+                    const {data} = await axios.post('/api/auth/recovery',payload)
+                    state.recovery = null
+                    if(data.status === 201) {
+                        commit('setCodeRecovery', true)
+                        dispatch('setSystemMessage', {
+                            value: data.values.message,
+                            type: 'warning'
+                        }, {root: true})
+                    }
+                    if(data.status === 200) {
+                        dispatch('setSystemMessage', {
+                            value: data.values.message,
+                            type: 'primary'
+                        }, {root: true})
+                    }
+
                 }
             } catch(e){
                 dispatch('setSystemMessage', {
@@ -270,14 +281,10 @@ export default {
 
         async recoverychecklink({commit, dispatch, state}, payload) {
             try {
-
                 const {data} = await axios.post('/api/auth/recoverychecklink',payload)
-                commit('setCodeRecovery', data.values.code)
-                dispatch('setSystemMessage', {
-                    value: data.values.message,
-                    code: data.values.code,
-                    type: 'primary'
-                }, {root: true})
+                if(!data.values.length) {
+                    await router.push('/404')
+                }
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
@@ -292,8 +299,9 @@ export default {
         async changepassword({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/auth/changepassword', payload)
-                commit('clearLogin')
-                commit('clearCodeRecovery')
+                if(data.values.code){
+                    await router.push('/auth')
+                }
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'
@@ -320,6 +328,9 @@ export default {
         },
         code(state) {
             return state.code
+        },
+        getCodeRecovery(state) {
+            return state.recovery
         },
         isAuthenticated(store, token){
             return !!store.token

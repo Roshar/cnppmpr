@@ -7,34 +7,39 @@
         <div class="content-loader" v-else>
             <div class="row">
                 <div class="col-12">
+
                     <div class="modal-form" v-if="showModal">
                         <div class="row">
                             <div class="col-12">
-                                <span style="float:right" @click="showModal=false"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                      <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                      <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                      </svg>
-                                </span>
+                            <span style="float:right" @click="fileCleared"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                  <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                                  </svg>
+                            </span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <img v-if="previewSourceUrl" :src="previewSourceUrl" width="300" />
+                                <div  class="my-2 w-64 h-64 object-fill mx-auto" style="padding: 10px 0px">
+                                    <img ref="img" id="image" v-if="!errorFormat"  :src="imgSrc"  class="block max-w-full img" style="max-width: 400px;max-height: 400px"/>
+                                    <p v-if="errorFormat" style="color: tomato">Вы пытаетесь загрузить файл, формат которого не поддерживается</p>
+                                </div>
                             </div>
                         </div>
-                        <form @submit.prevent="onSubmit" method="POST" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <div class="form-group">
+                        <div class="row">
+                            <div class="col-12">
+                                <form @submit.prevent="onSubmit" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <div class="col-lg-10">
+                                                <input type="file"  class="filestyle"  accept="image/jpeg, image/png, image/jpg" ref="imgInput"  @change="fileChanged"
+                                                       data-classbutton="btn btn-default btn-lg"
+                                                       data-input="false" id="filestyle-0" tabindex="-1"
+                                                       style="position: fixed; left: -3500px;">
+                                                <div class="bootstrap-filestyle input-group">
+                                                    <input type="text" class="form-control"  @click="sprint = true" :placeholder="previewSourceName">
 
-                                    <div class="col-lg-10">
-                                        <input type="file"  class="filestyle"  @change="onFileSelected"
-                                               data-classbutton="btn btn-default btn-lg"
-                                               data-input="false" id="filestyle-0" tabindex="-1"
-                                               style="position: fixed; left: -3500px;">
-                                        <div class="bootstrap-filestyle input-group">
-                                            <input type="text" class="form-control"  @click="sprint = true" :placeholder="previewSourceName">
-
-                                            <span class="input-group-btn" tabindex="0">
+                                                    <span class="input-group-btn" tabindex="0">
                                                 <label for="filestyle-0" class="btn btn-default btn-lg" >
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" fill="currentColor" class="bi bi-card-image" viewBox="0 2 16 16">
                                                       <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
@@ -42,20 +47,29 @@
                                                     </svg>
                                                 </label>
                                             </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p>Вы можете загрузить изображение в формате JPG, JPEG, PNG</p>
+                                            <p style="font-size: .8em">Если у вас возникают проблемы с загрузкой, попробуйте выбрать фотографию меньшего размера</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button type="submit" v-if="imgSrc" class="btn btn-outline-primary-send btn-block" >Сохранить</button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" @click="fileCleared" class="btn btn-outline-secondary btn-block"> Отмена</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <button type="submit"  class="btn btn-outline-primary-send btn-block" >Сохранить</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="button" @click="showModal = false" class="btn btn-outline-secondary btn-block"> Отмена</button>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
+
                     <div class="content-wallpaper">
                         <h5 >Редактировать профиль </h5>
                         <div class="main-body">
@@ -189,14 +203,15 @@
     import {useStore} from "vuex";
     import {useRouter, useRoute} from 'vue-router'
     import {declensionAge} from "../../utils/declensionAge"
-    import {ref, onMounted, watch} from 'vue'
     import AppLoader from "../../components/ui/AppLoader";
     import StudentMainMenu from "../../components/studentMenu/StudentMainMenu";
     import uniqid from "uniqid";
     import {requiredForm} from "../../utils/requiredForm";
+    import {defineComponent,ref,onMounted, onUnmounted, watch, watchEffect} from 'vue'
+    import Cropper from 'cropperjs'
 
 
-    export default {
+    export default defineComponent({
 
         setup() {
             const store = useStore()
@@ -220,10 +235,12 @@
             const discipline = ref();
             let students = ref();
             let dependencies = ref()
+            const errorFormat = ref()
             let tutorId = ref()
             let tutorFio = ref()
             let birthdayConvert = ref()
             let token = store.state['auth'].token;
+            const fileReader = new FileReader()
             let statData;
             const classBtn = ref('btn btn-outline-primary btn-block')
             const previewSourceUrl = ref(null)
@@ -248,6 +265,46 @@
                 discipline: 'discipline',
             })
 
+            const imgInput = ref(null)
+            const selectedFile = ref(null )
+            const imgSrc = ref(null)
+            const img = ref(null)
+            let cropper = null
+
+
+            fileReader.onload = (event) => {
+                imgSrc.value = event.target.result
+            }
+
+            const fileChanged = (e) => {
+                const files = e.target.files || e.dataTransfer.files;
+                errorFormat.value = false
+                previewSourceName.value = files[0].name
+                if(files.length) {
+                    selectedFile.value = files[0]
+                    if(img.value) {
+                        cropper = new Cropper(img.value, {
+                            // aspectRatio:1,
+                            minCropBoxWidth:300,
+                            minCropBoxHeight:440,
+                            minCanvasWidth:100,
+                            viewMode:2,
+                            dragMode: 'move',
+                            background:false,
+                            cropBoxMovable:true,
+                            cropBoxResizable:false,
+                            setCropBoxData: { width: 160, height: 80 }
+                        })
+                    }
+                }
+            }
+
+            const fileCleared = () => {
+                selectedFile.value = null
+                showModal.value = false
+                previewSourceName.value = 'Выбрать фотографию'
+            }
+
             const goToModule = async(r) => {
                 await router.push(`/${r}`)
             }
@@ -255,6 +312,14 @@
             const genderVal = (val) => {
                 return (val == 'man') ? 'муж': 'жен'
             }
+
+            watchEffect(() => {
+                if(selectedFile.value) {
+                    fileReader.readAsDataURL(selectedFile.value)
+                }else {
+                    imgSrc.value = null;
+                }
+            })
 
             watch([name,surname,login,gender], (values)=>{
                 if(values[0] !== '') {
@@ -280,6 +345,16 @@
 
             })
 
+            watch(imgSrc,() =>{
+
+                    if(imgSrc.value) {
+                        cropper.replace(imgSrc.value)
+                    }
+                }, {
+                    flush: 'post'
+                }
+            )
+
             const updateItem = async(status) => {
                 requiredForm('input',errorSchemaRequired,error)
                 requiredForm('select',errorSchemaRequired,error)
@@ -300,7 +375,6 @@
                     })
                     await router.push('/')
                 }
-                console.log(error.value)
 
                 error.value = {}
 
@@ -341,16 +415,44 @@
             })
 
 
-
             const onSubmit = async() => {
+
                 const ff = new FormData()
-                const uniqName = uniqid()
-                ff.append('file', uploadImage, uniqName)
-                ff.append('user', localStorage.getItem('jwt-token') )
-                await store.dispatch('user/changeAvatar',ff)
-                await load()
-                await router.push('/')
+                const generatedPostfix = uniqid()
+                const uniqName =   login.value + '_' + generatedPostfix;
+                try {
+                    cropper.getCroppedCanvas({
+                        imageSmoothingQuality: 'high',
+                        height: 500,
+                        width: 1050,
+                        maxWidth: 1050,
+                        maxHeight: 500,
+                    }).toBlob(async (blob) => {
+                        ff.append('file', blob, uniqName)
+                        ff.append('user', localStorage.getItem('jwt-token') )
+                        selectedFile.value = null
+                        imgSrc.value = null
+                        previewSourceName.value = 'Выбрать фотографию'
+                        await store.dispatch('user/changeAvatar',ff)
+                        await load()
+                        await router.push('/')
+                    })
+                }catch(e) {
+                    alert(e.message)
+                    imgSrc.value = null
+                    cropper.destroy
+                    console.log(e.message)
+                }
                 showModal.value = false
+
+                // const ff = new FormData()
+                // const uniqName = uniqid()
+                // ff.append('file', uploadImage, uniqName)
+                // ff.append('user', localStorage.getItem('jwt-token') )
+                // await store.dispatch('user/changeAvatar',ff)
+                // await load()
+                // await router.push('/')
+                // showModal.value = false
             }
 
 
@@ -385,12 +487,19 @@
                 showModal,
                 issetIom,
                 tutorId,
-                tutorFio
+                tutorFio,
+                errorFormat,
+                fileChanged,
+                fileCleared,
+                imgSrc,
+                img,
+                imgInput,
+                selectedFile,
 
             }
         },
         components: {StudentMainMenu,AppLoader}
-    }
+    })
 </script>
 
 <style  scoped>
@@ -422,7 +531,7 @@
         transform: translate(-50%,-27%);
         z-index: 99;
         width: 100%;
-        max-width:550px;
+        max-width:800px;
         background-color: #fafbfc;
         padding: 1.5em 1.5em;
     }

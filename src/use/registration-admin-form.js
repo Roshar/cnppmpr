@@ -73,6 +73,14 @@ export function useRegisterAdminForm() {
             .required('Необходимо указать ваш контактный номер (мобильный)')
     )
 
+    const {value:birthday, errorMessage: birthdayError, handleBlur:birthdayBlur} = useField(
+        'birthday',
+        yup
+            .string()
+            .trim()
+            .required('Необходимо указать дату рождения')
+    )
+
     const {value:gender, errorMessage: genderError, handleBlur:genderBlur} = useField(
         'gender',
         yup
@@ -103,6 +111,9 @@ export function useRegisterAdminForm() {
     return {
         login,
         password,
+        birthday,
+        birthdayError,
+        birthdayBlur,
         first_name,
         surname,
         patronymic,

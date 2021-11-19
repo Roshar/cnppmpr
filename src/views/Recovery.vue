@@ -3,6 +3,8 @@
         <div class="col-md-3 "></div>
         <div class="col-md-6 auth-block">
             <h2 class="text-center">Восстановление пароля </h2>
+            <p v-if="!time">Для восстановления пароля, укажите логин (ваш электронный почтовый адрес).На почту вашего аккаунта будет выслано письмо с дальнейшими инструкциями.</p>
+            <p v-if="time"> Электронное письмо с запросом на изменение пароля было выслано на Ваш электронный адрес. Если вы не получили данное письмо, проверьте папки «Спам» и «Удаленные», так как письмо могло автоматически туда перейти</p>
             <form>
                 <div class="form-group mb-3" >
                     <div class="form-group">
@@ -12,8 +14,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12" >
-                        <button type="button"  @click="sendRequest" class="btn auth-btn" > Отправить запрос  </button>
+
+                    <div class="col-12">
+                        <p v-if="time">Повторный запрос будет доступен через: {{limit}} </p>
+                        <button type="button" :disabled="time"  @click="sendRequest" class="btn auth-btn" > Отправить запрос  </button>
                     </div>
                 </div>
             </form>
@@ -26,7 +30,7 @@
 
     import {useStore} from "vuex";
     import {useRoute, useRouter} from "vue-router";
-    import {ref, onMounted} from 'vue'
+    import {ref, onMounted, watch} from 'vue'
 
     export default {
 
@@ -34,14 +38,50 @@
             const store = useStore()
             const router = useRouter()
             const route = useRoute()
+            // const baseUrl = ref('http://localhost:8080')
+            const baseUrl = ref('https://it-govzalla.onrender.com')
             const login = ref()
             const lError = ref()
             const lErrorLength = ref()
+            const time = ref()
+            const code = ref()
+            const limit = ref()
+
+            onMounted(()=>{
+                if(localStorage.getItem('timer')){
+                    limit.value = localStorage.getItem('timer')
+                    time.value = true
+                    timer()
+                }else {
+                    time.value = false
+                }
+            })
+
+            console.log(baseUrl.value)
+
+            const timer = () => {
+                setInterval(() => {
+                    if(limit.value !== 0) {
+                        const dd = limit.value --
+                        localStorage.setItem('timer',dd)
+                    }else {
+                        localStorage.removeItem('timer');
+                        time.value = false
+                    }
+                }, 1000)
+            }
 
             const sendRequest = async() => {
-                console.log(login.value.length)
-                if(login.value.length < 3) {
-                    await store.dispatch('auth/recovery', login)
+                if(login.value.length > 4) {
+                    code.value = store.getters['auth/getCodeRecovery']
+                    if(code.value !==true) {
+                        limit.value = 45
+                        localStorage.setItem('timer',limit.value)
+                        time.value = true
+                        timer()
+                    }
+                    await store.dispatch('auth/recovery', {login:login.value, baseUrl:baseUrl.value})
+
                 }else {
                     lErrorLength.value = 'Некорректный адрес '
                 }
@@ -52,7 +92,9 @@
                 login,
                 lError,
                 sendRequest,
-                lErrorLength
+                lErrorLength,
+                time,
+                limit
 
             }
         }

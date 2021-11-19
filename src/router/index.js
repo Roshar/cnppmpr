@@ -9,6 +9,8 @@ import Register from "../views/authForms/Register";
 import IomTutor from '../views/tutor/iom/index'
 import IomAdmin from '../views/admin/iom/index'
 import StudentAdmin from '../views/admin/student'
+import MyAccountAdmin from '../views/admin/myAccount'
+
 import StudentTutor from '../views/tutor/student'
 import Tutors from '../views/admin/tutor'
 import TutorProfileEdit from '../views/tutor/editProfile'
@@ -111,6 +113,26 @@ const routes = [
     path: '/students',
     name: 'adminStudents',
     component: StudentAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/my_account',
+    name: 'my_account',
+    component: MyAccountAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/editProfileAdmin',
+    name: 'editProfileAdmin',
+    component: AdminProfileEdit,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,

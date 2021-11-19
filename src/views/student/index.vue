@@ -233,8 +233,6 @@
                         studentId: id.value
                     })
                 }
-
-
                 loading.value = false
             })
 

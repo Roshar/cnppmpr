@@ -5,6 +5,29 @@
     <div class="col-9">
         <div class="row">
             <div class="col-12">
+                <div class="modal-form2" v-if="showModalDelete">
+                    <div class="modal-dialog modal-confirm">
+                        <div class="modal-content">
+                            <div class="modal-header flex-column">
+                                <div class="icon-box">
+                                    <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="currentColor" class="bi bi-cloud-lightning-rain" viewBox="0 0 16 16">
+                                        <path d="M2.658 11.026a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm-7.5 1.5a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316zm-.753-8.499a5.001 5.001 0 0 0-9.499-1.004A3.5 3.5 0 1 0 3.5 10H13a3 3 0 0 0 .405-5.973zM8.5 1a4 4 0 0 1 3.976 3.555.5.5 0 0 0 .5.445H13a2 2 0 0 1 0 4H3.5a2.5 2.5 0 1 1 .605-4.926.5.5 0 0 0 .596-.329A4.002 4.002 0 0 1 8.5 1zM7.053 11.276A.5.5 0 0 1 7.5 11h1a.5.5 0 0 1 .474.658l-.28.842H9.5a.5.5 0 0 1 .39.812l-2 2.5a.5.5 0 0 1-.875-.433L7.36 14H6.5a.5.5 0 0 1-.447-.724l1-2z"/>
+                                    </svg></i>
+                                </div>
+                                <h4 class="modal-title w-100">Вы уверены?</h4>
+                                <button type="button" class="close"  @click="cancelDelete" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p> <span style="color: tomato"> <strong>Важно!</strong></span>  Данная операция прервет всю работу тьютора, также будут удалены все данные связанные с тьютором (учебные группы, индивидуальные учебные маршруты и остальное). </p>
+                                <input type="text" class="form-control" placeholder="Введите секретный код" v-model="code">
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-secondary"  @click="cancelDelete" data-dismiss="modal">Одуматься</button>
+                                <button type="button" @click="deleteTutor" v-if="delBtn" class="btn btn-danger">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-form" v-if="showModal">
                     <form  id="form">
                         <div class="row">
@@ -62,6 +85,12 @@
                                                 Группа</h6>
                                             <span v-if="groupData" class="text-secondary"><router-link :to="{path:`/group/${groupId}`}"> {{groupName}}</router-link></span>
                                             <span v-else class="text-secondary"> не назначено</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap delete_user" @click="getIdForDelete">
+                                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 24 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                                            </svg>
+                                                Удалить пользователя</h6>
                                         </li>
                                     </ul>
                                 </div>
@@ -169,7 +198,7 @@
         </div>
     </div>
     <transition  name="fade" appear>
-        <div class="modal-overlay" v-if="showModal" @click="showModal = false">
+        <div class="modal-overlay" v-if="showModal || showModalDelete" @click="clearFade">
         </div>
     </transition>
 </template>
@@ -191,8 +220,11 @@
             const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const showModal = ref(false)
+            const showModalDelete = ref(false)
+            const code = ref(null)
             // STUDENTS DATA
             const currentTime = ref()
+            const idTutor = ref()
             const disciplines = ref()
             const students = ref()
             const dependencies = ref()
@@ -220,6 +252,7 @@
             const reportsCount = ref()
             const iomCount = ref()
             const lastActive = ref()
+            const delBtn = ref(false)
             const man = ref()
 
             //EDIT FLAG
@@ -271,11 +304,44 @@
                 }
             }
 
-            console.log(createGraphics(1, 200))
+            const cancelDelete = () => {
+                showModalDelete.value = false
+                delBtn.value = false
+                code.value = ''
+            }
+            const getIdForDelete = async() => {
+                showModalDelete.value = true
+            }
+
+            const deleteTutor = async() => {
+                await store.dispatch('user/deleteTutor', {
+                    code: code.value,
+                    token: localStorage.getItem('jwt-token'),
+                    tutorId: idTutor.value
+                })
+            }
+            watch([code], ()=> {
+                if(code.value === '5808'){
+                    delBtn.value = true
+                }else {
+                    delBtn.value = false
+                }
+            })
+            const clearFade = () => {
+                delBtn.value = false
+                showModal.value = false
+                showModalDelete.value = false
+            }
+
+
+
+
 
             onMounted(async()=>{
                 loading.value = true
                 const userId = route.params.userId
+                idTutor.value = route.params.userId
+
                 profile.value = await store.dispatch('admin/getProfile',{tbl:'tutors', userId:userId})
                 dependencies.value = await store.dispatch('admin/getDependenciesTutor',{ userId:userId})
                 console.log(dependencies.value['groupData'])
@@ -316,12 +382,17 @@
             return {
                 currentTime,
                 loading,
+                code,
                 showModal,
+                showModalDelete,
                 editProfile,
+                idTutor,
                 iomCount,
                 groupData,
                 groupId,
                 man,
+                delBtn,
+                deleteTutor,
                 groupName,
                 lastActive,
                 reportsCount,
@@ -331,7 +402,9 @@
                 studentsCount,
                 profile,
                 activation,
+                getIdForDelete,
                 createGraphics,
+                cancelDelete,
                 surname,
                 patronymic,
                 name,
@@ -343,6 +416,7 @@
                 genderVal,
                 discipline,
                 issetIom,
+                clearFade,
                 age,
                 activeTime,
                 declensionAge,
@@ -358,6 +432,96 @@
 </script>
 
 <style scoped>
+
+    .modal-dialog.modal-confirm {
+        padding: 0;
+        margin: 0;
+    }
+
+    .modal-header.flex-column {
+        padding: 10px;
+    }
+
+    .btn-outline-primary-send{
+        color: #fff;
+        background-color: #4571a3;
+        border-color: #4571a3;
+    }
+
+    .modal-confirm .icon-box {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        z-index: 9;
+        text-align: center;
+        border: none
+    }
+    .modal-confirm .icon-box svg {
+        color: #f15e5e;
+        font-size: 46px;
+        display: inline-block;
+        margin-top: 13px;
+    }
+    .modal-confirm .btn, .modal-confirm .btn:active {
+        color: #fff;
+        border-radius: 4px;
+        background: #60c7c1;
+        text-decoration: none;
+        transition: all 0.4s;
+        line-height: normal;
+        min-width: 120px;
+        border: none;
+        min-height: 40px;
+        border-radius: 3px;
+        margin: 0 5px;
+    }
+    .modal-confirm .btn-secondary {
+        background: #c1c1c1;
+    }
+    .modal-confirm .btn-secondary:hover, .modal-confirm .btn-secondary:focus {
+        background: #a8a8a8;
+    }
+    .modal-confirm .btn-danger {
+        background: #f15e5e;
+    }
+    .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+        background: #ee3535;
+    }
+    .modal-confirm .close {
+        position: absolute;
+        top: 15px;
+        right: 12px;
+    }
+    .modal-confirm h4 {
+        text-align: center;
+        font-size: 26px;
+        margin: 30px 0 -10px;
+    }
+
+    .modal-form2{
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        /*max-width:400px;*/
+        background-color: #edeef0;
+    }
+
+    .bi-x-circle-fill {
+        color: tomato;
+    }
+
+    .delete_user:hover {
+        background-color: tomato;
+        cursor: pointer;
+    }
+    .delete_user:hover .bi-x-circle-fill {
+        color: white;
+    }
+    .delete_user:hover h6 {
+        color: white;
+    }
 
     .modal-overlay,.modal-overlay2 {
         position: absolute;
@@ -380,6 +544,8 @@
         background-color: #fafbfc;
         padding: 1.5em 1.5em;
     }
+
+
 
     .message_element,.message_element_active {
         color:#5d5d5d;

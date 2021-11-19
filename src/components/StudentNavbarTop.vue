@@ -1,6 +1,8 @@
 <template>
     <div class="col-3">
-        <h2> <router-link to="/">IT-GOVZALLA</router-link></h2>
+        <h2> <router-link to="/">
+            <img src="/itlogo.svg" alt="лого" > </router-link>
+        </h2>
     </div>
     <div class="col-9">
         <nav class="navbar justify-content-end">

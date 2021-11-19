@@ -17,6 +17,7 @@ export default {
         role: null,
         userData: [],
         userLink: [],
+        adminData: null,
 
     },
 
@@ -32,6 +33,10 @@ export default {
         setUserData(state, userData) {
             state.userData = userData
         },
+
+        setAdminData(state, values) {
+            state.adminData = values
+        },
         setUserLink(state, userData) {
             state.userLink = userData
         },
@@ -46,10 +51,8 @@ export default {
         async getAdminData({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/getAdminData',{user:payload} )
-                return data.value
-                // console.log(data.value)
-                // commit('setUserData', data.values[0])
-                // commit('setUserLink', data.values[1])
+                commit('setUserData', data.values[0])
+                return data.values
 
             } catch(e){
                 dispatch('setSystemMessage', {
@@ -60,6 +63,36 @@ export default {
                 console.log("not module user")
             }
         },
+
+        async getTutorData({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/user/getTutorData',{user:payload} )
+                return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+                console.log("not module user")
+            }
+        },
+
+        async getDataAdminAccount({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/user/getDataAdminAccount',payload )
+                commit('setAdminData', data.values)
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+                console.log("not module user")
+            }
+        },
+
         async getUserData({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/getUserData',{user:payload} )
@@ -114,6 +147,23 @@ export default {
                     type: 'danger'
                 }, {root: true})
             }
+        },
+
+        async deleteTutor ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/user/deleteTutor',payload)
+                if(data.values.length) {
+                    dispatch('setSystemMessage', {
+                        value: data.values.message,
+                        type: 'primary'
+                    }, {root: true})
+                }
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
         }
 
     },
@@ -130,6 +180,10 @@ export default {
         },
         getUserLinks(state) {
             return state.userLink
+        },
+        getAdminData(state) {
+            return state.adminData
         }
+
     }
 }
