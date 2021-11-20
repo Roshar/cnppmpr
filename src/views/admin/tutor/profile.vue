@@ -319,6 +319,7 @@
                     token: localStorage.getItem('jwt-token'),
                     tutorId: idTutor.value
                 })
+                await router.push('/tutors')
             }
             watch([code], ()=> {
                 if(code.value === '5808'){

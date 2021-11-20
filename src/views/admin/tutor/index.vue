@@ -108,7 +108,6 @@
                 }else {
                     search.value = false
                     tutors.value = await store.dispatch('admin/getUsersActive',{filter: false, tbl:'tutors'})
-                    console.log(tutors.value.length)
                     countNum.value = tutors.value.length ? tutors.value.length : 0
                 }
             })

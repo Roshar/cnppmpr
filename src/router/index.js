@@ -8,8 +8,13 @@ import StudentTutorConfirm from '../views/StudentTutorConfirm'
 import Register from "../views/authForms/Register";
 import IomTutor from '../views/tutor/iom/index'
 import IomAdmin from '../views/admin/iom/index'
+import IomDataAdmin from '../views/admin/iom/single'
+import TaskDataAdmin from '../views/admin/iom/task'
 import StudentAdmin from '../views/admin/student'
 import MyAccountAdmin from '../views/admin/myAccount'
+import AcceptedExercises from '../views/tutor/accepted'
+import AcceptedTask from '../views/tutor/accepted/task'
+
 
 import StudentTutor from '../views/tutor/student'
 import Tutors from '../views/admin/tutor'
@@ -173,6 +178,26 @@ const routes = [
     path: '/iom',
     name: 'iom',
     component: IomAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/iom/:id/:tutor',
+    name: 'iomData',
+    component: IomDataAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/iom/:id/:tutor/:taskId',
+    name: 'taskDataAdmin',
+    component: TaskDataAdmin,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
@@ -425,6 +450,28 @@ const routes = [
       auth: true,
     },
   },
+
+  {
+    path: '/show_exercises_accepted',
+    name: 'show_exercises_accepted',
+    component: AcceptedExercises,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/show_exercises_accepted/task',
+    name: 'show_exercises_accepted_task',
+    component: AcceptedTask,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+
 
   {
     path: '/library',

@@ -28,7 +28,7 @@
                             <router-link :to="{path:`/students`}" style="font-size: .9em">Слушатели</router-link>
                             <router-link to="/tutors" style="font-size: .9em">Тьюторы</router-link>
                             <router-link to="/global_library" style="font-size: .9em">Библиотека мероприятий</router-link>
-                            <router-link to="/" style="font-size: .9em">ИОМ</router-link>
+                            <router-link to="/iom" style="font-size: .9em">ИОМ</router-link>
                             <router-link to="/" style="font-size: .9em">Отчеты</router-link>
                         </li>
                     </ul>

@@ -28,7 +28,7 @@
                                         <li class="widget-49-meeting-item"><span>Надтеречный район - {{nadterech}}</span></li>
                                         <li class="widget-49-meeting-item"><span>Наурский район - {{naur}}</span></li>
                                         <li class="widget-49-meeting-item"><span>Ножай-Юртовский район - {{nojay}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Сунженский район - {{sun}}</span></li>
+                                        <li class="widget-49-meeting-item"><span>Серноводский район - {{sun}}</span></li>
                                         <li class="widget-49-meeting-item"><span>Урус-Мартановский район - {{urus}}</span></li>
                                         <li class="widget-49-meeting-item"><span>Шалинский район - {{shali}}</span></li>
                                         <li class="widget-49-meeting-item"><span>Шаройский район - {{sharoy}}</span></li>
@@ -105,10 +105,9 @@
                                     <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeo}}</span></li>
                                 </ul>
                             </li>
-
                         </ol>
                         <div class="widget-49-meeting-action">
-                            <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
+                            <router-link to="/tutors" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</router-link>
                         </div>
                     </div>
                 </div>
@@ -144,7 +143,7 @@
                             </li>
                         </ol>
                         <div class="widget-49-meeting-action">
-                            <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
+                            <router-link to="/iom" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</router-link>
                         </div>
                     </div>
                 </div>

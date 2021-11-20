@@ -152,7 +152,24 @@ export default {
         async deleteTutor ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/user/deleteTutor',payload)
-                if(data.values.length) {
+                if(data.values) {
+                    dispatch('setSystemMessage', {
+                        value: data.values.message,
+                        type: 'primary'
+                    }, {root: true})
+                }
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        async deleteStudent ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/user/deleteStudent',payload)
+                if(data.values) {
                     dispatch('setSystemMessage', {
                         value: data.values.message,
                         type: 'primary'

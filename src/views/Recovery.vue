@@ -57,8 +57,6 @@
                 }
             })
 
-            console.log(baseUrl.value)
-
             const timer = () => {
                 setInterval(() => {
                     if(limit.value !== 0) {

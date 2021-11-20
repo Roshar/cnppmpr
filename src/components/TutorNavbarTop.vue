@@ -8,15 +8,15 @@
         <nav class="navbar justify-content-end">
             <ul class="list-group list-group-horizontal list-top-menu-ul">
                 <li class="list-group-item list-group-item-action list-top-menu-li">
-                    <span v-if="notificationMessage" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{notificationMessage.length}}</span>
+                    <span v-if="notificationMessage && notificationMessage" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{notificationMessage.length}}</span>
                     <router-link to="/tutor_conversations">Сообщения </router-link>
                 </li>
                 <li  class="list-group-item list-group-item-action list-top-menu-li">
-                    <span v-if="notificationAction.length" class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction.length}}</span>
+                    <span v-if="notificationAction" class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction}}</span>
                     <a href="#"  data-toggle="dropdown">Уведомления </a>
-                    <ul v-if="notificationAction.length" class="dropdown-menu">
+                    <ul v-if="notificationAction" class="dropdown-menu">
                         <li>
-                            <router-link :to="{path:`/notifications`}" style="font-size: .8em">Запрос на удаление ИОМа</router-link>
+                            <router-link :to="{path:`/show_exercises_accepted`}" style="font-size: .8em">В ожидании проверки <span style="font-size:1.2em;color: #4e73e5; font-weight: bold">{{pendingExercise.length}}</span> </router-link>
                         </li>
                     </ul>
                 </li>
@@ -56,8 +56,9 @@
         setup(){
             const store = useStore()
             const router = useRouter()
-            const notificationMessage = ref(false)
-            const notificationAction = ref(false)
+            const notificationMessage = ref()
+            const notificationAction = ref()
+            const pendingExercise = ref(null)
             const baseUrl = ref(process.env.VUE_APP_URL)
             const myAccount = ref(null)
             const avatar = ref(null)
@@ -66,10 +67,17 @@
 
             onMounted(async() => {
                 myAccount.value = await store.dispatch('user/getTutorData',localStorage.getItem('jwt-token'))
-                console.log(myAccount.value)
+
                 avatar.value = baseUrl.value +'/'+myAccount.value[0].avatar
                 name.value = myAccount.value[0].name
-                // notificationAction.value = await store.dispatch('notification/getNotificationAction')
+                pendingExercise.value = await store.dispatch('notification/getRequestPendingExercise', {
+                    token: localStorage.getItem('jwt-token')
+                })
+
+                if(pendingExercise.value ){
+                    notificationAction.value = pendingExercise.value.length
+
+                }
                 // requestStudents.value = await store.dispatch('notification/getRequestStudents')
                 // requestStudents.value = requestStudents.value ? requestStudents.value[0].id : 0
                 // requestTutors.value = requestTutors.value ? requestTutors.value[0].id : 0
@@ -88,6 +96,7 @@
                 onSubmit,
                 notificationMessage,
                 notificationAction,
+                pendingExercise,
                 avatar,
                 name
             }

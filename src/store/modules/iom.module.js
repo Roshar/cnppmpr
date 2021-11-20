@@ -14,6 +14,8 @@ export default {
         exercise: null,
         iomId: null,
         finishedExercises: null,
+        pendingExercises: null,
+        pendingData: null,
         exerciseData: [],
         tblNames: [],
         taskData: [],
@@ -37,6 +39,16 @@ export default {
 
         setFinishedExercises(state, finishedExercises) {
             state.finishedExercises = finishedExercises
+        },
+
+        // получить содержимое из заданий в статусе в ожидании проверки
+        setPendingData(state, values) {
+            state.pendingData = values
+        },
+
+        //получить количество заданий в ожидании проверки
+        setFinishPendingExercises(state, values) {
+            state.pendingExercises = values
         },
         setCode(state,values) {
             state.code = values
@@ -86,6 +98,42 @@ export default {
 
                 if(data.values) {
                     commit('setFinishedExercises',data.values)
+                }
+                console.log(state.iomData)
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getStatusToPendingFinish ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getStatusToPendingFinish',
+                    {token: localStorage.getItem('jwt-token'),
+                          studentId:payload.studentId,
+                          iomId: payload.iomId} )
+
+                if(data.values) {
+                    commit('setFinishPendingExercises',data.values)
+                }
+                console.log(state.iomData)
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getPendingData ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getPendingData',payload)
+                if(data.values) {
+                    commit('setPendingData',data.values)
                 }
                 console.log(state.iomData)
             } catch(e){
@@ -310,6 +358,14 @@ export default {
 
         getStatusFinished(state) {
             return state.finishedExercises
+        },
+
+        getStatusPendingFinish(state) {
+            return state.pendingExercises
+        },
+
+        getPendingData(state) {
+            return state.pendingData
         },
 
         getCode(state) {

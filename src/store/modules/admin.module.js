@@ -32,6 +32,19 @@ export default {
             }
         },
 
+        async getIomData ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getUserCount', payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async updateAdminProfile ({commit, dispatch, state}, payload) {
             try {
 
@@ -238,6 +251,46 @@ export default {
             }
         },
 
+        async getAllIomDataByTutorId ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getAllIomDataByTutorId',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getTask ({dispatch},payload) {
+            try {
+
+                const {data} = await axios.post('/api/admin/getTask',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getDataFromIOM ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getDataFromIOM',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async getExercisesByIomId ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/admin/getExercisesByIomId',
@@ -257,6 +310,25 @@ export default {
         async getStatusFinished ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/admin/getStatusFinished',
+                    {tutorId: payload.tutorId,
+                        studentId:payload.studentId,
+                        iomId: payload.iomId} )
+               if(data.values){
+                   return data.values
+               }
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getStatusToPendingFinish ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getStatusToPendingFinish',
                     {tutorId: payload.tutorId,
                         studentId:payload.studentId,
                         iomId: payload.iomId} )
