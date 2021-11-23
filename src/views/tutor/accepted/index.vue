@@ -10,12 +10,16 @@
             <div class="row">
                 <div class="col-6">
                     <select class="form-control" name="tutorId" v-model="status">
-                        <option value="">Завершенные</option>
-                        <option value="">В ожидании проверки</option>
+                        <option value="0">В ожидании проверки</option>
+                        <option value="1">Завершенные</option>
+                        <option value="2">На доработке</option>
                     </select>
                 </div>
                 <div class="col-6">
-                    <button class="btn btn-outline-secondary btn-block" type="button" @click="request"> Отобразить </button>
+                    <select class="form-control" name="tutorId" v-model="iomValue">
+                        <option value="">Все</option>
+                        <option v-for="item in iomData" :value="item['iom_id']"> {{item.title}}</option>
+                    </select>
                 </div>
             </div>
             <hr>
@@ -25,16 +29,26 @@
                     <thead>
                     <tr>
                         <th scope="col">№</th>
-                        <th scope="col">Нвзвание ИОМ</th>
+                        <th scope="col">ИОМ</th>
                         <th scope="col">Задание</th>
                         <th scope="col">Автор</th>
+                        <th scope="col">Слушатель</th>
                         <th scope="col">Открыть</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="(item, index) in exercises">
-                        <th scope="row">{{index+1}}</th>
-
+                        <td scope="row">{{index+1}}</td>
+                        <td scope="row">{{item['iom_title']}}</td>
+                        <td scope="row">{{item['title']}}</td>
+                        <td scope="row">{{author(item.mentor)}}</td>
+                        <td scope="row">{{item.surname}} {{item.name}} {{item.patronymic}}</td>
+                        <td scope="row">
+                            <router-link :to="{path:`/show_exercises_accepted/${item['iom_id']}/${item['id_exercises']}/${item['user_id']}`}" class="btn btn-outline-secondary">
+                                <span v-if="item.accepted === 0"> В ожидании </span>
+                                <span v-if="item.accepted === 1 ||item.accepted === 2 "> Открыть ответ </span>
+                            </router-link>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -56,16 +70,44 @@
             const store = useStore()
             const route = useRoute()
             const router = useRouter()
+            const token = localStorage.getItem('jwt-token')
             const exercises = ref()
-            const status = ref('')
+            const iomData = ref()
+            const status = ref('0')
+            const iomValue = ref('')
             const loading = ref(true)
+
+            const author = (val) => {
+                if(val === 0) {
+                    return 'Тьютор'
+                }else {
+                    return 'Наставник'
+                }
+            }
+
+            watch([status, iomValue], async() => {
+                if(status.value !== '' || iomValue.value !== '') {
+                    //Завершенные
+                    const code = parseInt(status.value)
+                    const iom = (iomValue.value !== '') ? iomValue.value : null
+                    await loadExercises(code,iom)
+                }else {
+                    // В ожидании
+                    const code = parseInt(status.value)
+                    await loadExercises(code)
+                }
+            })
+
+            const loadExercises = async(code,iomId = null) => {
+                await store.dispatch('iom/getPendingDataOrFinished', {token,status:code, iomId})
+                exercises.value = store.getters['iom/getPendingDataOrFinished']
+            }
 
             onMounted(async()=>{
                 loading.value = true
-                await store.dispatch('iom/getPendingData', {token:localStorage.getItem('jwt-token')})
-                exercises.value = store.getters['iom/getPendingData']
-
-                console.log(exercises.value)
+                await loadExercises(0)
+                await store.dispatch('iom/getData',token)
+                iomData.value = store.getters['iom/getData']
                 loading.value = false
             })
 
@@ -73,14 +115,15 @@
 
             }
 
-
-
-            document.title = "Менеджер индивидуальных образовательных маршрутов"
+            document.title = "Раздел: Задания"
             return {
+                iomData,
                 exercises,
                 request,
                 status,
-                loading
+                loading,
+                author,
+                iomValue
 
             }
         },

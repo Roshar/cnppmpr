@@ -462,7 +462,7 @@ const routes = [
   },
 
   {
-    path: '/show_exercises_accepted/task',
+    path: '/show_exercises_accepted/:iom/:exId/:studentId',
     name: 'show_exercises_accepted_task',
     component: AcceptedTask,
     beforeEnter: beforeTutor(),
@@ -551,7 +551,7 @@ const routes = [
   },
 
   {
-    path: '/my_course/:iomId/:taskId',
+    path: '/my_course/:iomId/:taskId/:tutorId',
     name: 'myTask',
     component: myTask,
     beforeEnter: beforeStudent(),

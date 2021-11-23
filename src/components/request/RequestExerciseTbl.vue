@@ -19,7 +19,7 @@
             <tbody>
                 <tr v-for="(item, index) in exeData" :key="item['id_exercise']">
                     <th scope="row">{{index + 1}}</th>
-                    <td><router-link :to="{ path: `/iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" >{{item.title}}</router-link></td>
+                    <td><router-link :to="{ path: `/my_iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" >{{item.title}}</router-link></td>
                     <td>{{shortContent(clearHTML(item.description), 100)}}</td>
                     <td>
                         <a href="{{item.link}}">{{item.link }}</a>

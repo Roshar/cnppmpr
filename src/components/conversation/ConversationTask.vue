@@ -1,184 +1,267 @@
 <template>
-    <div class="content-wallpaper">
-        <div class="container bootstrap snippets bootdeys">
-
-            <div class="panel" id="chat">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="icon wb-chat-text" aria-hidden="true"></i> Личный чат
-                    </h3>
-                    <span>Если возникили вопросы по текущему заданию, напишите тьютору</span>
-                </div>
-                <hr>
-<!--                <div class="panel-body">-->
-<!--                    <div class="chats">-->
-<!--                        <div class="chat">-->
-<!--                            <div class="chat-body">-->
-<!--                                <div class="chat-content">-->
-<!--                                  <p></p>-->
-<!--                                    <time class="chat-time" datetime="2015-07-01T11:37"></time>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="chat chat-left">-->
-<!--                            <div class="chat-body">-->
-<!--                                <div class="chat-content">-->
-<!--                                    <p></p>-->
-<!--                                    <time class="chat-time" datetime="2015-07-01T11:39"></time>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-                <div class="panel-footer">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <section class="content-item" id="comments">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
                     <form>
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Текст вопроса">
-                            <span class="input-group-btn">
-                             <button class="btn btn-outline-iom" type="button">Отправить</button>
-                            </span>
-                        </div>
+                        <h3 class="pull-left">Обсуждение вопросов по заданию</h3>
+                        <button type="button"  @click="sendComment" :disabled="disabled"  class="btn btn-normal  btn-outline-secondary pull-right">Оставить комментарий</button>
+                        <fieldset>
+                            <div class="row">
+                                <div class="form-group col-12">
+                                    <textarea class="form-control" v-model="commentChatBody" id="message" placeholder="Если возникили вопросы по текущему заданию, напишите в общий чат или свяжитесь с вашим тьютором" required=""></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
                     </form>
+
+                    <h3 v-if="chat">Всего комментариев: {{chat.length}}</h3>
+
+                    <!-- COMMENT  - START -->
+                    <div v-for="item in chat">
+                        <div class="media">
+                            <a class="pull-left" href="#"><img class="media-object" :src="generationUrl(item.avatar)" alt=""></a>
+                            <div class="media-body">
+                                <h4 class="media-heading" v-if="item['sender_id'] === studentId">Вы</h4>
+                                <h4 class="media-heading" v-if="item['sender_id'] === tutorId">Тьютор</h4>
+                                <h4 class="media-heading" v-if="item['sender_id'] !== tutorId && item['sender_id'] !== studentId "> {{item.surname}} {{item.name}} </h4>
+                                <p>{{item.message}}</p>
+                                <ul class="list-unstyled list-inline media-detail pull-left">
+                                    <li><i class="fa fa-calendar"></i>{{item['created_date']}}</li>
+<!--                                        <li v-if="item['like'] !== 0">-->
+<!--                                            <i class="fa fa-thumbs-up"></i> {{item['like']}}-->
+<!--                                        </li>-->
+                                </ul>
+
+            <!--                            <ul class="list-unstyled list-inline media-detail pull-right">-->
+            <!--                                <li class="social_actions">-->
+            <!--                                    <span style="display: flex; align-items: center; vertical-align: center">-->
+            <!--                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">-->
+            <!--                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>-->
+            <!--                                     </svg>-->
+            <!--                                     <button class="btn btn-own" >{{getStatusMark()}}</button>-->
+            <!--                                    </span>-->
+
+            <!--                                </li>-->
+<!--&lt;!&ndash;                                <li class="social_actions"><button class="btn">Ответить</button></li>&ndash;&gt;-->
+            <!--                            </ul>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- COMMENT  - END -->
+
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
 
 </template>
+
+<script>
+    import {ref,onMounted, watch} from 'vue'
+    import {useStore} from "vuex";
+    import {useRouter, useRoute} from 'vue-router'
+    export default {
+        emits:['open','sendMessage'],
+        props: ['chat','studentId','tutorId'],
+
+        setup() {
+
+            const baseUrl = ref(process.env.VUE_APP_URL)
+            const router = useRouter()
+            const route = useRoute()
+            const store = useStore()
+            const commentChatBody = ref()
+            const commentChatBodyError = ref()
+            const disabled = ref(true)
+
+            const generationUrl = (val) => {
+                return (val) ? baseUrl.value + '/' + val : ''
+            }
+
+            watch([commentChatBody], ()=> {
+                if(commentChatBody.value && commentChatBody.value.length >=2 ) {
+                    disabled.value = false
+                }else {
+                    disabled.value = true
+                }
+            })
+
+            const sendComment = async() => {
+
+                if(commentChatBody.value && commentChatBody.value.length >=2 ) {
+
+                    await store.dispatch('student/sendCommentsForTask', {
+                        taskId: route.params.taskId,
+                        iomId: route.params.iomId,
+                        tutorId: route.params.tutorId,
+                        content: commentChatBody.value,
+                        token: localStorage.getItem('jwt-token')
+                    })
+                    window.location.href = `/my_course/${route.params.iomId}/${route.params.taskId}/${route.params.tutorId}`
+                }
+            }
+            return {
+                baseUrl,
+                generationUrl,
+                commentChatBody,
+                commentChatBodyError,
+                disabled,
+                sendComment
+            }
+        }
+    }
+</script>
+
+
 
 
 
 <style scoped>
 
+    .btn-own {
+        padding: 0;
+    }
+
+    .content-wallpaper {
+        padding:15px 0px
+    }
+
+    .social_actions button{
+        font-size: .9em;
+        color: #5d5d5d;
+    }
+
     .container {
         min-height: 100vh;
     }
-    .btn-outline-iom{
-        color: #fff;
-        background-color: #4571a3;
-        border-color: #4571a3;
+    .content-item {
+        padding:30px 0;
+        background-color:#FFFFFF;
     }
 
-    .chat-box {
-        height: 100%;
-        width: 100%;
-        background-color: #fff;
-        overflow: hidden
+    .content-item.grey {
+        background-color:#F0F0F0;
+        padding:50px 0;
+        height:100%;
     }
 
-    .chats {
-        padding: 30px 15px
+    .content-item h2 {
+        font-weight:700;
+        font-size:35px;
+        line-height:45px;
+        text-transform:uppercase;
+        margin:20px 0;
+    }
+
+    .content-item h3 {
+        font-weight:400;
+        font-size:20px;
+        color:#555555;
+        margin:10px 0 15px;
+        padding:0;
+    }
+
+    .content-headline {
+        height:1px;
+        text-align:center;
+        margin:20px 0 70px;
+    }
+
+    .content-headline h2 {
+        background-color:#FFFFFF;
+        display:inline-block;
+        margin:-20px auto 0;
+        padding:0 20px;
+    }
+
+    .grey .content-headline h2 {
+        background-color:#F0F0F0;
+    }
+
+    .content-headline h3 {
+        font-size:14px;
+        color:#AAAAAA;
+        display:block;
     }
 
 
-    .chat-avatar {
-        float: right
+    #comments {
+        box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
+        background-color:#FFFFFF;
     }
 
-
-    .chat-body {
-        display: block;
-        margin: 10px 30px 0 0;
-        overflow: hidden
+    #comments form {
+        margin-bottom:30px;
     }
 
-    .chat-body:first-child {
-        margin-top: 0
+    #comments .btn {
+        margin-top:7px;
     }
 
-    .chat-content {
-        position: relative;
-        display: block;
-        float: right;
-        padding: 8px 15px;
-        margin: 0 20px 10px 0;
-        clear: both;
-        color: #fff;
-        background-color: #62a8ea;
-        border-radius: 4px;
-        -webkit-box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37);
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37);
+    #comments form fieldset {
+        clear:both;
     }
 
-    .chat-content:before {
-        position: absolute;
-        top: 10px;
-        right: -10px;
-        width: 0;
-        height: 0;
-        content: '';
-        border: 5px solid transparent;
-        border-left-color: #62a8ea
+    #comments form textarea {
+        height:100px;
     }
 
-    .chat-content>p:last-child {
-        margin-bottom: 0
+    #comments .media {
+        border-top:1px dashed #DDDDDD;
+        padding:20px 15px 20px 5px;
+        margin:0;
+        background-color: #f4faff;
+        /*background-color: tomato;*/
     }
 
-    .chat-content+.chat-content:before {
-        border-color: transparent
+    #comments .media > .pull-left {
+        margin-right:20px;
     }
 
-    .chat-time {
-        display: block;
-        margin-top: 8px;
-        color: rgba(255, 255, 255, .6)
+    #comments .media img {
+        max-width:100px;
     }
 
-    .chat-left .chat-avatar {
-        float: left
+    #comments .media h4 {
+        margin:0 0 10px;
     }
 
-    .chat-left .chat-body {
-        margin-right: 0;
-        margin-left: 30px
+    #comments .media h4 span {
+        font-size:14px;
+        float:right;
+        color:#999999;
     }
 
-    .chat-left .chat-content {
-        float: left;
-        margin: 0 0 10px 20px;
-        color: #76838f;
-        background-color: #dfe9ef
+    #comments .media p {
+        margin-bottom:15px;
+        text-align:justify;
     }
 
-    .chat-left .chat-content:before {
-        right: auto;
-        left: -10px;
-        border-right-color: #dfe9ef;
-        border-left-color: transparent
+    #comments .media-detail {
+        margin:0;
     }
 
-    .chat-left .chat-content+.chat-content:before {
-        border-color: transparent
+    #comments .media-detail li {
+        color:#AAAAAA;
+        font-size:12px;
+        padding-right: 10px;
+        font-weight:600;
     }
 
-    .chat-left .chat-time {
-        color: #a3afb7
+    #comments .media-detail a:hover {
+        text-decoration:underline;
     }
 
-    .panel-footer {
-        padding: 0 30px 15px;
-        background-color: transparent;
-        border-top: 1px solid transparent;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
+    #comments .media-detail li:last-child {
+        padding-right:0;
     }
-    .avatar img {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        border: 0 none;
-        border-radius: 1000px;
-    }
-    .chat-avatar .avatar {
-        width: 30px;
-    }
-    .avatar {
-        position: relative;
-        display: inline-block;
-        width: 40px;
-        white-space: nowrap;
-        border-radius: 1000px;
-        vertical-align: bottom;
+
+    #comments .media-detail li i {
+        color:#666666;
+        font-size:15px;
+        margin-right:10px;
     }
 </style>

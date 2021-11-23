@@ -15,7 +15,7 @@ export default {
         iomId: null,
         finishedExercises: null,
         pendingExercises: null,
-        pendingData: null,
+        pendingDataOrFinished: null,
         exerciseData: [],
         tblNames: [],
         taskData: [],
@@ -41,9 +41,9 @@ export default {
             state.finishedExercises = finishedExercises
         },
 
-        // получить содержимое из заданий в статусе в ожидании проверки
-        setPendingData(state, values) {
-            state.pendingData = values
+        // получить содержимое из заданий в статусе в ожидании проверки или завершенные по передаваемому статусу
+        setPendingDataOrFinished(state, values) {
+            state.pendingDataOrFinished = values
         },
 
         //получить количество заданий в ожидании проверки
@@ -79,7 +79,53 @@ export default {
                 if(data.values) {
                     commit('setIomData',data.values)
                 }
-                console.log(state.iomData)
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getStudentAnswer ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getStudentAnswer',payload )
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async successTask({ commit, dispatch}, payload) {
+            try{
+                const {data} = await axios.post('/api/iom/successTask',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async correctionTask({ commit, dispatch}, payload) {
+            try{
+                const {data} = await axios.post('/api/iom/correctionTask',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
@@ -129,11 +175,11 @@ export default {
             }
         },
 
-        async getPendingData ({commit, dispatch, state}, payload) {
+        async getPendingDataOrFinished ({commit, dispatch, state}, payload) {
             try {
-                const {data} = await axios.post('/api/iom/getPendingData',payload)
+                const {data} = await axios.post('/api/iom/getPendingDataOrFinished',payload)
                 if(data.values) {
-                    commit('setPendingData',data.values)
+                    commit('setPendingDataOrFinished',data.values)
                 }
                 console.log(state.iomData)
             } catch(e){
@@ -356,6 +402,10 @@ export default {
             return state.currentIomData
         },
 
+        getData(state) {
+            return state.iomData
+        },
+
         getStatusFinished(state) {
             return state.finishedExercises
         },
@@ -364,8 +414,8 @@ export default {
             return state.pendingExercises
         },
 
-        getPendingData(state) {
-            return state.pendingData
+        getPendingDataOrFinished(state) {
+            return state.pendingDataOrFinished
         },
 
         getCode(state) {

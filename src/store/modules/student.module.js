@@ -250,6 +250,36 @@ export default {
             }
         },
 
+
+
+        async getStatisticByIOM ({commit, dispatch, state }, payload) {
+            try {
+                const {data} = await axios.post('/api/student/getStatisticByIOM', payload)
+                 return data.values
+            } catch(e){
+                await router.push({name:'404'})
+            }
+        },
+
+        async getCommentsByTask ({commit, dispatch, state }, payload) {
+            try {
+                const {data} = await axios.post('/api/student/getCommentsByTask', payload)
+                 return data.values
+            } catch(e){
+                await router.push({name:'404'})
+            }
+        },
+
+        async sendCommentsForTask ({commit, dispatch, state }, payload) {
+            try {
+                 await axios.post('/api/student/sendCommentsForTask', payload)
+
+            } catch(e){
+                await router.push({name:'404'})
+            }
+        },
+
+
         async insertInReportWithoutFile ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/student/insertInReportWithoutFile', payload)
@@ -258,7 +288,7 @@ export default {
                     type: 'primary'
                 }, {root: true})
             } catch(e){
-                router.push('/404')
+                await router.push('/404')
                 dispatch('setSystemMessage', {
                     value: e.message,
                     type: 'danger'
@@ -266,9 +296,55 @@ export default {
             }
         },
 
+        async insertInReportWithFile ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/insertInReportWithFile', payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                await router.push('/my_course')
+                dispatch('setSystemMessage', {
+                    value: 'Произошла ошибка во время загрузки файла. Размер загружаемого файла превышает допустимое значение.',
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
 
+        async updateInReportWithoutFile ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/updateInReportWithoutFile', payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                await router.push('/404')
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
 
+        async updateInReportWithFile ({commit, dispatch, state}, payload) {
+            try {
 
+                const {data} = await axios.post('/api/student/updateInReportWithFile', payload)
+                console.log(payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                await router.push('/my_course')
+                dispatch('setSystemMessage', {
+                    value: 'Произошла ошибка во время загрузки файла. Размер загружаемого файла превышает допустимое значение.',
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
 
 
     },

@@ -1,4 +1,5 @@
 <template>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
         <div class="col-12 navbar-col">
             <div class="row justify-content-center">
                 <div class="col-9 ">
@@ -7,8 +8,6 @@
                             <li><router-link to="/"  class="router-link" >Личный профиль</router-link></li>
                             <li><router-link to="/my_course"  class="router-link" >Мой индивидуальный образовательный маршрут</router-link></li>
                             <li><router-link to="my_lib"  class="router-link" >Моя копилка</router-link></li>
-                            <li><router-link to="/my_conversation"  class="router-link" > Сообщения </router-link></li>
-                            <li><router-link to="/my_marks"  class="router-link" > Мои оценки  </router-link></li>
                         </ul>
                     </div>
                 </div>
@@ -16,10 +15,8 @@
 
         </div>
 
-
         <div class="col-9" >
 
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="row align-items-top">
@@ -28,7 +25,7 @@
                                 <div class="profile">
                                     <div class="jobster-user-info">
                                         <div class="profile-avatar">
-                                            <img class="img-fluid " alt="слушатель" :src="avatar">
+                                            <img class="img-fluid " alt="слушатель"  style="max-height: 120px" :src="avatar">
                                         </div>
                                         <div class="profile-avatar-info mt-3">
                                             <h5 class="text-white">{{name}} {{surname}}</h5>
@@ -68,24 +65,30 @@
                                     <h6 class="text-white">(индивидуальный образовательный маршрут)</h6>
                                     <br>
                                     <div class="candidate-info">
-                                        <p class="text-white">Общее количество мероприятий(заданий):</p>
+                                        <p class="text-white">Общее количество мероприятий(заданий): {{common_exe}}</p>
                                     </div>
                                     <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" style="width:55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(finished_exe,common_exe)" aria-valuenow="{{finished_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
                                             <div class="progress-bar-title text-white">Количество выполненных заданий</div>
-                                            <span class="progress-bar-number text-white">70</span>
+                                            <span class="progress-bar-number text-white">{{finished_exe}}</span>
                                         </div>
                                     </div>
                                     <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" style="width:80%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar-title text-white">Количество незавершенных заданий</div>
-                                            <span class="progress-bar-number text-white">30</span>
+                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(edit_exe,common_exe)" aria-valuenow="{{edit_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
+                                            <div class="progress-bar-title text-white">Количество заданий требующих доработку</div>
+                                            <span class="progress-bar-number text-white">{{edit_exe}}</span>
                                         </div>
                                     </div>
                                     <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" style="width:55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(edit_exe,common_exe)" aria-valuenow="{{check_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
                                             <div class="progress-bar-title text-white">Количество заданий на проверке</div>
-                                            <span class="progress-bar-number text-white">30</span>
+                                            <span class="progress-bar-number text-white">{{check_exe}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress bg-dark">
+                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(active_exe,common_exe)" aria-valuenow="{{active_exe}}" aria-valuemin="0" aria-valuemax="{{check_exe}}">
+                                            <div class="progress-bar-title text-white">Количество незавершенных заданий</div>
+                                            <span class="progress-bar-number text-white">{{active_exe}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -98,17 +101,52 @@
                                 <div class="timeline-box" v-if="tagsData" v-for="tag in tagsData" >
                                     <h5 class="resume-experience-title">
                                         {{tag.title_tag}}</h5>
-                                    <div class="jobster-candidate-timeline"  @click="openTask(item.id_exercises,item.iom_id)" v-if="exerciseData" v-for="item in exerciseData">
-                                        <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
-                                            <div class="jobster-timeline-cricle">
-                                                <i class="far fa-circle"></i>
+                                    <div v-if="exerciseData" v-for="item in exerciseData">
+                                        <div class="jobster-candidate-timeline active_block"   v-if="item.accepted === null && (item['on_check'] === 0 || item['on_check'] === null)"  @click="openTask(item.id_exercises,item.iom_id)">
+                                            <div class="jobster-timeline-item " v-if="filterData(tag.tag_id,item.tag_id)">
+                                                <div class="jobster-timeline-cricle">
+                                                    <i class="active far fa-circle"></i>
+                                                </div>
+                                                <div class="jobster-timeline-info" >
+                                                    <div class="dashboard-timeline-info">
+                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                        <h6 class="mb-2"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                        <span style="font-style: italic"> Автор: {{setAuthor(item.mentor )}}</span>
+                                                        <p class="mt-2">Содержание: {{shortContent(clearHTML(item.description))}}</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="jobster-timeline-info" >
-                                                <div class="dashboard-timeline-info">
-                                                    <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                    <h6 class="mb-2"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                    <span style="font-style: italic"> Автор: {{setAuthor(item.mentor )}}</span>
-                                                    <p class="mt-2">Содержание: {{shortContent(clearHTML(item.description))}}</p>
+                                        </div>
+                                        <div class="jobster-candidate-timeline done"   v-if="item.accepted === 1 && item['on_check'] === 0 " @click="openTask(item.id_exercises,item.iom_id)" >
+                                            <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
+                                                <div class="jobster-timeline-info" >
+                                                    <div class="dashboard-timeline-info ">
+                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                        <h6 class="mb-2" style="color: green"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                        <span style="font-style: italic; background-color: green; color:white;padding: 4px"> Статус: Ответ принят</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="jobster-candidate-timeline pendding pendding_block"   v-if="item.accepted === 2 && item['on_check'] === 0"  @click="openTask(item.id_exercises,item.iom_id)">
+                                            <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
+                                                <div class="jobster-timeline-info" >
+                                                    <div class="dashboard-timeline-info">
+                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                        <h6 class="mb-2" style="color: orange"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                        <span style="font-style: italic; background-color: orange; color:white;padding: 4px"> Статус: Необходимо внести корректировки в ответ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="jobster-candidate-timeline on_check_block"   v-if="item['on_check'] === 1" >
+                                            <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
+                                                <div class="jobster-timeline-info" >
+                                                    <div class="dashboard-timeline-info">
+                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                        <h6 class="mb-2" style="color: blueviolet"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                        <span style="font-style: italic; background-color: blueviolet; color:white;padding: 4px"> Статус: На проверке</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -147,6 +185,11 @@
             const patronymic = ref();
             const phone = ref();
             const issetIom = ref()
+            const common_exe = ref(0)
+            const finished_exe = ref(0)
+            const edit_exe = ref(0)
+            const check_exe = ref(0)
+            const active_exe = ref(0)
             const age = ref();
             const birthday = ref();
             const baseUrl = ref(process.env.VUE_APP_URL)
@@ -172,15 +215,7 @@
             }
 
 
-            const openTask = (taskId, iomId) => {
 
-                router.push(`/my_course/${iomId}/${taskId}`)
-                // await store.dispatch('student/getMyTaskById', {
-                //     taskId: taskId,
-                //     iomId: iomId,
-                //     token: localStorage.getItem('jwt-token'),
-                // })
-            }
 
             const load = () => {
                 id.value = store.state['user'].userData.user_id;
@@ -204,6 +239,15 @@
                 return parentId === childId ? true : false
             }
 
+            const createGraphics = (currentValue, maxValue) => {
+                if(currentValue === 0 || maxValue === 0) {
+                    return 'width: 0%'
+                }else {
+                    let res = currentValue/maxValue * 100
+                    return 'width:' + String(res) + '%'
+                }
+            }
+
 
             onMounted(async()=>{
                 loading.value = true
@@ -211,6 +255,7 @@
                 await load()
 
                 dependencies.value = store.getters['user/getUserLinks']
+
                 if(dependencies.value) {
 
                     tutorId.value = dependencies.value.user_id
@@ -226,18 +271,40 @@
                         await store.dispatch('student/getExercisesFromMyIom',{
                             iomId: issetIom.value[0]['iom_id'],
                             tutorId:tutorId.value,
+                            token: localStorage.getItem('jwt-token')
                         } )
+
                         exerciseData.value = store.getters['student/getExercisesMyIom']
+
+                        common_exe.value = exerciseData.value.length
+                        if(common_exe.value) {
+                           const statisticsIOM = await store.dispatch('student/getStatisticByIOM', {
+                                iomId:  exerciseData.value[0]['iom_id'],
+                                userId: id.value,
+                                tutorId: tutorId.value
+                            })
+                            // завершено
+                            finished_exe.value = statisticsIOM[0][0]['id']
+                            console.log(statisticsIOM[0][0]['id'])
+                            // требует доробтку
+                            edit_exe.value = statisticsIOM[1][0]['id']
+                            // на проверке
+                            check_exe.value = statisticsIOM[2][0]['id']
+                            // не завершено
+                            active_exe.value = common_exe.value - statisticsIOM[0][0]['id']
+                        }
                         tagsData.value = store.getters['student/getTagsMyIom']
-
-                        console.log( exerciseData.value)
-                        console.log( tagsData.value)
-
 
                     }
                 }
+
                 loading.value = false
             })
+
+            const openTask = (taskId, iomId) => {
+                router.push(`/my_course/${iomId}/${taskId}/${tutorId.value}`)
+            }
+
             return {
                 name,
                 surname,
@@ -247,13 +314,19 @@
                 area,
                 phone,
                 discipline,
+                createGraphics,
                 gender,
+                edit_exe,
+                check_exe,
+                finished_exe,
                 filterData,
                 declensionAge,
                 openTask,
                 exerciseData,
                 checkTerm,
+                active_exe,
                 shortContent,
+                common_exe,
                 avatar,
                 birthday,
                 age,
@@ -273,10 +346,36 @@
 
 <style scoped>
 
-    .jobster-candidate-timeline:hover {
+
+
+    /*.jobster-candidate-timeline:hover {*/
+    /*    background-color:rgba(167, 199, 231, .6);*/
+    /*    cursor: pointer;*/
+    /*}*/
+
+    .active_block:hover {
         background-color:rgba(167, 199, 231, .6);
         cursor: pointer;
     }
+
+    .done:hover {
+        background-color:#b4ecb4;
+        cursor: pointer;
+    }
+
+    .pendding_block, .done {
+        padding: 15px 0px;
+    }
+
+    .pendding_block:hover {
+        background-color:#ffc87a;
+        cursor: pointer;
+    }
+
+    /*.done_block:hover {*/
+    /*    background-color:rgba(167, 199, 231, .6);*/
+    /*    cursor: pointer;*/
+    /*}*/
 
     .title-page {
         color: #4571a3;
@@ -465,6 +564,41 @@
         height: calc(100% - 5px);
         background-color: #eeeeee;
     }
+    .jobster-candidate-timeline.done:before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        width: 2px;
+        top: 5px;
+        bottom: 5px;
+        height: calc(100% - 5px);
+        background-color: green;
+    }
+
+    .jobster-candidate-timeline.pendding:before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        width: 2px;
+        top: 5px;
+        bottom: 5px;
+        height: calc(100% - 5px);
+        background-color: orange;
+    }
+
+    .jobster-candidate-timeline.on_check_block:before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        width: 2px;
+        top: 5px;
+        bottom: 5px;
+        height: calc(100% - 5px);
+        background-color: blueviolet;
+    }
+
+
+
 
     .jobster-candidate-timeline .jobster-timeline-item {
         display: table;
@@ -475,7 +609,7 @@
 
     .jobster-candidate-timeline .jobster-timeline-item .jobster-timeline-cricle {
         border-radius: 50%;
-        border: 12px solid white;
+        border: 13px solid white;
         z-index: 1;
         top: 5px;
         left: 9px;
@@ -491,12 +625,30 @@
         height: 2px;
         background-color: #eeeeee;
     }
-    .jobster-candidate-timeline .jobster-timeline-item .jobster-timeline-cricle > i {
+    .done .jobster-timeline-item .jobster-timeline-cricle:before {
+        content: "";
+        position: absolute;
+        left: 12px;
+        width: 20px;
+        top: -1px;
+        bottom: 5px;
+        height: 2px;
+        background-color: green;
+    }
+
+    .jobster-candidate-timeline .jobster-timeline-item .jobster-timeline-cricle > i.active {
         font-size: 15px;
         top: -8px;
         left: -7px;
         position: absolute;
         color: tomato;
+    }
+    .jobster-candidate-timeline .jobster-timeline-item .jobster-timeline-cricle > i.done {
+        color: green;
+    }
+
+    .jobster-candidate-timeline .jobster-timeline-item .jobster-timeline-cricle > i.pendding {
+        color: orange;
     }
 
     .jobster-candidate-timeline .jobster-timeline-item .jobster-timeline-info {
@@ -529,6 +681,8 @@
         position: relative;
         margin-bottom: 20px;
     }
+
+
     .jobster-candidate-timeline .jobster-timeline-icon i {
         font-size: 16px;
         color: #212529;
