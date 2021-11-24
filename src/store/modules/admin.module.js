@@ -347,9 +347,7 @@ export default {
 
         async getLastUsers ({dispatch},payload) {
             try {
-                console.log('start Front')
                 const {data} = await axios.post('/api/admin/getLastUsers',payload)
-                console.log('end Front')
                 return data.values
             } catch(e){
                 dispatch('setSystemMessage', {

@@ -3,7 +3,7 @@
         <admin-student-menu></admin-student-menu>
     </div>
     <div class="col-9">
-        <app-loader v-if="loading"></app-loader>
+<!--        <app-loader v-if="loading"></app-loader>-->
         <div class="content-wallpaper" v-else>
             <h5 >Последние зарегистрировавшиеся слушатели </h5>
 
@@ -114,14 +114,14 @@
             }
 
             onMounted(async()=>{
-                loading.value = true
+                // loading.value = true
                 // STUDENT INFO
                 areas.value = await store.dispatch('area/getAreas')
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
                 lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
                 console.log(lastStudents.value)
                 //AREA INFO
-                loading.value = false
+                // loading.value = false
             })
 
 
