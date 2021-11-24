@@ -221,18 +221,18 @@
             onMounted(async()=>{
                 loading.value = true
                 await load()
-                // dependencies.value = store.getters['user/getUserLinks']
-                //
-                // if(dependencies.value) {
-                //     tutorId.value = dependencies.value.user_id
-                //     tutorFio.value = dependencies.value.surname + ' '+dependencies.value.name+' '+dependencies.value.patronymic
-                // }
-                // if(tutorId.value){
-                //     issetIom.value = await store.dispatch('student/checkIssetMyIom',{
-                //         tutorId:tutorId.value,
-                //         studentId: id.value
-                //     })
-                // }
+                dependencies.value = store.getters['user/getUserLinks']
+
+                if(dependencies.value) {
+                    tutorId.value = dependencies.value.user_id
+                    tutorFio.value = dependencies.value.surname + ' '+dependencies.value.name+' '+dependencies.value.patronymic
+                }
+                if(tutorId.value){
+                    issetIom.value = await store.dispatch('student/checkIssetMyIom',{
+                        tutorId:tutorId.value,
+                        studentId: id.value
+                    })
+                }
                 loading.value = false
             })
 

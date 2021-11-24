@@ -119,6 +119,7 @@
                 areas.value = await store.dispatch('area/getAreas')
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
                 lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                console.log(lastStudents.value)
                 //AREA INFO
                 loading.value = false
             })
