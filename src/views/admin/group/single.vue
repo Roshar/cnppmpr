@@ -195,6 +195,7 @@
                 studentsInGroup.value = await store.dispatch('admin/getAppointedStudentsCurrentGroup',
                     {tutorId:groupData.value['tutor_id'],
                         groupId:groupData.value['id']})
+                studentsFree.value = await store.dispatch('admin/getFreeStudentsByDisciplineId',{disId: groupData.value['id_dis']})
                 await router.push('/group/'+route.params.id)
             }
 
