@@ -4,7 +4,7 @@
     </div>
     <div class="col-9">
 <!--        <app-loader v-if="loading"></app-loader>-->
-        <div class="content-wallpaper" v-else>
+        <div class="content-wallpaper">
             <h5 >Последние зарегистрировавшиеся слушатели </h5>
 
             <div class="row">
@@ -31,7 +31,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item, index) in lastStudents" :key="item.user_id">
+                <tr v-if="lastStudents && lastStudents.length" v-for="(item, index) in lastStudents" :key="item.user_id">
                     <th scope="row">{{index+1}}</th>
                     <td>{{item.name}} {{item.surname}}</td>
                     <td>{{item.school_name}}</td>
@@ -66,7 +66,7 @@
             const store = useStore()
             const router = useRouter()
             const route = useRoute()
-            const loading = ref(true)
+            // const loading = ref(true)
             // STUDENTS DATA
             const currentTime = ref()
             const areas = ref()
@@ -128,7 +128,7 @@
             currentTime.value = getDateCurrent()
             return {
                 currentTime,
-                loading,
+                // loading,
                 areas,
                 disciplines,
                 students,
