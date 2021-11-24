@@ -8,6 +8,8 @@ export function checkAccess () {
                 const roleAuth = store.state['auth'].role
                 if((roleAuth === 'student' || roleAuth === 'tutor')  && store.state['auth'].status === 'on') {
                     store.commit('setLayout',roleAuth)
+                    console.log(roleAuth)
+                    console.log('fdfdfdfdffdf')
                     await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
                     next()
                 } else if (roleAuth === 'admin'  && store.state['auth'].status == 'null') {
