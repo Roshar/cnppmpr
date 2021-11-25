@@ -31,23 +31,23 @@
                 </tr>
                 </thead>
                 <tbody>
-<!--                <tr v-if="lastStudents && lastStudents.length" v-for="(item, index) in lastStudents" :key="item.user_id">-->
-<!--                    <th scope="row">{{index+1}}</th>-->
-<!--                    <td>{{item.name}} {{item.surname}}</td>-->
-<!--                    <td>{{item.school_name}}</td>-->
-<!--                    <td>{{item.title_area}}</td>-->
-<!--                    <td>{{item.title_discipline}}</td>-->
-<!--                    {{activeStatus(item.status)}}-->
-<!--                    <td> <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>-->
-<!--                    <td>{{item.created}}</td>-->
-<!--                    <td>-->
-<!--                        <div v-if="deactivation" style="text-align: center" @click="deactivationUser(item.user_id)">-->
-<!--                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">-->
-<!--                                <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>-->
-<!--                            </svg>-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                </tr>-->
+                    <tr v-if="lastStudents && lastStudents.length" v-for="(item, index) in lastStudents" :key="item.user_id">
+                        <th scope="row">{{index+1}}</th>
+                        <td>{{item.name}} {{item.surname}}</td>
+                        <td>{{item.school_name}}</td>
+                        <td>{{item.title_area}}</td>
+                        <td>{{item.title_discipline}}</td>
+                        {{activeStatus(item.status)}}
+                        <td> <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>
+                        <td>{{item.created}}</td>
+                        <td>
+<!--                            <div v-if="deactivation" style="text-align: center" @click="deactivationUser(item.user_id)">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>-->
+<!--                                </svg>-->
+<!--                            </div>-->
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -83,8 +83,6 @@
             const checkUser = () => {
                 router.push(category.value)
             }
-
-
 
 
             const activeStatus = (val) => {
