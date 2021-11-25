@@ -8,10 +8,8 @@ export function beforeStudent () {
                 store.commit('setLayout',authResult.role)
                 next()
             } else if(authResult.role && authResult.status == 'on' && authResult.role !== "student") {
-                console.log('404')
                 next('/404')
             } else {
-                console.log('before')
                 next('/auth?message=auth')
             }
         } catch(e){
