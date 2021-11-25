@@ -103,6 +103,9 @@
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
                 lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
+                const test1 = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                console.log(lastTutors.value)
+                console.log(test1)
                 await router.push('/last_tutor')
             }
 
