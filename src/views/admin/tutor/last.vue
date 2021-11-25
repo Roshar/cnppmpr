@@ -80,6 +80,7 @@
 
 
             const activeStatus = (val) => {
+                console.log(val)
                 if(val === 'on') {
                     btnActiveValue.value = 'Активирован'
                     btnActiveClass.value = 'btn-primary-outline'
