@@ -41,8 +41,9 @@ export default {
             localStorage.setItem(ROLE,role)
         },
         setStatus(state, status) {
-            state.status = status
-            localStorage.setItem(STATUS,status)
+            if(status !== 'null') {
+                state.status  = status
+            }
         },
         setCode(state, code) {
             state.code = code
@@ -108,12 +109,13 @@ export default {
         //авторизация
         async login({ commit, dispatch}, user) {
             try{
+                console.log('login start')
                 const {data} =  await axios.post('/api/auth/signin',user)
+                console.log('login end')
                     commit('setToken', data.values.token)
-                    commit('setRole', data.values.role)
-                    commit('setStatus', data.values.status)
+                    commit('setRole', data.values.role )
+                    commit('setStatus',data.values.status )
                     commit('setUserId', data.values.userId)
-
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
@@ -124,7 +126,6 @@ export default {
         },
 
         //регистрация
-
         async registration({ commit, dispatch}, payload) {
             try{
                 const {data} = await axios.post('/api/auth/signup',payload)
