@@ -5,7 +5,8 @@
     <div class="col-9">
         <app-loader v-if="loading"></app-loader>
         <div class="content-wallpaper" v-else>
-            <h5 >Последние зарегистрировавшиеся тьюторы </h5>
+            <h5 >Последние зарегистрировавшиеся слушатели </h5>
+
             <div class="row">
                 <div class="col-6">
                     <label > Категория пользователей</label>
@@ -16,12 +17,13 @@
                     </select>
                 </div>
             </div>
-
             <table class="table">
                 <thead>
                 <tr>
                     <th scope="col">№</th>
                     <th scope="col">ФИО</th>
+                    <th scope="col">Школа</th>
+                    <th scope="col">Район</th>
                     <th scope="col">Предмет</th>
                     <th scope="col">Активация</th>
                     <th scope="col">Дата регистрации</th>
@@ -29,15 +31,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item, index) in lastTutors" :key="item.user_id">
+                <tr v-for="(item, index) in lastStudents" :key="item.user_id">
                     <th scope="row">{{index+1}}</th>
                     <td>{{item.name}} {{item.surname}}</td>
-                    <td>{{item.title_discipline}}</td>
-                    {{activeStatus(item.status)}}
-                    <td> <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>
+                    <td>{{item['school_name']}} </td>
+                    <td>{{item['title_area']}} </td>
+                    <td>{{item['title_discipline']}}</td>
+
+                    <td>
+                        <input  :class="setBtnActiveClass(item.status)"
+                                :disabled="disabled(item.status)"
+                                type="button"
+                                @click="activation(item.user_id)" :value="setBtnActiveValue(item.status)">
+                    </td>
                     <td>{{item.created}}</td>
                     <td>
-                        <div v-if="deactivation" style="text-align: center" @click="deactivationUser(item.user_id)">
+                        <div v-if="deactivation(item.status)" style="text-align: center" @click="deactivationUser(item.user_id)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
                             </svg>
@@ -65,74 +74,70 @@
             const loading = ref(true)
             // STUDENTS DATA
             const currentTime = ref()
+            const areas = ref()
             const disciplines = ref()
+            const students = ref()
             const category = ref(route.path)
-            const tutors = ref()
-            const lastTutors = ref()
+            const lastStudents = ref()
             const btnActiveClass = ref()
             const btnActiveValue = ref()
-            const disabled = ref(false)
-            const deactivation = ref(false)
+
 
             const checkUser = () => {
                 router.push(category.value)
             }
 
 
-            const activeStatus = (val) => {
-                console.log(val)
-                if(val === 'on') {
-                    btnActiveValue.value = 'Активирован'
-                    btnActiveClass.value = 'btn-primary-outline'
-                    disabled.value = true
-                    deactivation.value = true
-                }else {
-                    btnActiveValue.value = 'Активировать'
-                    btnActiveClass.value = 'btn-danger-outline'
-                    disabled.value = false
-                    deactivation.value = false
-                }
+            const setBtnActiveValue = (val) => {
+                return (val === 'on') ? 'Активирован' : 'Активировать'
             }
+
+            const setBtnActiveClass = (val) => {
+                return (val === 'on') ? 'btn-primary-outline' : 'btn-danger-outline'
+            }
+
+            const disabled = (val) => {
+                return (val === 'on') ? true : false
+            }
+
+            const deactivation = (val) => {
+                return (val === 'on') ? true : false
+            }
+
 
             const deactivationUser = async (user) => {
                 await store.dispatch('admin/deactivationById',{userId: user})
-                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
-                await router.push('/last_tutor')
+                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                await router.push('/last_student')
             }
 
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
-                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
-
-                await router.push('/last_tutor')
+                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                await router.push('/last_student')
             }
 
             onMounted(async()=>{
                 loading.value = true
-                // TUTOR INFO
+                // STUDENT INFO
+                areas.value = await store.dispatch('area/getAreas')
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
-                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
-                const test1 = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                console.log('tut')
-                console.log(lastTutors.value)
-                console.log('tutend')
-                console.log('st')
-                console.log(test1)
-                console.log('stend')
-
+                //lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
+                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                console.log(lastStudents.value)
                 //AREA INFO
                 loading.value = false
             })
 
 
-            currentTime.value = getDateCurrent()
             return {
-                currentTime,
                 loading,
+                areas,
                 disciplines,
-                tutors,
-                lastTutors,
-                activeStatus,
+                students,
+                lastStudents,
+                setBtnActiveClass,
+                setBtnActiveValue,
                 btnActiveClass,
                 btnActiveValue,
                 disabled,

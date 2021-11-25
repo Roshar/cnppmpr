@@ -32,12 +32,16 @@
                 <tr v-for="(item, index) in lastTutors" :key="item.user_id">
                     <th scope="row">{{index+1}}</th>
                     <td>{{item.name}} {{item.surname}}</td>
-                    <td>{{item.title_discipline}}</td>
-                    {{activeStatus(item.status)}}
-                    <td> <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>
+                    <td>{{item['title_description']}}</td>
+                    <td>
+                        <input  :class="setBtnActiveClass(item.status)"
+                                 :disabled="disabled(item.status)"
+                                 type="button"
+                                 @click="activation(item.user_id)" :value="setBtnActiveValue(item.status)">
+                    </td>
                     <td>{{item.created}}</td>
                     <td>
-                        <div v-if="deactivation" style="text-align: center" @click="deactivationUser(item.user_id)">
+                        <div v-if="deactivation(item.status)" style="text-align: center" @click="deactivationUser(item.user_id)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
                             </svg>
@@ -71,27 +75,26 @@
             const lastTutors = ref()
             const btnActiveClass = ref()
             const btnActiveValue = ref()
-            const disabled = ref(false)
-            const deactivation = ref(false)
+
 
             const checkUser = () => {
                 router.push(category.value)
             }
 
+            const setBtnActiveValue = (val) => {
+                return (val === 'on') ? 'Активирован' : 'Активировать'
+            }
 
-            const activeStatus = (val) => {
-                console.log(val)
-                if(val === 'on') {
-                    btnActiveValue.value = 'Активирован'
-                    btnActiveClass.value = 'btn-primary-outline'
-                    disabled.value = true
-                    deactivation.value = true
-                }else {
-                    btnActiveValue.value = 'Активировать'
-                    btnActiveClass.value = 'btn-danger-outline'
-                    disabled.value = false
-                    deactivation.value = false
-                }
+            const setBtnActiveClass = (val) => {
+                return (val === 'on') ? 'btn-primary-outline' : 'btn-danger-outline'
+            }
+
+            const disabled = (val) => {
+                return (val === 'on') ? true : false
+            }
+
+            const deactivation = (val) => {
+                return (val === 'on') ? true : false
             }
 
             const deactivationUser = async (user) => {
@@ -125,7 +128,8 @@
                 disciplines,
                 tutors,
                 lastTutors,
-                activeStatus,
+                setBtnActiveValue,
+                setBtnActiveClass,
                 btnActiveClass,
                 btnActiveValue,
                 disabled,
