@@ -86,17 +86,17 @@
 
 
             const activeStatus = (val) => {
-                // if(val === 'on') {
-                //     btnActiveValue.value = 'Активирован'
-                //     btnActiveClass.value = 'btn-primary-outline'
-                //     disabled.value = true
-                //     deactivation.value = true
-                // }else {
-                //     btnActiveValue.value = 'Активировать'
-                //     btnActiveClass.value = 'btn-danger-outline'
-                //     disabled.value = false
-                //     deactivation.value = false
-                // }
+                if(val === 'on') {
+                    btnActiveValue.value = 'Активирован'
+                    btnActiveClass.value = 'btn-primary-outline'
+                    disabled.value = true
+                    deactivation.value = true
+                }else {
+                    btnActiveValue.value = 'Активировать'
+                    btnActiveClass.value = 'btn-danger-outline'
+                    disabled.value = false
+                    deactivation.value = false
+                }
             }
 
             const deactivationUser = async (user) => {
