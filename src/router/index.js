@@ -606,19 +606,27 @@ const routes = [
   {
     path: '/adminconfirm',
     name: 'AdminConfirm',
+    component: AdminConfirm,
     beforeEnter:withoutIsAuth('auth'),
-    component: () => {
-      switch (store.state['auth'].role) {
-        case "admin":
-          return AdminConfirm
-        case "tutor":
-          return StudentTutorConfirm
-        case "student":
-          return StudentTutorConfirm
-        default:
-          return StudentTutorConfirm
-      }
-    },
+    meta:{
+      auth:false
+    }
+  },
+
+  {
+    path: '/tutorconfirm',
+    name: 'tutorconfirm',
+    component: StudentTutorConfirm,
+    beforeEnter:withoutIsAuth('auth'),
+    meta:{
+      auth:false
+    }
+  },
+  {
+    path: '/studentconfirm',
+    name: 'studentconfirm',
+    component: StudentTutorConfirm,
+    beforeEnter:withoutIsAuth('auth'),
     meta:{
       auth:false
     }

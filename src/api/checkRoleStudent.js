@@ -11,6 +11,7 @@ export function beforeStudent () {
                 console.log('404')
                 next('/404')
             } else {
+                console.log('before')
                 next('/auth?message=auth')
             }
         } catch(e){

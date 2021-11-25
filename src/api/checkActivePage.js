@@ -21,9 +21,15 @@ export function checkAccess () {
                     next()
                 } else if (store.state['auth'].role && (store.getters['auth/status'] === null || store.getters['auth/status'] === 'ban' )) {
                     console.log('Я ТУТ')
-                    // next('/active?token='+store.state['auth'].token)
-                    // next('/adminconfirm')
-                    next('/adminconfirm?token='+store.state['auth'].token)
+                    if(store.state['auth'].role === 'student') {
+                        console.log('im student')
+                        next('/studentconfirm?token=' + store.state['auth'].token)
+                    }else if(store.state['auth'].role === 'tutor') {
+                        console.log('im tutor')
+                        next('/tutorconfirm?token=' + store.state['auth'].token)
+                    }else {
+                        next('/adminconfirm?token=' + store.state['auth'].token)
+                    }
 
                 } else {
                     console.log('нет подтверждения роли')
