@@ -37,8 +37,8 @@
                         <td>{{item.school_name}}</td>
                         <td>{{item.title_area}}</td>
                         <td>{{item.title_discipline}}</td>
-                        {{activeStatus(item.status)}}
-                        <td> <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>
+
+                        <td> {{aStatus(item.status)}} <input :class="btnActiveClass" :disabled="disabled" type="button" @click="activation(item.user_id)" :value="btnActiveValue">  </td>
                         <td>{{item.created}}</td>
                         <td>
                             <div v-if="deactivation" style="text-align: center" @click="deactivationUser(item.user_id)">
@@ -85,7 +85,8 @@
             }
 
 
-            const activeStatus = (val) => {
+            const aStatus = (val) => {
+                console.log(val)
                 if(val === 'on') {
                     btnActiveValue.value = 'Активирован'
                     btnActiveClass.value = 'btn-primary-outline'
@@ -129,7 +130,7 @@
                 disciplines,
                 students,
                 lastStudents,
-                activeStatus,
+                aStatus,
                 btnActiveClass,
                 btnActiveValue,
                 disabled,
