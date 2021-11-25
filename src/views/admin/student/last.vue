@@ -110,7 +110,7 @@
                 loading.value = true
                 // TUTOR INFO
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
-                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
+                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
 
                 console.log(lastTutors.value)
                 //AREA INFO
