@@ -111,6 +111,8 @@
                 // TUTOR INFO
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
                 lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
+
+                console.log(lastTutors.value)
                 //AREA INFO
                 loading.value = false
             })
