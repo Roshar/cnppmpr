@@ -3,8 +3,8 @@
         <admin-student-menu></admin-student-menu>
     </div>
     <div class="col-9">
-<!--        <app-loader v-if="loading"></app-loader>-->
-        <div class="content-wallpaper">
+        <app-loader v-if="loading"></app-loader>
+        <div class="content-wallpaper" v-else>
             <h5 >Последние зарегистрировавшиеся слушатели </h5>
 
             <div class="row">
@@ -86,45 +86,45 @@
 
 
             const activeStatus = (val) => {
-                if(val === 'on') {
-                    btnActiveValue.value = 'Активирован'
-                    btnActiveClass.value = 'btn-primary-outline'
-                    disabled.value = true
-                    deactivation.value = true
-                }else {
-                    btnActiveValue.value = 'Активировать'
-                    btnActiveClass.value = 'btn-danger-outline'
-                    disabled.value = false
-                    deactivation.value = false
-                }
+                // if(val === 'on') {
+                //     btnActiveValue.value = 'Активирован'
+                //     btnActiveClass.value = 'btn-primary-outline'
+                //     disabled.value = true
+                //     deactivation.value = true
+                // }else {
+                //     btnActiveValue.value = 'Активировать'
+                //     btnActiveClass.value = 'btn-danger-outline'
+                //     disabled.value = false
+                //     deactivation.value = false
+                // }
             }
 
             const deactivationUser = async (user) => {
-                await store.dispatch('admin/deactivationById',{userId: user})
-                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                await router.push('/last_student')
+                // await store.dispatch('admin/deactivationById',{userId: user})
+                // lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                // await router.push('/last_student')
             }
 
             const activation = async (user) => {
-                await store.dispatch('admin/activationById',{userId: user})
-                lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                await router.push('/last_student')
+                // await store.dispatch('admin/activationById',{userId: user})
+                // lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                // await router.push('/last_student')
             }
 
             onMounted(async()=>{
-                // loading.value = true
+                loading.value = true
                 // STUDENT INFO
                 areas.value = await store.dispatch('area/getAreas')
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
                 lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
                 console.log(lastStudents.value)
                 //AREA INFO
-                // loading.value = false
+                loading.value = false
             })
 
 
             return {
-                // loading,
+                loading,
                 areas,
                 disciplines,
                 students,
