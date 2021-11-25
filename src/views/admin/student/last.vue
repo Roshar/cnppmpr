@@ -103,9 +103,7 @@
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
                 lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
-                const test1 = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                console.log(lastTutors.value)
-                console.log(test1)
+
                 await router.push('/last_tutor')
             }
 
@@ -113,9 +111,15 @@
                 loading.value = true
                 // TUTOR INFO
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
-                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-
+                lastTutors.value = await store.dispatch('admin/getLastUsers',{tbl:'tutors'})
+                const test1 = await store.dispatch('admin/getLastUsers',{tbl:'students'})
+                console.log('tut')
                 console.log(lastTutors.value)
+                console.log('tutend')
+                console.log('st')
+                console.log(test1)
+                console.log('stend')
+
                 //AREA INFO
                 loading.value = false
             })
