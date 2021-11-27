@@ -1,5 +1,5 @@
 <template>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
         <div class="col-12 navbar-col">
             <div class="row justify-content-center">
                 <div class="col-9 ">
@@ -14,9 +14,58 @@
             </div>
 
         </div>
+        <div class="col-9">
+            <div class="modal-form2" v-if="showModalNotice">
+                <div class="modal-dialog modal-confirm">
+                    <div class="modal-content">
+                        <div class="modal-header flex-column">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <p> Для завершения обучения необходимо выполнить все задания </p>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary"  @click="showModalNotice = false" data-dismiss="modal">Понятно</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-form" v-if="showModalSuccess">
+                <form  id="form">
+                    <div class="row">
+                        <div class="col-12">
+                                <span style="float:right" @click="showModalSuccess=false"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                      <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                      <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                                      </svg>
+                                </span>
+                        </div>
+                    </div>
 
-        <div class="col-9" >
+                        <div class="form-group">
+                            <label style="font-style: italic"> Оцените обучение по 5 бальной шкале (где 5- высшая оценка, 1-низшая)</label>
+                            <select class="form-control" name="mark"  v-model="mark"  required  >
+                                <option value="5">5 </option>
+                                <option value="4">4 </option>
+                                <option value="3">3 </option>
+                                <option value="2">2 </option>
+                                <option value="1">1  </option>
+                            </select>
+                            <small style="color:tomato" v-if="markError">Необходимо оценить обучение</small>
+                        </div>
 
+                    <div class="form-group">
+                        <span>Мы будем признательны Вам за комментарий и замечание и обязательно учтем Ваши пожелания в дальнейшей работе.</span>
+                        <label class="message_element">Ваш комментарий:</label>
+                        <textarea class="form-control" cols="70" rows="6" id="description" v-model="messageBody"  name="message" placeholder="Ваш комментарий"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-block btn-outline-primary-send" @click="finishEdu">Отправить оценку и заврешить обучение</button>
+                </form>
+            </div>
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="row align-items-top">
@@ -80,7 +129,7 @@
                                         </div>
                                     </div>
                                     <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(edit_exe,common_exe)" aria-valuenow="{{check_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
+                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(check_exe,common_exe)" aria-valuenow="{{check_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
                                             <div class="progress-bar-title text-white">Количество заданий на проверке</div>
                                             <span class="progress-bar-number text-white">{{check_exe}}</span>
                                         </div>
@@ -95,9 +144,12 @@
                             </div>
                         </div>
                         <div class="col-lg-7" >
+                            <button type="button" v-if="readyFinishedStatus" @click="showModalSuccess = true" class="btn btn-block btn-outline-primary">Завершить обучение</button>
+                            <button type="button" v-else class="btn btn-block btn-outline-primary" @click="showModalNotice = true" >Завершить обучение</button>
                             <div class="resume-experience">
+                                <div v-if="readyFinishedStatus"> Вы выполнили все задания в своем индивидуальном образовательном маршруте и теперь можеть завершить обучение.</div>
+                                <hr>
                                 <h5 class="title-page">Мой индивидуальный образовательный маршрут</h5>
-
                                 <div class="timeline-box" v-if="tagsData" v-for="tag in tagsData" >
                                     <h5 class="resume-experience-title">
                                         {{tag.title_tag}}</h5>
@@ -158,10 +210,10 @@
                 </div>
             </div>
         </div>
-
-
-
-
+        <transition  name="fade" appear>
+            <div class="modal-overlay" v-if="showModalNotice || showModalSuccess" @click="clearOverlay">
+            </div>
+        </transition>
 </template>
 
 <script>
@@ -185,12 +237,18 @@
             const patronymic = ref();
             const phone = ref();
             const issetIom = ref()
+            const markError = ref(false)
+            const mark = ref("5")
+            const readyFinishedStatus = ref(false)
+            const showModalNotice = ref(false)
+            const showModalSuccess = ref(false)
             const common_exe = ref(0)
             const finished_exe = ref(0)
             const edit_exe = ref(0)
             const check_exe = ref(0)
             const active_exe = ref(0)
             const age = ref();
+            const messageBody = ref();
             const birthday = ref();
             const baseUrl = ref(process.env.VUE_APP_URL)
             const avatar = ref();
@@ -214,9 +272,6 @@
                 }
             }
 
-
-
-
             const load = () => {
                 id.value = store.state['user'].userData.user_id;
                 name.value = store.state['user'].userData.name;
@@ -232,11 +287,34 @@
                 school.value = store.state['user'].userData['school_name'];
                 area.value = store.state['user'].userData['title_area'];
                 discipline.value = store.state['user'].userData['title_discipline'];
+            }
 
+            const clearOverlay = () => {
+                showModalSuccess.value = false
+                showModalNotice.value = false
             }
 
             const filterData = (parentId, childId) => {
                 return parentId === childId ? true : false
+            }
+
+            const finishEdu = async() => {
+                if(mark.value) {
+                    await store.dispatch('finished/studentEducation', {
+                        iomId: issetIom.value[0]['iom_id'],
+                        tutorId: tutorId.value,
+                        token: localStorage.getItem('jwt-token'),
+                        recall: messageBody.value || 'Отсутствует',
+                        mark: mark.value
+                    })
+                    showModalSuccess.value = false
+                }else {
+                    markError.value = true
+                }
+            }
+
+            const readyFinishFunc = (countTask, readyTask) => {
+                return (countTask === readyTask) ? readyFinishedStatus.value = true : readyFinishedStatus.value = false
             }
 
             const createGraphics = (currentValue, maxValue) => {
@@ -257,11 +335,10 @@
                 dependencies.value = store.getters['user/getUserLinks']
 
                 if(dependencies.value) {
-
                     tutorId.value = dependencies.value.user_id
                     tutorFio.value = dependencies.value.surname + ' '+dependencies.value.name+' '+dependencies.value.patronymic
-
                 }
+
                 if(tutorId.value){
                     issetIom.value = await store.dispatch('student/checkIssetMyIom',{
                         tutorId:tutorId.value,
@@ -285,7 +362,6 @@
                             })
                             // завершено
                             finished_exe.value = statisticsIOM[0][0]['id']
-                            console.log(statisticsIOM[0][0]['id'])
                             // требует доробтку
                             edit_exe.value = statisticsIOM[1][0]['id']
                             // на проверке
@@ -295,9 +371,10 @@
                         }
                         tagsData.value = store.getters['student/getTagsMyIom']
 
+                        readyFinishFunc(common_exe.value,finished_exe.value)
+
                     }
                 }
-
                 loading.value = false
             })
 
@@ -307,14 +384,18 @@
 
             return {
                 name,
+                showModalSuccess,
                 surname,
                 setAuthor,
                 patronymic,
+                readyFinishedStatus,
                 school,
+                clearOverlay,
                 area,
                 phone,
                 discipline,
                 createGraphics,
+                showModalNotice,
                 gender,
                 edit_exe,
                 check_exe,
@@ -322,13 +403,17 @@
                 filterData,
                 declensionAge,
                 openTask,
+                messageBody,
                 exerciseData,
                 checkTerm,
                 active_exe,
                 shortContent,
                 common_exe,
                 avatar,
+                mark,
+                markError,
                 birthday,
+                finishEdu,
                 age,
                 login,
                 issetIom,
@@ -346,7 +431,37 @@
 
 <style scoped>
 
+    .modal-form{
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        width: 100%;
+        max-width:550px;
+        background-color: #fafbfc;
+        padding: 1.5em 1.5em;
+    }
 
+    .modal-form2{
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        /*max-width:400px;*/
+        background-color: #edeef0;
+    }
+
+    .btn-outline-primary {
+        color: #4571a3;
+        border-color: #4571a3;
+    }
+    .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #4571a3;
+        border-color: #4571a3;
+    }
 
     /*.jobster-candidate-timeline:hover {*/
     /*    background-color:rgba(167, 199, 231, .6);*/
@@ -371,6 +486,19 @@
         background-color:#ffc87a;
         cursor: pointer;
     }
+
+    .modal-overlay,.modal-overlay2 {
+        position: absolute;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 98;
+        background-color: rgba(0,0,0, 0.5);
+    }
+
+
 
     /*.done_block:hover {*/
     /*    background-color:rgba(167, 199, 231, .6);*/

@@ -12,6 +12,8 @@ import area from './modules/area.module'
 import discipline from './modules/discipline.module'
 import conversation from './modules/conversation.module'
 import student from './modules/student.module'
+import finished from './modules/finished.module'
+
 
 
 const plugins = []
@@ -71,6 +73,7 @@ export default createStore({
     discipline,
     conversation,
     globalLibrary,
-    student
+    student,
+    finished
   }
 })
