@@ -7,44 +7,47 @@
                         <ul class="navbar-default">
                             <li><router-link to="/"  class="router-link" >Личный профиль</router-link></li>
                             <li><router-link to="/my_course"  class="router-link" >Мой индивидуальный образовательный маршрут</router-link></li>
-                            <li><router-link to="my_lib"  class="router-link" >Моя копилка</router-link></li>
+                            <li><router-link to="/my_box"  class="router-link" >Моя копилка</router-link></li>
                         </ul>
                     </div>
                 </div>
             </div>
 
         </div>
+
         <div class="col-9">
-            <div class="modal-form2" v-if="showModalNotice">
-                <div class="modal-dialog modal-confirm">
-                    <div class="modal-content">
-                        <div class="modal-header flex-column">
-                            <div class="icon-box">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
-                                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
-                                </svg>
+            <app-loader v-if="loading"></app-loader>
+            <div class="content-loader" v-else>
+                <div class="modal-form2" v-if="showModalNotice">
+                    <div class="modal-dialog modal-confirm">
+                        <div class="modal-content">
+                            <div class="modal-header flex-column">
+                                <div class="icon-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+                                    </svg>
+                                </div>
                             </div>
-                        </div>
-                        <div class="modal-body">
-                            <p> Для завершения обучения необходимо выполнить все задания </p>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-secondary"  @click="showModalNotice = false" data-dismiss="modal">Понятно</button>
+                            <div class="modal-body">
+                                <p> Для завершения обучения необходимо выполнить все задания </p>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-secondary"  @click="showModalNotice = false" data-dismiss="modal">Понятно</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-form" v-if="showModalSuccess">
-                <form  id="form">
-                    <div class="row">
-                        <div class="col-12">
+                <div class="modal-form" v-if="showModalSuccess">
+                    <form  id="form">
+                        <div class="row">
+                            <div class="col-12">
                                 <span style="float:right" @click="showModalSuccess=false"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                       <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
                                       <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
                                       </svg>
                                 </span>
+                            </div>
                         </div>
-                    </div>
 
                         <div class="form-group">
                             <label style="font-style: italic"> Оцените обучение по 5 бальной шкале (где 5- высшая оценка, 1-низшая)</label>
@@ -58,157 +61,177 @@
                             <small style="color:tomato" v-if="markError">Необходимо оценить обучение</small>
                         </div>
 
-                    <div class="form-group">
-                        <span>Мы будем признательны Вам за комментарий и замечание и обязательно учтем Ваши пожелания в дальнейшей работе.</span>
-                        <label class="message_element">Ваш комментарий:</label>
-                        <textarea class="form-control" cols="70" rows="6" id="description" v-model="messageBody"  name="message" placeholder="Ваш комментарий"></textarea>
-                    </div>
-                    <button type="button" class="btn btn-block btn-outline-primary-send" @click="finishEdu">Отправить оценку и заврешить обучение</button>
-                </form>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <div class="row align-items-top">
-                        <div class="col-lg-4">
-                            <div class="resume-base  user-dashboard-info-box p-4">
-                                <div class="profile">
-                                    <div class="jobster-user-info">
-                                        <div class="profile-avatar">
-                                            <img class="img-fluid " alt="слушатель"  style="max-height: 120px" :src="avatar">
+                        <div class="form-group">
+                            <span>Мы будем признательны Вам за комментарий и замечание и обязательно учтем Ваши пожелания в дальнейшей работе.</span>
+                            <label class="message_element">Ваш комментарий:</label>
+                            <textarea class="form-control" cols="70" rows="6" id="description" v-model="messageBody"  name="message" placeholder="Ваш комментарий"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-block btn-outline-primary-send" @click="finishEdu">Отправить оценку и заврешить обучение</button>
+                    </form>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="row align-items-top">
+                            <div class="col-lg-4" >
+                                <div class="resume-base  user-dashboard-info-box p-4">
+                                    <div class="profile">
+                                        <div class="jobster-user-info">
+                                            <div class="profile-avatar">
+                                                <img class="img-fluid " alt="слушатель"  style="max-height: 120px" :src="avatar">
+                                            </div>
+                                            <div class="profile-avatar-info mt-3">
+                                                <h5 class="text-white">{{name}} {{surname}}</h5>
+                                            </div>
                                         </div>
-                                        <div class="profile-avatar-info mt-3">
-                                            <h5 class="text-white">{{name}} {{surname}}</h5>
+                                    </div>
+                                    <div class="about-candidate border-top">
+                                        <div class="candidate-info">
+                                            <h6 class="text-white">Email:</h6>
+                                            <p class="text-white">{{login}}</p>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="about-candidate border-top">
-                                    <div class="candidate-info">
-                                        <h6 class="text-white">Email:</h6>
-                                        <p class="text-white">{{login}}</p>
-                                    </div>
-                                    <div class="candidate-info">
-                                        <h6 class="text-white">Телефон:</h6>
-                                        <p class="text-white">{{phone}}</p>
-                                    </div>
-                                    <div class="candidate-info">
-                                        <h6 class="text-white">Возраст:</h6>
-                                        <p class="text-white">{{age}}{{declensionAge(age)}}</p>
-                                    </div>
-                                    <div class="candidate-info">
-                                        <h6 class="text-white">Школа:</h6>
-                                        <p class="text-white">{{school}}</p>
-                                    </div>
-                                    <div class="candidate-info">
-                                        <h6 class="text-white">Район:</h6>
-                                        <p class="text-white">{{area}}</p>
-                                    </div>
-                                    <hr>
-                                    <div class="candidate-info">
-                                        <h6 class="text-white">ФИО тьютора:</h6>
-                                        <p class="text-white">{{tutorFio}}</p>
-                                    </div>
+                                        <div class="candidate-info">
+                                            <h6 class="text-white">Телефон:</h6>
+                                            <p class="text-white">{{phone}}</p>
+                                        </div>
+                                        <div class="candidate-info">
+                                            <h6 class="text-white">Возраст:</h6>
+                                            <p class="text-white">{{age}}{{declensionAge(age)}}</p>
+                                        </div>
+                                        <div class="candidate-info">
+                                            <h6 class="text-white">Школа:</h6>
+                                            <p class="text-white">{{school}}</p>
+                                        </div>
+                                        <div class="candidate-info">
+                                            <h6 class="text-white">Район:</h6>
+                                            <p class="text-white">{{area}}</p>
+                                        </div>
+                                        <hr>
+                                        <div class="candidate-info">
+                                            <h6 class="text-white">ФИО тьютора:</h6>
+                                            <p class="text-white">{{tutorFio}}</p>
+                                        </div>
 
-                                </div>
-                                <div class="mt-0">
-                                    <h5 class="text-white">Ваш прогресс по прохождению ИОМ</h5>
-                                    <h6 class="text-white">(индивидуальный образовательный маршрут)</h6>
-                                    <br>
-                                    <div class="candidate-info">
-                                        <p class="text-white">Общее количество мероприятий(заданий): {{common_exe}}</p>
                                     </div>
-                                    <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(finished_exe,common_exe)" aria-valuenow="{{finished_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
-                                            <div class="progress-bar-title text-white">Количество выполненных заданий</div>
-                                            <span class="progress-bar-number text-white">{{finished_exe}}</span>
+                                    <div class="mt-0" v-if="!statusInCurrentIomFinished">
+                                        <div v-if="issetIom">
+                                            <h5 class="text-white">Ваш прогресс по прохождению ИОМ</h5>
+                                            <h6 class="text-white">(индивидуальный образовательный маршрут)</h6>
+                                            <br>
+                                            <div class="candidate-info">
+                                                <p class="text-white">Общее количество мероприятий(заданий): {{common_exe}}</p>
+                                            </div>
+                                            <div class="progress bg-dark">
+                                                <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(finished_exe,common_exe)" aria-valuenow="{{finished_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
+                                                    <div class="progress-bar-title text-white">Количество выполненных заданий</div>
+                                                    <span class="progress-bar-number text-white">{{finished_exe}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="progress bg-dark">
+                                                <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(edit_exe,common_exe)" aria-valuenow="{{edit_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
+                                                    <div class="progress-bar-title text-white">Количество заданий требующих доработку</div>
+                                                    <span class="progress-bar-number text-white">{{edit_exe}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="progress bg-dark">
+                                                <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(check_exe,common_exe)" aria-valuenow="{{check_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
+                                                    <div class="progress-bar-title text-white">Количество заданий на проверке</div>
+                                                    <span class="progress-bar-number text-white">{{check_exe}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="progress bg-dark">
+                                                <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(active_exe,common_exe)" aria-valuenow="{{active_exe}}" aria-valuemin="0" aria-valuemax="{{check_exe}}">
+                                                    <div class="progress-bar-title text-white">Количество незавершенных заданий</div>
+                                                    <span class="progress-bar-number text-white">{{active_exe}}</span>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        <div v-else>
+                                            <h5 class="text-white">Ваш прогресс будет доступен после назначения ИОМ</h5>
+                                        </div>
+
                                     </div>
-                                    <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(edit_exe,common_exe)" aria-valuenow="{{edit_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
-                                            <div class="progress-bar-title text-white">Количество заданий требующих доработку</div>
-                                            <span class="progress-bar-number text-white">{{edit_exe}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(check_exe,common_exe)" aria-valuenow="{{check_exe}}" aria-valuemin="0" aria-valuemax="{{common_exe}}">
-                                            <div class="progress-bar-title text-white">Количество заданий на проверке</div>
-                                            <span class="progress-bar-number text-white">{{check_exe}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="progress bg-dark">
-                                        <div class="progress-bar bg-white" role="progressbar" :style="createGraphics(active_exe,common_exe)" aria-valuenow="{{active_exe}}" aria-valuemin="0" aria-valuemax="{{check_exe}}">
-                                            <div class="progress-bar-title text-white">Количество незавершенных заданий</div>
-                                            <span class="progress-bar-number text-white">{{active_exe}}</span>
-                                        </div>
+                                    <div class="mt-0" v-if="statusInCurrentIomFinished">
+                                        <h5 class="text-white">Текущий индивидуальный маршрут успешно пройден!</h5>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-7" >
-                            <button type="button" v-if="readyFinishedStatus" @click="showModalSuccess = true" class="btn btn-block btn-outline-primary">Завершить обучение</button>
-                            <button type="button" v-else class="btn btn-block btn-outline-primary" @click="showModalNotice = true" >Завершить обучение</button>
-                            <div class="resume-experience">
-                                <div v-if="readyFinishedStatus"> Вы выполнили все задания в своем индивидуальном образовательном маршруте и теперь можеть завершить обучение.</div>
-                                <hr>
-                                <h5 class="title-page">Мой индивидуальный образовательный маршрут</h5>
-                                <div class="timeline-box" v-if="tagsData" v-for="tag in tagsData" >
-                                    <h5 class="resume-experience-title">
-                                        {{tag.title_tag}}</h5>
-                                    <div v-if="exerciseData" v-for="item in exerciseData">
-                                        <div class="jobster-candidate-timeline active_block"   v-if="item.accepted === null && (item['on_check'] === 0 || item['on_check'] === null)"  @click="openTask(item.id_exercises,item.iom_id)">
-                                            <div class="jobster-timeline-item " v-if="filterData(tag.tag_id,item.tag_id)">
-                                                <div class="jobster-timeline-cricle">
-                                                    <i class="active far fa-circle"></i>
-                                                </div>
-                                                <div class="jobster-timeline-info" >
-                                                    <div class="dashboard-timeline-info">
-                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                        <h6 class="mb-2"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                        <span style="font-style: italic"> Автор: {{setAuthor(item.mentor )}}</span>
-                                                        <p class="mt-2">Содержание: {{shortContent(clearHTML(item.description))}}</p>
+                            <div class="col-lg-7" v-if="!statusInCurrentIomFinished">
+                                <div v-if="issetIom">
+                                    <button type="button" v-if="readyFinishedStatus" @click="showModalSuccess = true" class="btn btn-block btn-outline-primary">Завершить обучение</button>
+                                    <button type="button" v-else class="btn btn-block btn-outline-primary" @click="showModalNotice = true" >Завершить обучение</button>
+                                    <div class="resume-experience">
+                                        <div v-if="readyFinishedStatus"> Вы выполнили все задания в своем индивидуальном образовательном маршруте и теперь можеть завершить обучение.</div>
+                                        <hr>
+                                        <h5 class="title-page">Мой индивидуальный образовательный маршрут</h5>
+                                        <div class="timeline-box" v-if="tagsData" v-for="tag in tagsData" >
+                                            <h5 class="resume-experience-title">
+                                                {{tag.title_tag}}</h5>
+                                            <div v-if="exerciseData" v-for="item in exerciseData">
+                                                <div class="jobster-candidate-timeline active_block"   v-if="item.accepted === null && (item['on_check'] === 0 || item['on_check'] === null)"  @click="openTask(item.id_exercises,item.iom_id)">
+                                                    <div class="jobster-timeline-item " v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-timeline-cricle">
+                                                            <i class="active far fa-circle"></i>
+                                                        </div>
+                                                        <div class="jobster-timeline-info" >
+                                                            <div class="dashboard-timeline-info">
+                                                                <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                <h6 class="mb-2"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                <span style="font-style: italic"> Автор: {{setAuthor(item.mentor )}}</span>
+                                                                <p class="mt-2">Содержание: {{shortContent(clearHTML(item.description))}}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="jobster-candidate-timeline done"   v-if="item.accepted === 1 && item['on_check'] === 0 " @click="openTask(item.id_exercises,item.iom_id)" >
-                                            <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
-                                                <div class="jobster-timeline-info" >
-                                                    <div class="dashboard-timeline-info ">
-                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                        <h6 class="mb-2" style="color: green"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                        <span style="font-style: italic; background-color: green; color:white;padding: 4px"> Статус: Ответ принят</span>
+                                                <div class="jobster-candidate-timeline done"   v-if="item.accepted === 1 && item['on_check'] === 0 " @click="openTask(item.id_exercises,item.iom_id)" >
+                                                    <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-timeline-info" >
+                                                            <div class="dashboard-timeline-info ">
+                                                                <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                <h6 class="mb-2" style="color: green"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                <span style="font-style: italic; background-color: green; color:white;padding: 4px"> Статус: Ответ принят</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="jobster-candidate-timeline pendding pendding_block"   v-if="item.accepted === 2 && item['on_check'] === 0"  @click="openTask(item.id_exercises,item.iom_id)">
-                                            <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
-                                                <div class="jobster-timeline-info" >
-                                                    <div class="dashboard-timeline-info">
-                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                        <h6 class="mb-2" style="color: orange"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                        <span style="font-style: italic; background-color: orange; color:white;padding: 4px"> Статус: Необходимо внести корректировки в ответ</span>
+                                                <div class="jobster-candidate-timeline pendding pendding_block"   v-if="item.accepted === 2 && item['on_check'] === 0"  @click="openTask(item.id_exercises,item.iom_id)">
+                                                    <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-timeline-info" >
+                                                            <div class="dashboard-timeline-info">
+                                                                <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                <h6 class="mb-2" style="color: orange"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                <span style="font-style: italic; background-color: orange; color:white;padding: 4px"> Статус: Необходимо внести корректировки в ответ</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="jobster-candidate-timeline on_check_block"   v-if="item['on_check'] === 1" >
-                                            <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
-                                                <div class="jobster-timeline-info" >
-                                                    <div class="dashboard-timeline-info">
-                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                        <h6 class="mb-2" style="color: blueviolet"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                        <span style="font-style: italic; background-color: blueviolet; color:white;padding: 4px"> Статус: На проверке</span>
+                                                <div class="jobster-candidate-timeline on_check_block"   v-if="item['on_check'] === 1" >
+                                                    <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-timeline-info" >
+                                                            <div class="dashboard-timeline-info">
+                                                                <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                <h6 class="mb-2" style="color: blueviolet"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                <span style="font-style: italic; background-color: blueviolet; color:white;padding: 4px"> Статус: На проверке</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div v-else>
+                                    <h5 class="title-page">Вам еще не назначен индивидуальный образовательный маршрут</h5>
+                                </div>
+                            </div>
+                            <div class="col-lg-7" v-if="statusInCurrentIomFinished">
+                                <h5 class="title-page">Текущий индивидуальный маршрут успешно пройден!</h5>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <transition  name="fade" appear>
             <div class="modal-overlay" v-if="showModalNotice || showModalSuccess" @click="clearOverlay">
@@ -220,6 +243,7 @@
     import StudentMainMenu from "../../../components/studentMenu/StudentMainMenu";
     import {onMounted, ref} from "vue";
     import {useStore} from "vuex";
+    import AppLoader from "../../../components/ui/AppLoader";
     import {useRoute, useRouter} from "vue-router";
     import {declensionAge} from "../../../utils/declensionAge";
     import {checkTerm} from '../../../utils/checkTerm'
@@ -257,12 +281,14 @@
             const area = ref();
             const school = ref();
             const discipline = ref();
+            const statusInCurrentIomFinished = ref(false)
             let tutorId = ref()
             let tutorFio = ref()
             let dependencies = ref()
             let exerciseData = ref()
             let tagsData = ref()
             const loading = ref(true)
+
 
             const setAuthor = (mentor) => {
                 if(mentor === 0) {
@@ -307,7 +333,9 @@
                         recall: messageBody.value || 'Отсутствует',
                         mark: mark.value
                     })
+                    await checkStatusCurrentIom()
                     showModalSuccess.value = false
+
                 }else {
                     markError.value = true
                 }
@@ -326,14 +354,22 @@
                 }
             }
 
+            const checkStatusCurrentIom = async() => {
+                await store.dispatch('finished/checkStudentIOM',{
+                    iomId: issetIom.value[0]['iom_id'],
+                    tutorId:tutorId.value,
+                    token: localStorage.getItem('jwt-token')
+                })
+                statusInCurrentIomFinished.value = store.getters['finished/getStatusByIOM'].length
+            }
+
 
             onMounted(async()=>{
                 loading.value = true
+
                 await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
                 await load()
-
                 dependencies.value = store.getters['user/getUserLinks']
-
                 if(dependencies.value) {
                     tutorId.value = dependencies.value.user_id
                     tutorFio.value = dependencies.value.surname + ' '+dependencies.value.name+' '+dependencies.value.patronymic
@@ -344,7 +380,11 @@
                         tutorId:tutorId.value,
                         studentId: id.value
                     })
+
                     if(issetIom.value) {
+
+                        await checkStatusCurrentIom()
+
                         await store.dispatch('student/getExercisesFromMyIom',{
                             iomId: issetIom.value[0]['iom_id'],
                             tutorId:tutorId.value,
@@ -390,8 +430,10 @@
                 patronymic,
                 readyFinishedStatus,
                 school,
+                statusInCurrentIomFinished,
                 clearOverlay,
                 area,
+                loading,
                 phone,
                 discipline,
                 createGraphics,
@@ -424,7 +466,7 @@
 
             }
         },
-        components:{StudentMainMenu}
+        components:{StudentMainMenu,AppLoader}
 
     }
 </script>

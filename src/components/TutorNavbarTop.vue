@@ -20,8 +20,8 @@
                         </li>
                     </ul>
                 </li>
-                <li class="list-group-item list-group-item-action list-top-menu-li">
-                    <div style="display: flex; align-items: center; " class="acc" data-toggle="dropdown">
+                <li class="list-group-item list-group-item-action list-top-menu-li last-element">
+                    <div style="display: flex; align-items: center; " class="acc justify-content-end" data-toggle="dropdown">
                         <span style="margin-right: .5em"><strong>{{name}}</strong></span>
                         <div><img :src="avatar" alt="Админ" class="rounded-circle" width="36" height="36"  ></div>
                         <span style="display:inline-block; margin-left: .5em">
@@ -114,6 +114,7 @@
         display: flex;
         color: #5d5d5d;
         padding: 10px 25px;
+        min-width:230px
     }
 
     .acc:hover {
@@ -146,6 +147,7 @@
         background-color: transparent;
         font-size: .9em;
     }
+
 
 
     .list-top-menu-li{

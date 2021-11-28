@@ -23,12 +23,14 @@ import AdminProfileEdit from '../views/admin/editProfile'
 import StudentProfileEdit from '../views/student/editProfile'
 import myCourse from '../views/student/course/index'
 import myTask from '../views/student/course/task'
+import myBox from '../views/student/box'
 
 import Tag from '../views/admin/tag'
 import GlobalLibrary from '../views/admin/library'
 import GlobalLibraryShow from '../views/admin/library/show'
 import GlobalLibraryCreate from '../views/admin/library/create'
 import GlobalLibraryEdit from '../views/admin/library/edit'
+import showFinished from '../views/tutor/finished'
 
 import StudentProfileAdmin from '../views/admin/student/profile'
 import TutorProfile from '../views/admin/tutor/profile'
@@ -510,6 +512,15 @@ const routes = [
       auth: true,
     }
   },
+  {
+    path: '/show_finished',
+    name: 'show_finished',
+    component: showFinished,
+    beforeEnter: beforeTutor(),
+    meta: {
+      auth: true,
+    }
+  },
 
   /**
    * //////////////////////////////////////////////////////////
@@ -552,6 +563,16 @@ const routes = [
     path: '/my_course/:iomId/:taskId/:tutorId',
     name: 'myTask',
     component: myTask,
+    beforeEnter: beforeStudent(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/my_box',
+    name: 'my_box',
+    component: myBox,
     beforeEnter: beforeStudent(),
     meta:{
       auth: true,

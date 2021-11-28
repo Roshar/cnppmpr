@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="content-wallpaper">
-                        <h5 >Ваш профиль </h5>
+                        <h5 >Мой профиль </h5>
                         <div class="main-body">
                             <div class="row gutters-sm">
                                 <div class="col-md-4 mb-3">

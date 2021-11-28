@@ -361,7 +361,8 @@
                 disciplineCountGeoI.value = await countItem('dis_id','count_iom',{parameter:'number',val:9})
 
                 //REPORT INFO
-                countReport.value = await countItem('id', 'report', {parameter: 'none'})
+                // countReport.value = await countItem('id', 'report', {parameter: 'none'})
+                countReport.value = 0
                 loading.value = false
             })
 

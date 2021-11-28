@@ -1,4 +1,5 @@
 <template>
+
     <div class="col-3">
         <TutorMainMenu></TutorMainMenu>
     </div>
@@ -224,6 +225,7 @@
 </template>
 <script>
     import {useStore} from "vuex";
+
     import {useRouter, useRoute} from 'vue-router'
     import {declensionAge} from "../../utils/declensionAge"
     import {ref,onMounted} from 'vue'
@@ -256,6 +258,7 @@
             const withoutIom = (countStudent, countStudentIom) => {
                 return parseInt(countStudent) - parseInt(countStudentIom)
             }
+
 
             const genderVal = (val) => {
                 return (val == 'man') ? 'муж': 'жен'

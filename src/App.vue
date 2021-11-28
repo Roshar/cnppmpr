@@ -18,11 +18,11 @@
             const route = useRoute()
             const {state} = useStore()
             const layout = computed(()=> {
-                console.log(state.layout)
                 return state.layout
             })
+
             return {
-                layout
+                layout,
             }
         },
         components: {Main,Auth,Student,Tutor,NotFound,TutorContext,AdminContext,Admin}

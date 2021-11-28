@@ -195,6 +195,10 @@ export default {
         status(state) {
             return state.status
         },
+
+        userData(state) {
+            return state.userData
+        },
         getUserLinks(state) {
             return state.userLink
         },
