@@ -173,7 +173,7 @@
     import {useStore} from 'vuex'
     import {useRouter} from "vue-router";
     import {useRoute} from 'vue-router'
-    import {checkPossibilityDeleteIom} from "../../../api/checkPossibilityDeleteData";
+    import {checkPossibilityDeleteIom} from "../../../accessRouteAndAction/checkPossibilityDeleteData";
     import {mysqlEscape} from '../../../utils/mysqlEscape'
     export default {
         setup() {
@@ -399,7 +399,6 @@
         color: #5d5d5d;
     }
     .content-wallpaper-margin {
-        background-color: white;
         color: #5d5d5d;
         padding: 25px;
     }
@@ -419,6 +418,7 @@
     }
 
     .modal-form2{
+        overflow: scroll;
         position: fixed;
         top: 27%;
         left: 50%;
@@ -454,14 +454,15 @@
     }
 
     .modal-form{
+        overflow: scroll;
+        height: 100%;
         position: fixed;
         top: 27%;
         left: 50%;
         transform: translate(-50%,-27%);
         z-index: 99;
         width: 60%;
-        /*max-width:400px;*/
-        background-color: #edeef0;
+        background-color: #fff;
     }
 
     ul.iom-add {

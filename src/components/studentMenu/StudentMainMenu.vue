@@ -5,7 +5,6 @@
                 <li><router-link to="/"  class="router-link" >Личный профиль</router-link></li>
                 <li><router-link to="/my_course"  class="router-link" >Мой индивидуальный образовательный маршрут</router-link></li>
                 <li><router-link to="/my_box"  class="router-link" >Моя копилка</router-link></li>
-                <li><router-link to="/my_marks"  class="router-link" > Мои оценки  </router-link></li>
             </ul>
         </nav>
     </div>

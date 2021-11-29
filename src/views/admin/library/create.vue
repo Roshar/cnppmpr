@@ -62,7 +62,6 @@
     import {useRouter} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import AdminLibraryMenu from "../../../components/adminMenu/AdminLibraryMenu";
-    import EditorMain from "../../../components/editor/EditorMain";
     import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
     import {mysqlEscape} from '../../../utils/mysqlEscape'
     export default {
@@ -142,7 +141,7 @@
                 editor
             }
         },
-        components: {AppLoader,AdminLibraryMenu, EditorMain}
+        components: {AppLoader,AdminLibraryMenu}
     }
 </script>
 

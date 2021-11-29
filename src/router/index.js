@@ -54,19 +54,17 @@ import SingleGroup from '../views/admin/group/single'
 import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
+import Develops from '../views/Develops'
 import Test from '../views/test'
-import {beforeTutor} from '../api/checkroleIom'
-import {beforeStudent} from '../api/checkRoleStudent'
-import {withoutIsAuth} from '../api/withoutIsAuth'
-import {checkAccess} from '../api/checkActivePage'
-import {beforeAdmin} from '../api/checkRoleAdmin'
-
+import {beforeTutor} from '../accessRouteAndAction/checkroleIom'
+import {beforeStudent} from '../accessRouteAndAction/checkRoleStudent'
+import {withoutIsAuth} from '../accessRouteAndAction/withoutIsAuth'
+import {checkAccess} from '../accessRouteAndAction/checkActivePage'
+import {beforeAdmin} from '../accessRouteAndAction/checkRoleAdmin'
 
 import EduMembers from '../views/tutor/edumembers'
 
-
 const routes = [
-
 
   {
     path: '/test',
@@ -218,8 +216,10 @@ const routes = [
   {
     path: '/admin_conversations',
     name: 'admin_conversations',
-    component: conAdmin,
-    beforeEnter: beforeAdmin(),
+    // component: conAdmin,
+    component: Develops,
+    // beforeEnter: beforeAdmin(),
+    beforeEnter: withoutIsAuth('auth'),
     meta:{
       auth: true,
     },
@@ -228,8 +228,10 @@ const routes = [
   {
     path: '/admin_conversations/:chat/:user',
     name: 'admin_conv',
-    component: chatAdmin,
-    beforeEnter: beforeAdmin(),
+    // component: chatAdmin,
+    component: Develops,
+    // beforeEnter: beforeAdmin(),
+    beforeEnter: withoutIsAuth('auth'),
     meta: {
       auth: true,
     }
@@ -497,8 +499,10 @@ const routes = [
   {
     path: '/tutor_conversations',
     name: 'tutor_conversations',
-    component: conTutor,
-    beforeEnter: beforeTutor(),
+    component: Develops,
+    // component: conTutor,
+    beforeEnter: withoutIsAuth('auth'),
+    // beforeEnter: beforeTutor(),
     meta:{
       auth: true,
     },
@@ -507,8 +511,10 @@ const routes = [
   {
     path: '/tutor_conversations/:chat/:user',
     name: 'tutor_conv',
-    component: chatTutor,
-    beforeEnter: beforeTutor(),
+    // component: chatTutor,
+    component: Develops,
+    // beforeEnter: beforeTutor(),
+    beforeEnter: withoutIsAuth('auth'),
     meta: {
       auth: true,
     }
@@ -698,6 +704,17 @@ const routes = [
       auth:false
     }
   },
+
+  {
+    path: '/develops',
+    name: 'Develops',
+    component: Develops,
+    beforeEnter:withoutIsAuth('auth'),
+    meta:{
+      auth:false
+    }
+  },
+
 
   {
     path: '/recovery',

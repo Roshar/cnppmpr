@@ -108,7 +108,7 @@
     import {useRoute} from 'vue-router'
     import {useRouter} from 'vue-router'
     import {requiredForm} from '../../../utils/requiredForm'
-    import {checkPossibilityDeleteData} from '../../../api/checkPossibilityDeleteData'
+    import {checkPossibilityDeleteData} from '../../../accessRouteAndAction/checkPossibilityDeleteData'
     import {mysqlEscape} from '../../../utils/mysqlEscape'
 
 
@@ -277,6 +277,8 @@
 
 <style scoped>
 
+
+
     .btn-outline-iom{
         color: #4571a3;
         border-color: #4571a3;
@@ -332,6 +334,8 @@
     }
     .modal-form{
         position: fixed;
+        overflow: scroll;
+        height: 100%;
         top: 27%;
         left: 50%;
         transform: translate(-50%,-27%);

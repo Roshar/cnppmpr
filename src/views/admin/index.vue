@@ -252,15 +252,6 @@
             // REPORT INFO
             const countReport = ref(0)
 
-            // const countItem = async(obj,item,val) => {
-            //     let result = 0
-            //     await obj.forEach((property) =>{
-            //         if(property[item] === val){
-            //             result++
-            //         }
-            //     })
-            //     return result
-            // }
             const countItem = async(column,table,option) => {
                 return  await store.dispatch('admin/getOptionFromStudents',{column:column, table:table, value:option})
             }

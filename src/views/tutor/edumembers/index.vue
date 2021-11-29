@@ -255,7 +255,6 @@
 
 <style scoped>
 
-
     .text-example {
         display: flex;
         align-items: center;
@@ -298,13 +297,15 @@
 
     .modal-form{
         position: fixed;
+        overflow: scroll;
+        height: 100%;
         top: 4%;
         left: 50%;
         transform: translate(-50%,-4%);
         z-index: 99;
         width: 90%;
         /*max-width:400px;*/
-        background-color: #edeef0;
+        background-color: #fff;
         padding: 60px 60px;
     }
     .title-page {

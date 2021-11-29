@@ -9,7 +9,8 @@
             <ul class="list-group list-group-horizontal list-top-menu-ul">
                 <li class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationMessage" class="badge badge-pill badge-danger" style="float:right;margin-bottom:-4px;">{{notificationMessage.length}}</span>
-                    <router-link to="/conversations">Сообщения </router-link>
+                    <router-link to="/develops">Сообщения </router-link>
+
                 </li>
                 <li  class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationAction.length" class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction.length}}</span>
@@ -24,7 +25,6 @@
                     <form @submit.prevent="onSubmit">
                         <button type="submit" class="btn auth-btn" > Выход </button>
                     </form>
-
                 </li>
             </ul>
         </nav>

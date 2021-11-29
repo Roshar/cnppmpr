@@ -16,13 +16,6 @@
     </div>
 </template>
 
-<script>
-    import StudentNavbarLeft from '../components/StudentNavbarLeft.vue'
-    import StudentNavbarTop from '../components/StudentNavbarTop.vue'
-    export default {
-        components: {StudentNavbarLeft, StudentNavbarTop}
-    }
-</script>
 
 <style>
 

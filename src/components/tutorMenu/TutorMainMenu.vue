@@ -8,7 +8,7 @@
                 <li><router-link to="/show_exercises_accepted"  class="router-link" >Ответы слушателей</router-link></li>
                 <li><router-link to="/show_finished"  class="router-link" >Завершившие обучение</router-link></li>
                 <li><router-link to="/library"  class="router-link" > Библиотека заданий </router-link></li>
-                <li><router-link to="/report"  class="router-link" > Отчетность  </router-link></li>
+                <li><router-link to="/develops"  class="router-link" > Отчетность  </router-link></li>
             </ul>
         </nav>
     </div>

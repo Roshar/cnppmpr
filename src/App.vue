@@ -12,8 +12,7 @@
     import Admin from "./layout/Admin";
     import Tutor from "./layout/Tutor";
     import NotFound from "./layout/NotFound";
-    import TutorContext from "./layout/TutorContext";
-    import AdminContext from "./layout/AdminContext";
+
 
     export default {
         setup(){
@@ -28,7 +27,7 @@
                 layout,
             }
         },
-        components: {Main,Auth,Student,Tutor,NotFound,TutorContext,AdminContext,Admin}
+        components: {Main,Auth,Student,Tutor,NotFound,Admin}
     }
 </script>
 <style>
