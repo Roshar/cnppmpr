@@ -4,7 +4,6 @@
         <div class="outer">
             <div class="middle">
                 <div class="inner">
-
                     <div class="inner-circle"><i class="fa fa-home"></i><span>404</span></div>
                     <span class="inner-status">Вы потерялись</span>
                     <span class="inner-detail">

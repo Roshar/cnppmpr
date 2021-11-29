@@ -49,7 +49,7 @@
             const onSubmit = handleSubmit(async values => {
                 try{
                     await store.dispatch('auth/logout')
-                    await  router.push('/auth')
+                    window.location.href = `/auth`;
                 }catch (e) {
 
                 }

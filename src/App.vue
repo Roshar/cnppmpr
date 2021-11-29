@@ -2,7 +2,8 @@
     <component v-if="layout" :is="layout" > </component>
 </template>
 <script>
-    import {computed, ref} from 'vue'
+
+    import {computed, ref, onMounted} from 'vue'
     import {useStore} from 'vuex'
     import {useRoute} from 'vue-router'
     import Main from './layout/Main.vue'
@@ -13,6 +14,7 @@
     import NotFound from "./layout/NotFound";
     import TutorContext from "./layout/TutorContext";
     import AdminContext from "./layout/AdminContext";
+
     export default {
         setup(){
             const route = useRoute()
@@ -20,6 +22,7 @@
             const layout = computed(()=> {
                 return state.layout
             })
+
 
             return {
                 layout,

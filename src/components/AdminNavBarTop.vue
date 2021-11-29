@@ -112,7 +112,7 @@
                 try{
                     await store.dispatch('auth/logout')
                     store.commit('clearLayout')
-                    await  router.push('/auth')
+                    window.location.href = `/auth`;
                 }catch (e) {
 
                 }
