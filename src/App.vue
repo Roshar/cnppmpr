@@ -13,7 +13,6 @@
     import Tutor from "./layout/Tutor";
     import NotFound from "./layout/NotFound";
 
-
     export default {
         setup(){
             const route = useRoute()
@@ -21,8 +20,7 @@
             const layout = computed(()=> {
                 return state.layout
             })
-
-
+            document.title = "IT-Говзалла"
             return {
                 layout,
             }

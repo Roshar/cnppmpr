@@ -4,7 +4,7 @@
     </div>
     <div class="col-9">
         <app-loader v-if="loading"></app-loader>
-        <div class="content-loader" >
+        <div class="content-loader" v-else >
             <div class="row">
                 <div class="col-12">
                     <div class="modal-form" v-if="showModal">
@@ -343,6 +343,7 @@
                 loading.value = true
                 await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
                 await load()
+                loading.value = false
             })
 
             watchEffect(() => {
@@ -411,7 +412,6 @@
                     alert(e.message)
                     imgSrc.value = null
                     cropper.destroy
-                    console.log(e.message)
                 }
                 showModal.value = false
             }

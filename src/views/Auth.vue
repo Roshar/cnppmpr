@@ -107,6 +107,7 @@
                     type: 'warning'
                 })
             }
+
             return {...useLoginForm(),authenticated,doConfirm,cancelLogout,loading}
 
         },
