@@ -59,7 +59,7 @@
 
                     </div>
                     <ul class="dropdown-menu my_account">
-                        <router-link to="/my_account" style="font-size: .9em">Мой профиль</router-link>
+                        <router-link to="/" style="font-size: .9em">Мой профиль</router-link>
                         <li>
                             <form @submit.prevent="onSubmit">
                                 <button type="submit" class=" btn-block my_account_btn"> Выход </button>

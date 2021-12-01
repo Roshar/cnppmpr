@@ -1,737 +1,321 @@
 <template>
+    <div class="col-3">
+        <admin-profile-menu></admin-profile-menu>
+    </div>
+    <div class="col-9">
         <app-loader v-if="loading"></app-loader>
         <div class="content-loader" v-else>
-            <div class="col-lg-3">
-                <div class="card card-margin">
-                    <div class="card-header no-border">
-                        <h5 class="card-title">Слушатели</h5>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="widget-49">
-                            <div class="widget-49-title-wrapper">
-                                <div class="widget-49-meeting-info">
-                                    <span class="widget-49-pro-title">Общая статистика на  </span>
-                                    <span class="widget-49-meeting-time">{{currentTime}}</span>
+            <div class="row">
+                <div class="col-12">
+                    <div class="content-wallpaper">
+                        <h5 >Ваш профиль </h5>
+                        <div class="main-body">
+                            <div class="row gutters-sm">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex flex-column align-items-center text-center">
+                                                <img :src="avatar" alt="Слушатель" style="border-radius: .4rem" width="250">
+                                                <div class="mt-3">
+                                                    <h4>{{name}}</h4>
+                                                    <p class="text-secondary mb-1">Администратор</p>
+                                                    <p class="text-muted font-size-sm">Возраст:  {{age}}{{declensionAge(age)}}</p>
+                                                    <button class="btn btn-outline-primary" @click="goToModule('editProfileAdmin')">Редактировать профиль</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">ФИО</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    <span>{{surname}} {{name}} {{patronymic}}</span>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Дата рождения</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{birthday}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Email-адрес</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{login}}
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Телефон</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{phone}}
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Пол</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{genderVal(gender)}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <ol class="widget-49-meeting-points">
-                                <li class="widget-49-meeting-item"><span>Всего слушателей: {{countStudents}}</span></li>
-                                <li class="widget-49-meeting-item"><span>Всего районов:</span></li>
-                                <li class="widget-49-meeting-item"><span>Статистика по районам:</span>
-                                    <ul class="widget-49-meeting-points">
-                                        <li class="widget-49-meeting-item"><span>Ачхой-Мартановский район - {{achkhoy}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Веденский район - {{vedeno}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Грозненский район - {{grozarea}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Гудермесский район - {{gudarea}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Итум-Калинский район - {{itum}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Курчалоевский район - {{kurchaloy}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Надтеречный район - {{nadterech}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Наурский район - {{naur}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Ножай-Юртовский район - {{nojay}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Серноводский район - {{sun}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Урус-Мартановский район - {{urus}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Шалинский район - {{shali}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Шаройский район - {{sharoy}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Шатойский район - {{shatoy}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Шелковской район -{{shelk}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>город Аргун -{{argun}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>город Грозный -{{grozny}}</span></li>
-                                    </ul>
-                                </li>
-
-                                <li class="widget-49-meeting-item"><span>Гендерная статистика:</span>
-                                    <ul class="widget-49-meeting-points">
-                                        <li class="widget-49-meeting-item"><span>Мужчин - {{man}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Женщин - {{woman}}</span></li>
-                                    </ul>
-                                </li>
-                                <li class="widget-49-meeting-item"><span>Возрастные группы</span>
-                                    <ul class="widget-49-meeting-points">
-                                        <li class="widget-49-meeting-item"><span>до 25 лет - {{ageBefore25}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>от 25 до 35 лет - {{ageInterval25to35}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>от 35 до 45 лет - {{ageInterval35to45}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>от 45 до 55 лет -{{ageInterval45to55}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>от 55 до 65 лет - {{ageInterval55to65}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>старше 65 лет  - {{ageMore65}}</span></li>
-                                    </ul>
-                                </li>
-                                <li class="widget-49-meeting-item"><span>Количество студентов по учебным предметам</span>
-                                    <ul class="widget-49-meeting-points">
-                                        <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYAS}} </span></li>
-                                        <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLitS}} </span></li>
-                                        <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMathS}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHimS}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBioS}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhizS}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHistS}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObzS}}</span></li>
-                                        <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeoS}}</span></li>
-                                    </ul>
-                                </li>
-
-                            </ol>
-                            <div class="widget-49-meeting-action">
-                                <router-link to="/students" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</router-link>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-            <div class="card card-margin">
-                <div class="card-header no-border">
-                    <h5 class="card-title">Тьюторы</h5>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="widget-49">
-                        <div class="widget-49-title-wrapper">
-                            <div class="widget-49-meeting-info">
-                                <span class="widget-49-pro-title">Общая статистика на  </span>
-                                <span class="widget-49-meeting-time">{{currentTime}}</span>
-                            </div>
-                        </div>
-                        <ol class="widget-49-meeting-points">
-                            <li class="widget-49-meeting-item"><span>Всего тьюторов {{tutorCount}}</span></li>
-                            <li class="widget-49-meeting-item"><span>Количество тьюторов по учебным предметам</span>
-                                <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYA}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLit}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMath}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHim}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBio}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhiz}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHist}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObz}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeo}}</span></li>
-                                </ul>
-                            </li>
-                        </ol>
-                        <div class="widget-49-meeting-action">
-                            <router-link to="/tutors" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</router-link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-            <div class="col-lg-3">
-            <div class="card card-margin">
-                <div class="card-header no-border">
-                    <h5 class="card-title">Индивидуальные образовательные маршруты</h5>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="widget-49">
-                        <div class="widget-49-title-wrapper">
-                            <div class="widget-49-meeting-info">
-                                <span class="widget-49-pro-title">Общая статистика на  </span>
-                                <span class="widget-49-meeting-time">{{currentTime}}</span>
-                            </div>
-                        </div>
-                        <ol class="widget-49-meeting-points">
-                            <li class="widget-49-meeting-item"><span>Всего ИОМов {{countIom}}</span></li>
-                            <li class="widget-49-meeting-item"><span>Количество ИОМов по учебным предметам</span>
-                                <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYAI}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLitI}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMathI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHimI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBioI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhizI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHistI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObzI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeoI}}</span></li>
-                                </ul>
-                            </li>
-                        </ol>
-                        <div class="widget-49-meeting-action">
-                            <router-link to="/iom" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</router-link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="col-lg-3">
-        <div class="card card-margin">
-            <div class="card-header no-border">
-                <h5 class="card-title">Отчеты</h5>
-            </div>
-            <div class="card-body pt-0">
-                <div class="widget-49">
-                    <div class="widget-49-title-wrapper">
-                        <div class="widget-49-meeting-info">
-                            <span class="widget-49-pro-title">Общая статистика на </span>
-                            <span class="widget-49-meeting-time">{{currentTime}}</span>
-                        </div>
-                    </div>
-                    <ol class="widget-49-meeting-points">
-                        <li class="widget-49-meeting-item"><span>Всего слушателей, завершившие обучение - {{countReport}}</span></li>
-
-                    </ol>
-                    <div class="widget-49-meeting-action">
-                        <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        </div>
 </template>
 
 <script>
-    import {getDateCurrent} from '../../utils/getDateCurrent'
-    import {ref, onMounted, computed} from 'vue'
-    import {useStore} from 'vuex'
+    import AdminProfileMenu from '../../components/adminMenu/AdminProfileMenu'
+    import {useStore} from "vuex";
+    import {useRouter, useRoute} from 'vue-router'
+    import {declensionAge} from "../../utils/declensionAge"
+    import {ref,onMounted} from 'vue'
     import AppLoader from "../../components/ui/AppLoader";
     export default {
-        setup() {
+        setup(){
+
             const store = useStore()
+            const router = useRouter()
+            const route = useRoute()
+            const id = ref()
+            const name = ref();
+            const surname = ref();
+            const patronymic = ref();
+            const phone = ref();
+            const age = ref();
+            const birthday = ref();
+            const baseUrl = ref(process.env.VUE_APP_URL)
+            const avatar = ref();
+            const gender = ref();
+            const login = ref();
+            let statData = ref();
             const loading = ref(true)
-            // STUDENTS DATA
-            const currentTime = ref()
-            const countStudents = ref()
-            const optionStudents = ref()
-            const achkhoy = ref()
-            const vedeno = ref()
-            const grozarea = ref()
-            const gudarea = ref()
-            const itum = ref()
-            const kurchaloy = ref()
-            const nadterech = ref()
-            const naur = ref()
-            const nojay = ref()
-            const sun = ref()
-            const urus = ref()
-            const shali = ref()
-            const sharoy = ref()
-            const shatoy = ref()
-            const shelk = ref()
-            const argun = ref()
-            const grozny = ref()
-            const man = ref()
-            const woman = ref()
-            const ageBefore25 = ref(0)
-            const ageInterval25to35 = ref(0)
-            const ageInterval35to45 = ref(0)
-            const ageInterval45to55 = ref(0)
-            const ageInterval55to65 = ref(0)
-            const ageMore65 = ref(0)
-            const tutorCountS = ref(0)
-            const disciplineCountRYAS = ref(0)
-            const disciplineCountLitS = ref(0)
-            const disciplineCountMathS = ref(0)
-            const disciplineCountHimS = ref(0)
-            const disciplineCountBioS = ref(0)
-            const disciplineCountPhizS = ref(0)
-            const disciplineCountHistS = ref(0)
-            const disciplineCountObzS = ref(0)
-            const disciplineCountGeoS = ref(0)
 
-            // TUTOR DATA
-            const tutorCount = ref(0)
-            const disciplineCountRYA = ref(0)
-            const disciplineCountLit = ref(0)
-            const disciplineCountMath = ref(0)
-            const disciplineCountHim = ref(0)
-            const disciplineCountBio = ref(0)
-            const disciplineCountPhiz = ref(0)
-            const disciplineCountHist = ref(0)
-            const disciplineCountObz = ref(0)
-            const disciplineCountGeo = ref(0)
+            const goToModule = async(r) => {
+                await router.push(`/${r}`)
+            }
 
-            // IOM INFO
-            const countIom = ref(0)
-            const disciplineCountRYAI = ref(0)
-            const disciplineCountLitI = ref(0)
-            const disciplineCountMathI = ref(0)
-            const disciplineCountHimI = ref(0)
-            const disciplineCountBioI = ref(0)
-            const disciplineCountPhizI = ref(0)
-            const disciplineCountHistI = ref(0)
-            const disciplineCountObzI = ref(0)
-            const disciplineCountGeoI = ref(0)
-
-            // REPORT INFO
-            const countReport = ref(0)
-
-            const countItem = async(column,table,option) => {
-                return  await store.dispatch('admin/getOptionFromStudents',{column:column, table:table, value:option})
+            const genderVal = (val) => {
+                return (val == 'man') ? 'муж': 'жен'
             }
 
             onMounted(async()=>{
                 loading.value = true
-
-                // STUDENT INFO
-                countStudents.value = await store.dispatch('admin/getUserCount',{tbl:'students'})
-
-                // TUTOR INFO
-                tutorCount.value = await store.dispatch('admin/getUserCount', {tbl: 'tutors'})
-
-                //AREA INFO
-                achkhoy.value = await countItem('area_id','students', {parameter:'number',val:1})
-                vedeno.value = await countItem('area_id','students',{parameter:'number',val:2})
-                grozarea.value = await countItem('area_id','students',{parameter:'number',val:3})
-                gudarea.value = await countItem('area_id','students',{parameter:'number',val:4})
-                itum.value = await countItem('area_id','students',{parameter:'number',val:5})
-                kurchaloy.value = await countItem('area_id','students',{parameter:'number',val:6})
-                nadterech.value = await countItem('area_id','students',{parameter:'number',val:7})
-                naur.value = await countItem('area_id','students',{parameter:'number',val:8})
-                nojay.value = await countItem('area_id','students',{parameter:'number',val:9})
-                sun.value = await countItem('area_id','students',{parameter:'number',val:10})
-                urus.value = await countItem('area_id','students',{parameter:'number',val:11})
-                shali.value = await countItem('area_id','students',{parameter:'number',val:13})
-                sharoy.value = await countItem('area_id','students',{parameter:'number',val:14})
-                shatoy.value = await countItem('area_id','students',{parameter:'number',val:15})
-                shelk.value = await countItem('area_id','students',{parameter:'number',val:16})
-                argun.value = await countItem('area_id','students',{parameter:'number',val:17})
-                grozny.value = await countItem('area_id','students',{parameter:'number',val:18})
-
-                //GANDER INFO
-                man.value = await countItem('gender','students',{parameter:'string',val:'man'})
-                woman.value = await countItem('gender','students',{parameter:'string',val:'woman'})
-
-                //AGE INFO
-                ageBefore25.value = await countItem('birthday','students',
-                    {parameter:'age',val:{
-                            start:1,
-                            end:25
-                            }})
-                ageInterval25to35.value = await countItem('birthday','students',
-                    {parameter:'age',val:{
-                            start:25,
-                            end:35
-                        }})
-                ageInterval35to45.value = await countItem('birthday','students',
-                    {parameter:'age',val:{
-                            start:35,
-                            end:45
-                        }})
-                ageInterval45to55.value = await countItem('birthday','students',
-                    {parameter:'age',val:{
-                            start:45,
-                            end:55
-                        }})
-                ageInterval55to65.value = await countItem('birthday','students',
-                    {parameter:'age',val:{
-                            start:55,
-                            end:55
-                        }})
-                ageMore65.value = await countItem('birthday','students',
-                    {parameter:'age',val:{
-                            start:55,
-                            end:100
-                        }})
-                disciplineCountRYAS.value = await countItem('discipline_id','students',{parameter:'number',val:1})
-                disciplineCountLitS.value = await countItem('discipline_id','students',{parameter:'number',val:2})
-                disciplineCountMathS.value = await countItem('discipline_id','students',{parameter:'number',val:3})
-                disciplineCountHimS.value = await countItem('discipline_id','students',{parameter:'number',val:4})
-                disciplineCountBioS.value = await countItem('discipline_id','students',{parameter:'number',val:5})
-                disciplineCountPhizS.value = await countItem('discipline_id','students',{parameter:'number',val:6})
-                disciplineCountHistS.value = await countItem('discipline_id','students',{parameter:'number',val:7})
-                disciplineCountObzS.value = await countItem('discipline_id','students',{parameter:'number',val:8})
-                disciplineCountGeoS.value = await countItem('discipline_id','students',{parameter:'number',val:9})
-
-                disciplineCountRYA.value = await countItem('discipline_id','tutors',{parameter:'number',val:1})
-                disciplineCountLit.value = await countItem('discipline_id','tutors',{parameter:'number',val:2})
-                disciplineCountMath.value = await countItem('discipline_id','tutors',{parameter:'number',val:3})
-                disciplineCountHim.value = await countItem('discipline_id','tutors',{parameter:'number',val:4})
-                disciplineCountBio.value = await countItem('discipline_id','tutors',{parameter:'number',val:5})
-                disciplineCountPhiz.value = await countItem('discipline_id','tutors',{parameter:'number',val:6})
-                disciplineCountHist.value = await countItem('discipline_id','tutors',{parameter:'number',val:7})
-                disciplineCountObz.value = await countItem('discipline_id','tutors',{parameter:'number',val:8})
-                disciplineCountGeo.value = await countItem('discipline_id','tutors',{parameter:'number',val:9})
-
-                // IOM INFO
-                countIom.value = await countItem('id','count_iom',{parameter:'none'})
-                disciplineCountRYAI.value = await countItem('dis_id','count_iom',{parameter:'number',val:1})
-                disciplineCountLitI.value = await countItem('dis_id','count_iom',{parameter:'number',val:2})
-                disciplineCountMathI.value = await countItem('dis_id','count_iom',{parameter:'number',val:3})
-                disciplineCountHimI.value = await countItem('dis_id','count_iom',{parameter:'number',val:4})
-                disciplineCountBioI.value = await countItem('dis_id','count_iom',{parameter:'number',val:5})
-                disciplineCountPhizI.value = await countItem('dis_id','count_iom',{parameter:'number',val:6})
-                disciplineCountHistI.value = await countItem('dis_id','count_iom',{parameter:'number',val:7})
-                disciplineCountObzI.value = await countItem('dis_id','count_iom',{parameter:'number',val:8})
-                disciplineCountGeoI.value = await countItem('dis_id','count_iom',{parameter:'number',val:9})
-
-                //REPORT INFO
-                // countReport.value = await countItem('id', 'report', {parameter: 'none'})
-                countReport.value = 0
+                await store.dispatch('user/getDataAdminAccount', {token: localStorage.getItem('jwt-token')})
+                statData.value = store.getters['user/getAdminData']
+                name.value = statData.value.name
+                surname.value = statData.value.surname
+                patronymic.value = statData.value.patronymic
+                phone.value = statData.value.phone
+                age.value = statData.value.age
+                birthday.value = statData.value.birthday
+                gender.value = statData.value.gender
+                login.value = statData.value.login
+                avatar.value = baseUrl.value +'/'+statData.value.avatar
+                id.value = statData.value['user_id']
                 loading.value = false
             })
 
+            return{name,surname,patronymic,phone,avatar,age,birthday,gender,login,id,goToModule,genderVal,declensionAge}
 
-            currentTime.value = getDateCurrent()
-            return {
-                currentTime,
-                loading,
-                countStudents,
-                optionStudents,
-                achkhoy,
-                vedeno,
-                grozarea,
-                gudarea,
-                itum,
-                kurchaloy,
-                nadterech,
-                naur,
-                nojay,
-                sun,
-                urus,
-                shali,
-                sharoy,
-                shatoy,
-                shelk,
-                argun,
-                grozny,
-                man,
-                woman,
-                ageBefore25,
-                ageInterval25to35,
-                ageInterval35to45,
-                ageInterval45to55,
-                ageInterval55to65,
-                ageMore65,
-                tutorCount,
-                disciplineCountRYAS,
-                disciplineCountLitS,
-                disciplineCountMathS,
-                disciplineCountHimS,
-                disciplineCountBioS,
-                disciplineCountPhizS,
-                disciplineCountHistS,
-                disciplineCountObzS,
-                disciplineCountGeoS,
-                // TUTOR
-                tutorCount,
-                disciplineCountRYA,
-                disciplineCountLit,
-                disciplineCountMath,
-                disciplineCountHim,
-                disciplineCountBio,
-                disciplineCountPhiz,
-                disciplineCountHist,
-                disciplineCountObz,
-                disciplineCountGeo,
-                // IOM
-                countIom,
-                disciplineCountRYAI,
-                disciplineCountLitI,
-                disciplineCountMathI,
-                disciplineCountHimI,
-                disciplineCountBioI,
-                disciplineCountPhizI,
-                disciplineCountHistI,
-                disciplineCountObzI,
-                disciplineCountGeoI,
-                // REPORT
-                countReport,
-
-            }
         },
-        components: {AppLoader}
+        components: {AdminProfileMenu}
+
     }
 </script>
 
 <style scoped>
-.content-loader {
-    position: relative;
-    display: flex;
-}
-.card-margin {
-    margin-top: 1.5rem;
-    margin-bottom: 1.875rem;
-}
+    .content-wallpaper, .student-menu {
+        margin-top: 1.5rem;
+        background-color: white;
+        color: #5d5d5d;
+    }
+    .content-wallpaper {
+        padding: 25px;
+    }
 
-.card {
-    border: 0;
-    box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
-    -webkit-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
-    -moz-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
-    -ms-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
-}
-.card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #ffffff;
-    background-clip: border-box;
-    border: 1px solid #e6e4e9;
-    border-radius: 8px;
-}
+    ul.ul-style {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    .container-st {
+        padding: 14px;
+    }
+    .feature-box-1 {
+        padding: 32px;
+        box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
+        margin: 15px 0;
+        position: relative;
+        z-index: 1;
+        border-radius: 10px;
+        overflow: hidden;
+        -moz-transition: ease all 0.35s;
+        -o-transition: ease all 0.35s;
+        -webkit-transition: ease all 0.35s;
+        transition: ease all 0.35s;
+        top: 0;
+        min-height: 300px;
+    }
+    .feature-box-1 * {
+        -moz-transition: ease all 0.35s;
+        -o-transition: ease all 0.35s;
+        -webkit-transition: ease all 0.35s;
+        transition: ease all 0.35s;
+    }
+    .feature-box-1 .icon {
+        width: 70px;
+        height: 70px;
+        line-height: 70px;
+        background: #fc5356;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 50%;
+        margin-bottom: 22px;
+        font-size: 27px;
+    }
+    .feature-box-1 .icon i {
+        line-height: 70px;
+    }
+    .feature-box-1 h5 {
+        color: #20247b;
+        font-weight: 600;
+    }
+    .feature-box-1 p {
+        margin: 0;
+    }
+    .feature-box-1 {
+        background-color: #ffffffdb;
+    }
+    .feature-box-1:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: auto;
+        right: 0;
+        border-radius: 10px;
+        width: 0;
+        background: #4571a3;
+        z-index: -1;
+        -moz-transition: ease all 0.35s;
+        -o-transition: ease all 0.35s;
+        -webkit-transition: ease all 0.35s;
+        transition: ease all 0.35s;
+        cursor: pointer;
+    }
+    .feature-box-1:hover {
+        top: -5px;
+    }
+    .feature-box-1:hover h5 {
+        color: #ffffff;
+    }
+    .feature-box-1:hover p,
+    .feature-box-1:hover .ul-style li {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    .feature-box-1:hover:after {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        left: 0;
+        right: auto;
+    }
+    .section {
+        padding: 50px 0;
+        position: relative;
+    }
+    .section-title {
+        padding-bottom: 45px;
+    }
+    .section-title h2 {
+        font-weight: 700;
+        color: #4571a3;
+        font-size: 45px;
+        margin: 0 0 15px;
+        border-left: 5px solid tomato;
+        padding-left: 15px;
+    }
 
-.card .card-header.no-border {
-    border: 0;
-}
-.card .card-header {
-    background: none;
-    padding: 0 0.9375rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    min-height: 50px;
-}
-.card-header:first-child {
-    border-radius: calc(8px - 1px) calc(8px - 1px) 0 0;
-}
 
-.widget-49 .widget-49-title-wrapper {
-    display: flex;
-    align-items: center;
-}
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-primary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #edf1fc;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-primary .widget-49-date-day {
-    color: #4e73e5;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
+    .content-wallpaper, .tutor-left-main-menu {
+        margin-top: 1.5rem;
+        background-color: white;
+        color: #5d5d5d;
+    }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-primary .widget-49-date-month {
-    color: #4e73e5;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
+    .btn-outline-primary {
+        color: #4571a3;
+        border-color: #4571a3;
+    }
+    .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #4571a3;
+        border-color: #4571a3;
+    }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-secondary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #fcfcfd;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
+    .card.page_info_wrap {
+        border: none;
+    }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-secondary .widget-49-date-day {
-    color: #dde1e9;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
+    .content-wallpaper {
+        padding: 25px;
+    }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-secondary .widget-49-date-month {
-    color: #dde1e9;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
+    .outside-block-indent {
+        padding:10px 0 10px 0;
+    }
+    .inside-block-indent {
+        margin:10px 0 10px 0;
+    }
+    ul.counts_module{
+        list-style-type: none;
+    }
+    .counts_module li {
+        display: inline-block;
+        padding-left: 55px;
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-success {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #e8faf8;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-success .widget-49-date-day {
-    color: #17d1bd;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-success .widget-49-date-month {
-    color: #17d1bd;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #ebf7ff;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-info .widget-49-date-day {
-    color: #36afff;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-info .widget-49-date-month {
-    color: #36afff;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-warning {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: floralwhite;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-warning .widget-49-date-day {
-    color: #FFC868;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-warning .widget-49-date-month {
-    color: #FFC868;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-danger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #feeeef;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-danger .widget-49-date-day {
-    color: #F95062;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-danger .widget-49-date-month {
-    color: #F95062;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-light {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #fefeff;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-light .widget-49-date-day {
-    color: #f7f9fa;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-light .widget-49-date-month {
-    color: #f7f9fa;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-dark {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #ebedee;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-dark .widget-49-date-day {
-    color: #394856;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-dark .widget-49-date-month {
-    color: #394856;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-base {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: #f0fafb;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-base .widget-49-date-day {
-    color: #68CBD7;
-    font-weight: 500;
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-date-base .widget-49-date-month {
-    color: #68CBD7;
-    line-height: 1;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-meeting-info {
-    display: flex;
-    flex-direction: column;
-    margin-left: 1rem;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-pro-title {
-    color: #3c4142;
-    font-size: 14px;
-}
-
-.widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-meeting-time {
-    color: #B1BAC5;
-    font-size: 13px;
-}
-
-.widget-49 .widget-49-meeting-points {
-    font-weight: 400;
-    font-size: 13px;
-    margin-top: .5rem;
-}
-
-.widget-49 .widget-49-meeting-points .widget-49-meeting-item {
-    display: list-item;
-    color: #727686;
-}
-
-.widget-49 .widget-49-meeting-points .widget-49-meeting-item span {
-    margin-left: .5rem;
-}
+    }
+    .count {
+        text-align: center;
+        color: #2a5885;
+        font-size: 1.3em;
+    }
+    .card-flex-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .between-s {
+        margin-left: 40px;
+    }
+    .card-body a {
+        color: #ffffff;
+    }
 </style>

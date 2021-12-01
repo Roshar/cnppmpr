@@ -2,12 +2,10 @@
     <div class="student-menu">
         <nav class="colorlib-main-menu" role="navigation">
             <ul class="navbar-menu">
-                <li><router-link to="/"  class="router-link" > <span style="padding-right:1em" ><svg  xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                </svg></span> Вернуться</router-link></li>
-                <li><router-link to="/global_library"  class="router-link" >Библиотека</router-link></li>
-                <li><router-link to="/global_library/create"  class="router-link" >Добавить в библиотеку</router-link></li>
-                <li><router-link to="/tag"  class="router-link" >Категории</router-link></li>
+                <li><router-link to="/"  class="router-link" >Мой профиль</router-link></li>
+                <li><router-link to="/tutors"  class="router-link" >Тьюторы</router-link></li>
+                <li><router-link to="/last_tutor"  class="router-link" > Заявки от тьютора </router-link></li>
+                <li><router-link to="/tutor_ban"  class="router-link" > Заблокированные тьюторы </router-link></li>
             </ul>
         </nav>
     </div>

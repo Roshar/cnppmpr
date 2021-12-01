@@ -2,12 +2,16 @@
     <div class="student-menu">
         <nav class="colorlib-main-menu" role="navigation">
             <ul class="navbar-menu">
-                <li><router-link to="/global_library"  class="router-link" >Мой профиль</router-link></li>
+                <li><router-link to="/"  class="router-link" >Мой профиль</router-link></li>
                 <li><router-link to="/students"  class="router-link" >Слушатели</router-link></li>
                 <li><router-link to="/tutors"  class="router-link" >Тьюторы</router-link></li>
+                <li><router-link to="/statistic"  class="router-link" >Статистика</router-link></li>
+                <li><router-link to="/group"  class="router-link" >Учебные группы</router-link></li>
                 <li><router-link to="/global_library"  class="router-link" >Библиотека мероприятий</router-link></li>
-                <li><router-link to="/last_student"  class="router-link" >Заявки от слушателей</router-link></li>
-                <li><router-link to="/last_tutor"  class="router-link" >Заявки от тьюторов</router-link></li>
+                <li><router-link to="/last_student"  class="router-link" > Последние зарегистрировавшиеся студенты </router-link></li>
+                <li><router-link to="/last_tutor"  class="router-link" > Последние зарегистрировавшиеся тьюторы </router-link></li>
+                <li><router-link to="/ban"  class="router-link" > Заблокированные пользователи </router-link></li>
+                <li><router-link to="/search"  class="router-link" >Поисковик</router-link></li>
             </ul>
         </nav>
     </div>

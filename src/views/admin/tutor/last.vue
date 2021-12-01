@@ -1,6 +1,6 @@
 <template>
     <div class="col-3">
-        <admin-student-menu></admin-student-menu>
+        <admin-profile-menu></admin-profile-menu>
     </div>
     <div class="col-9">
         <app-loader v-if="loading"></app-loader>
@@ -60,7 +60,8 @@
     import {useStore} from 'vuex'
     import {useRouter, useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
+    import AdminProfileMenu from "../../../components/adminMenu/AdminProfileMenu";
+
     export default {
         setup() {
             const store = useStore()
@@ -140,7 +141,7 @@
                 checkUser
             }
         },
-        components: {AppLoader,AdminStudentMenu}
+        components: {AppLoader,AdminProfileMenu}
     }
 </script>
 

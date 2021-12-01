@@ -11,7 +11,7 @@ import IomAdmin from '../views/admin/iom/index'
 import IomDataAdmin from '../views/admin/iom/single'
 import TaskDataAdmin from '../views/admin/iom/task'
 import StudentAdmin from '../views/admin/student'
-import MyAccountAdmin from '../views/admin/myAccount'
+import AdminStatistic from '../views/admin/statistic'
 import AcceptedExercises from '../views/tutor/accepted'
 import AcceptedTask from '../views/tutor/accepted/task'
 
@@ -123,15 +123,17 @@ const routes = [
     },
   },
 
+
   {
-    path: '/my_account',
-    name: 'my_account',
-    component: MyAccountAdmin,
+    path: '/statistic',
+    name: 'statistic',
+    component: AdminStatistic,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,
     },
   },
+
 
   {
     path: '/editProfileAdmin',

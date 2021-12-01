@@ -170,6 +170,7 @@ export default {
 
         async getUsersWithBanStatus ({dispatch},payload) {
             try {
+                console.log(payload)
                 const {data} = await axios.post('/api/admin/getUsersWithBanStatus',payload)
                 return data.values
             } catch(e){

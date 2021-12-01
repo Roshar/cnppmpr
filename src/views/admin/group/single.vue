@@ -1,6 +1,6 @@
 <template>
     <div class="col-3">
-        <admin-student-menu></admin-student-menu>
+        <admin-profile-menu></admin-profile-menu>
     </div>
 
     <div class="col-9">
@@ -84,8 +84,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Количество участников</h5>
-                                <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Без ИОМ: </h6>
-                                <h6 class="card-subtitle mb-2 text-muted" >Завершившие обучение: </h6>
+                                <h3 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Всего: {{studentsInGroup.length}} </h3>
                             </div>
                         </div>
                     </div>
@@ -121,14 +120,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="(item, index) in studentsInGroup" :key="item.user_id">
+                            <tr v-for="(item, index) in studentsInGroup" :key="item['user_id']">
                                 <th scope="row">{{index+1}}</th>
-                                <td> <router-link :to="{path:`/student/profile/${item.user_id}`}">{{item.surname}} {{item.name}} {{item.patronymic}} </router-link></td>
-                                <td>{{item.school_name}}</td>
-                                <td>{{item.title_area}}</td>
-                                <td> {{checkIom(item.isset_iom)}}</td>
-                                <td>{{checkIom(item.finish_iom)}}</td>
-                                <td><button class="btn" @click="deleteInGroup(item.user_id)">
+                                <td> <router-link :to="{path:`/student/profile/${item['user_id']}`}">{{item.surname}} {{item.name}} {{item.patronymic}} </router-link></td>
+                                <td>{{item['school_name']}}</td>
+                                <td>{{item['title_area']}}</td>
+                                <td v-if="item['iom_id']"> <router-link :to="{path:`/iom/${item['iom_id']}/${item['t_user_id']}`}">назначен</router-link> </td>
+                                <td v-else> не назначен</td>
+                                <td v-if="item['status']">завершено</td>
+                                <td v-else>в процессе</td>
+                                <td><button class="btn" @click="deleteInGroup(item['user_id'])">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
                                         <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                                         <path fill-rule="evenodd" d="M12.146 5.146a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
@@ -137,10 +138,8 @@
                             </tr>
                             </tbody>
                         </table>
-                        <!--                   -->
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -157,7 +156,7 @@
     import {useRouter} from 'vue-router'
     import {useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
+    import AdminProfileMenu from "../../../components/adminMenu/AdminProfileMenu";
 
     export default {
         setup() {
@@ -180,11 +179,10 @@
             const areas = ref()
             const gender_value = ref("0")
             const area_value = ref("0")
+            const flagIom = ref(false)
 
             const name = ref()
-                const checkIom = (value) => {
-                    return value === null ? 'нет' : 'да'
-                }
+
 
             const deleteInGroup = async (id) => {
                 await store.dispatch('admin/deleteInGroup',{
@@ -259,6 +257,7 @@
             return {
                 loading,
                 showModal,
+                flagIom,
                 tutorsData,
                 groupData,
                 title,
@@ -267,7 +266,6 @@
                 disciplineTitle,
                 name,
                 studentsFree,
-                checkIom,
                 studentsInGroup,
                 gender_value,
                 area_value,
@@ -276,7 +274,7 @@
                 deleteInGroup
             }
         },
-        components: {AppLoader, AdminStudentMenu}
+        components: {AppLoader, AdminProfileMenu}
     }
 </script>
 

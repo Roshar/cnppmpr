@@ -1,6 +1,6 @@
 <template>
     <div class="col-3">
-        <AdminStudentMenu></AdminStudentMenu>
+        <admin-profile-menu></admin-profile-menu>
     </div>
     <div class="col-9">
         <div class="row">
@@ -223,7 +223,7 @@
     import {useRouter} from 'vue-router'
     import {useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
+    import AdminProfileMenu from "../../../components/adminMenu/AdminProfileMenu";
     import {declensionAge} from "../../../utils/declensionAge"
     export default {
         setup() {
@@ -274,6 +274,7 @@
 
             //EDIT FLAG
             const editProfile = ref(false)
+
             const avatar = ref('')
 
             const sendMessage = async() => {
@@ -311,6 +312,7 @@
                 delBtn.value = false
                 code.value = ''
             }
+
             const getIdForDelete = async() => {
                 showModalDelete.value = true
             }
@@ -323,6 +325,7 @@
                 })
                 await router.push('/students')
             }
+
             watch([code], ()=> {
                 if(code.value === '5808'){
                     delBtn.value = true
@@ -407,8 +410,8 @@
 
             })
 
-
             currentTime.value = getDateCurrent()
+
             return {
                 currentTime,
                 loading,
@@ -460,7 +463,7 @@
                 code
             }
         },
-        components: {AppLoader, AdminStudentMenu}
+        components: {AppLoader, AdminProfileMenu}
     }
 </script>
 

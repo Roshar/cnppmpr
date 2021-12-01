@@ -1,38 +1,73 @@
 <template>
     <div class="col-3">
-        <AdminStudentMenu></AdminStudentMenu>
+        <admin-profile-menu></admin-profile-menu>
     </div>
     <div class="col-9">
 
         <div class="row">
             <div class="col-12">
+
                 <app-loader v-if="loading"></app-loader>
                 <div class="content-wallpaper" v-else>
-                    <h5 >Заблокированные пользователи </h5>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">№</th>
-                            <th scope="col">ФИО</th>
-                            <th scope="col">Школа</th>
-                            <th scope="col">Район</th>
-                            <th scope="col">Предмет</th>
-                            <th scope="col">Активация</th>
-                            <th scope="col">Дата регистрации</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(item, index) in banStudents" :key="item.user_id">
-                            <th scope="row">{{index+1}}</th>
-                            <td>{{item.name}} {{item.surname}}</td>
-                            <td>{{item.school_name}}</td>
-                            <td>{{item.title_area}}</td>
-                            <td>{{item.title_discipline}}</td>
-                            <td> <input class="btn-primary-outline"  type="button" @click="activation(item.user_id)" value="Разблокировать">  </td>
-                            <td>{{item.created}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <h5 class="subtitle-page">Выбрать категорию </h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <select class="form-control" v-model="tblName">
+                                <option value="students">Студенты</option>
+                                <option value="tutors">Тьюторы</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div v-if="studentBanFlag">
+                        <h5 >Заблокированные студенты </h5>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">ФИО</th>
+                                <th scope="col">Школа</th>
+                                <th scope="col">Район</th>
+                                <th scope="col">Предмет</th>
+                                <th scope="col">Активация</th>
+                                <th scope="col">Дата регистрации</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item, index) in banUsers" :key="item.user_id">
+                                <th scope="row">{{index+1}}</th>
+                                <td>{{item.name}} {{item.surname}}</td>
+                                <td>{{item.school_name}}</td>
+                                <td>{{item.title_area}}</td>
+                                <td>{{item.title_discipline}}</td>
+                                <td> <input class="btn-primary-outline"  type="button" @click="activation(item.user_id)" value="Разблокировать">  </td>
+                                <td>{{item.created}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div v-if="tutorBanFlag">
+                        <h5 >Заблокированные тьюторы </h5>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">ФИО</th>
+                                <th scope="col">Предмет</th>
+                                <th scope="col">Активация</th>
+                                <th scope="col">Дата регистрации</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item, index) in banUsers" :key="item.user_id">
+                                <th scope="row">{{index+1}}</th>
+                                <td>{{item.name}} {{item.surname}}</td>
+                                <td>{{item.title_discipline}}</td>
+                                <td> <input class="btn-primary-outline"  type="button" @click="activation(item.user_id)" value="Разблокировать">  </td>
+                                <td>{{item.created}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -46,7 +81,7 @@
     import {useStore} from 'vuex'
     import {useRouter} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import AdminStudentMenu from "../../../components/adminMenu/AdminStudentMenu";
+    import AdminProfileMenu from "../../../components/adminMenu/AdminProfileMenu";
     export default {
         setup() {
             const store = useStore()
@@ -57,18 +92,35 @@
             const areas = ref()
             const disciplines = ref()
             const students = ref()
-            const banStudents = ref()
+            const banUsers = ref()
+            const studentBanFlag = ref(true)
+            const tutorBanFlag = ref(false)
+            const tblName = ref('students')
 
+            watch([tblName], async()=>{
+                if(tblName.value === 'students') {
+                    studentBanFlag.value = true
+                    tutorBanFlag.value = false
+                }else {
+                    studentBanFlag.value = false
+                    tutorBanFlag.value = true
+                }
+                banUsers.value = await getUsers(tblName.value)
+            })
+
+            const getUsers = async(name = 'students') => {
+                return  await store.dispatch('admin/getUsersWithBanStatus',{tbl:name})
+            }
 
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
-                banStudents.value = await store.dispatch('admin/getUsersWithBanStatus',{tbl:'students'})
+                banUsers.value = await getUsers(tblName.value)
                 await router.push('/ban')
             }
 
             onMounted(async()=>{
                 loading.value = true
-                banStudents.value = await store.dispatch('admin/getUsersWithBanStatus',{tbl:'students'})
+                banUsers.value = await getUsers()
                 loading.value = false
             })
 
@@ -78,14 +130,17 @@
                 currentTime,
                 loading,
                 areas,
+                studentBanFlag,
+                tutorBanFlag,
                 disciplines,
                 students,
-                banStudents,
+                banUsers,
                 activation,
+                tblName
 
             }
         },
-        components: {AppLoader, AdminStudentMenu}
+        components: {AppLoader, AdminProfileMenu}
     }
 </script>
 

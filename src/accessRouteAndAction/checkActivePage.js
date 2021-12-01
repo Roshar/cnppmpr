@@ -5,7 +5,7 @@ export function checkAccess () {
             if(localStorage.getItem('jwt-token')) {
                 await store.dispatch('auth/confirmRole')
                 const roleAuth = store.state['auth'].role
-                console.log(store.state['auth'].status)
+
                 if((roleAuth === 'student' || roleAuth === 'tutor')  && store.state['auth'].status === 'on') {
                     store.commit('setLayout',roleAuth)
                     await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
