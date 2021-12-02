@@ -76,6 +76,8 @@ export function useRegisterForm() {
                 .required('Обязательное поле')
         )
 
+
+
         const {value:area, errorMessage: areaError, handleBlur:areaBlur} = useField(
             'area',
             yup
@@ -83,6 +85,7 @@ export function useRegisterForm() {
                 .trim()
                 .required('Необходимо выбрать поле "город/район"')
         )
+
 
         const {value:birthday, errorMessage: birthdayError, handleBlur:birthdayBlur} = useField(
             'birthday',
@@ -162,6 +165,9 @@ export function useRegisterForm() {
             genderError,
             lError,
             pError,
+            code,
+            codeError,
+            codeBlur,
             birthdayError,
             fnError,
             cpError,

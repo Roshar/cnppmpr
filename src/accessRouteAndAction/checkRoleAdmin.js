@@ -4,10 +4,10 @@ export function beforeAdmin () {
         try{
             await store.dispatch('auth/confirmRole')
             const authResult = store.state['auth']
-            if(authResult.role && authResult.status === 'on' && authResult.role == "admin" ) {
+            if(authResult.role && authResult.status === 'on' && authResult.role === "admin" ) {
                 store.commit('setLayout',authResult.role)
                 next()
-            } else if(authResult.role && authResult.status === 'on' && authResult.role != "admin") {
+            } else if(authResult.role && authResult.status === 'on' && authResult.role !== "admin") {
                 console.log('404')
                 next('/404')
             } else {

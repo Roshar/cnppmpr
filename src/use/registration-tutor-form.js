@@ -4,7 +4,7 @@ import {useField, useForm} from 'vee-validate'
 import {useStore} from 'vuex'
 import {useRouter} from "vue-router";
 
-export function useRegisterTutorForm() {
+export function useRegisterTutorForm(role) {
         const {handleSubmit,isSubmiting} = useForm({
             initialValues: {
                 gender: '',

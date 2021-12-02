@@ -40,11 +40,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <button type="submit" class="btn auth-btn" :disabled="isSubmiting">Войти</button>
-                            </div>
-                            <div class="col-6">
-                                <router-link class="auth-not-btn" to="/recovery">Забыли пароль?</router-link>
                             </div>
                         </div>
                         <div class="row">
@@ -52,7 +49,7 @@
                                 <router-link to="/register">Зарегистрироваться как слушатель</router-link>
                             </div>
                             <div class="col-6">
-                                <router-link class="auth-not-btn" to="/regtutor">Зарегистрироваться как тьютор</router-link>
+                                <router-link class="auth-not-btn" to="/recovery">Забыли пароль?</router-link>
                             </div>
                         </div>
                     </form>

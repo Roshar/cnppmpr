@@ -90,7 +90,7 @@
                                                     <hr>
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <button class="btn btn-outline-cancel btn-block" @click="goToModule('my_account')">Отмена</button>
+                                                            <button class="btn btn-outline-cancel btn-block" @click="goToModule('/')">Отмена</button>
                                                         </div>
                                                     </div>
                                                 </div>

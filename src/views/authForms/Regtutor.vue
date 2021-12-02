@@ -100,8 +100,8 @@
                     </div>
                     <div class="form-group mb-3">
                         <div class="form-group">
-                            <label for="phone" style="color:grey; font-style: italic"> Введите секретный код  </label>
-                            <input type="tel" :class="['form-control',{invalid:codeError}]" name="code" id="code" v-model="code"  @blur="codeBlur" placeholder="код">
+                            <label for="code" style="color:grey; font-style: italic"> Введите секретный код  </label>
+                            <input type="text" :class="['form-control',{invalid:codeError}]" name="code" id="code" v-model="code"  @blur="codeBlur" placeholder="код">
                             <small v-if="codeError">{{codeError}}</small>
                         </div>
                     </div>
@@ -125,7 +125,6 @@
     import {useRouter} from "vue-router";
     export default {
         setup(){
-
             const authenticated = ref(false)
             const store = useStore()
             const router = useRouter()

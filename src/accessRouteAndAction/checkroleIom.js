@@ -4,7 +4,7 @@ export function beforeTutor () {
         try{
             await store.dispatch('auth/confirmRole')
             const authResult = store.state['auth']
-            if(authResult.role && authResult.status == 'on' && authResult.role === "tutor" ) {
+            if(authResult.role && authResult.status === 'on' && authResult.role === "tutor" ) {
                 store.commit('setLayout',authResult.role)
                 next()
             } else if(authResult.role && authResult.status == 'on' && authResult.role !== "tutor") {

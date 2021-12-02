@@ -609,7 +609,7 @@ const routes = [
     component: ()=> import('../views/Help.vue'),
     meta:{
       layout:'main',
-      auth:true,
+      auth:false,
     }
   },
 
