@@ -7,7 +7,7 @@ export function beforeTutor () {
             if(authResult.role && authResult.status === 'on' && authResult.role === "tutor" ) {
                 store.commit('setLayout',authResult.role)
                 next()
-            } else if(authResult.role && authResult.status == 'on' && authResult.role !== "tutor") {
+            } else if(authResult.role && authResult.status === 'on' && authResult.role !== "tutor") {
                 console.log('404')
                 next('/404')
             } else {
