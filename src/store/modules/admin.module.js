@@ -296,9 +296,8 @@ export default {
             try {
                 const {data} = await axios.post('/api/admin/getExercisesByIomId',
                     {payload})
-                if(data.values.length){
-                    return data.values
-                }
+                return data.values
+
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
