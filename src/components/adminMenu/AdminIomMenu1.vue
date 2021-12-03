@@ -2,7 +2,7 @@
     <div class="student-menu">
         <nav class="colorlib-main-menu" role="navigation">
             <ul class="navbar-menu">
-                <li><router-link to="/my_account"  class="router-link" >Мой профиль</router-link></li>
+                <li><router-link to="/"  class="router-link" >Мой профиль</router-link></li>
                 <li><router-link to="/iom"  class="router-link" >ИОМы</router-link></li>
                 <li v-if="iomData"> <router-link :to="{path: `/iom/${iomData.iom}/${iomData.tutorId}`}"  class="router-link" >
                     <span v-if="iomData.task">

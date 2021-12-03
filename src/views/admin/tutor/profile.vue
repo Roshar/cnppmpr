@@ -1,6 +1,6 @@
 <template>
     <div class="col-3">
-        <admin-tutor-menu></admin-tutor-menu>
+        <admin-profile-menu></admin-profile-menu>
     </div>
     <div class="col-9">
         <div class="row">
@@ -210,7 +210,7 @@
     import {useRouter} from 'vue-router'
     import {useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import AdminTutorMenu from "../../../components/adminMenu/AdminTutorMenu";
+    import AdminProfileMenu from '../../../components/adminMenu/AdminProfileMenu'
     import {declensionAge} from "../../../utils/declensionAge"
     export default {
         setup() {
@@ -428,7 +428,7 @@
                 messageBody
             }
         },
-        components: {AppLoader, AdminTutorMenu}
+        components: {AppLoader, AdminProfileMenu}
     }
 </script>
 

@@ -18,9 +18,8 @@ export default {
         },
 
         async test({dispatch}) {
-
             try {
-                const {data} = await axios.post('/api/users')
+                const {data} = await axios.post('/api/test')
                 return data.values ? data.values : []
             }catch(e){
                 dispatch('setSystemMessage', {

@@ -7,6 +7,7 @@
                 <li><router-link to="/tutors"  class="router-link" >Тьюторы</router-link></li>
                 <li><router-link to="/statistic"  class="router-link" >Статистика</router-link></li>
                 <li><router-link to="/group"  class="router-link" >Учебные группы</router-link></li>
+                <li><router-link to="/iom"  class="router-link" >Идивидуальные образовательные маршруты</router-link></li>
                 <li><router-link to="/global_library"  class="router-link" >Библиотека мероприятий</router-link></li>
                 <li><router-link to="/last_student"  class="router-link" > Последние зарегистрировавшиеся студенты </router-link></li>
                 <li><router-link to="/last_tutor"  class="router-link" > Последние зарегистрировавшиеся тьюторы </router-link></li>

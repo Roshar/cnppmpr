@@ -95,7 +95,13 @@
 
                                                 <hr>
                                                 <h6>Ссылка:</h6>
-                                                <p class="mb-0" v-if="aLink" v-html="aLink"></p>
+<!--                                                <p class="mb-0" v-if="aLink" v-html="aLink"></p>-->
+                                                  <a :href="aLink" v-if="aLink" target="_blank">{{aLink}}</a>
+                                                <p class="mb-0" v-else>Пусто</p>
+                                                <hr>
+                                                <h6>Файл:</h6>
+
+                                                <a class="mb-0" v-if="aFilePath" :href="aFilePath"> Скачать</a>
                                                 <p class="mb-0" v-else>Пусто</p>
                                                 <hr>
                                             </div>
@@ -153,6 +159,7 @@
             const route = useRoute()
             const router = useRouter()
             const token = localStorage.getItem('jwt-token')
+            const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const showModal = ref(false)
             const accepted = ref()
@@ -164,6 +171,7 @@
             const created = ref()
             const term = ref()
             const aContent = ref()
+            const aFilePath = ref()
             const aLink = ref()
             const tutorComment = ref()
             const messageBody = ref()
@@ -204,6 +212,7 @@
                     exId: route.params.exId,
                     studentId: route.params.studentId
                 })
+                console.log(answer)
 
                 accepted.value  = answer.accepted
                 studentFIO.value  = answer.surname + ' '+answer.name + ' '+ answer.patronymic
@@ -213,6 +222,7 @@
                 exDescription.value  = answer['ex_description']
                 ex_link.value  = answer['ex_link']
                 created.value  = answer['answer_created']
+                aFilePath.value  = baseUrl.value +'/'+ answer['file_path']
                 term.value  = answer['ex_term']
                 aContent.value  = answer['answer_content']
                 aLink.value  = answer['answer_link']
@@ -225,7 +235,7 @@
                 loading,
                 messageBodyError,
                 tutorComment,
-                exTitle,accepted, studentFIO,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
+                exTitle,accepted, studentFIO,aFilePath,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
                 showModal
             }
         },

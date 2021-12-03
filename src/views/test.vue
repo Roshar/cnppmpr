@@ -18,7 +18,6 @@
                 data.value = await  store.dispatch('area/test')
             })
 
-
             return {
                 data
             }
