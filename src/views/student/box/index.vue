@@ -28,7 +28,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <h5 v-else>Нет пройденных курсов</h5>
+                            <h5 v-else>Пусто</h5>
                         </div>
                     </div>
                 </div>
@@ -59,11 +59,12 @@
                 await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
                 const studentData = store.getters['user/userData']
                 const tutorData = store.getters['user/getUserLinks']
-
-                await store.dispatch('finished/getFinishedCourses', {
-                    studentId: studentData['user_id'],
-                    tutorId: tutorData['user_id'],
-                })
+                if(tutorData) {
+                    await store.dispatch('finished/getFinishedCourses', {
+                        studentId: studentData['user_id'],
+                        tutorId: tutorData['user_id'],
+                    })
+                }
 
                 courses.value = store.getters['finished/getCourses']
 
