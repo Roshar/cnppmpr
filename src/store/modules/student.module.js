@@ -227,7 +227,8 @@ export default {
             try {
                 const {data} = await axios.post('/api/student/getExercisesFromMyIom', payload)
                 console.log(data.values)
-                if(data.values) {
+
+                if(data.values && data.values.length) {
                     commit('setExercisesMyIom',data.values[0])
                     commit('setExercisesTags',data.values[1])
                 }

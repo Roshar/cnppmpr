@@ -65,12 +65,7 @@
                         tutorId: tutorData['user_id'],
                     })
                 }
-
                 courses.value = store.getters['finished/getCourses']
-
-
-
-
 
                 loading.value = false
             })
