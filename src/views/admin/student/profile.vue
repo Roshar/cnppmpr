@@ -62,7 +62,8 @@
                                                     <p class="text-secondary mb-1">Слушатель</p>
                                                     <p class="text-muted font-size-sm">Возраст: {{ age}}{{declensionAge(age)}}</p>
                                                     <p :class="onlineClass"> {{onlineStatus}}</p>
-                                                    <button class="btn btn-outline-primary" @click="showModal=true">Отправить сообщение</button>
+<!--                                                    <button class="btn btn-outline-primary" @click="showModal=true">Отправить сообщение</button>-->
+                                                    <button class="btn btn-outline-primary" >Отправить сообщение</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -163,7 +164,7 @@
                                             <hr>
                                         </div>
                                     </div>
-                                    <div v-if="iom">
+                                    <div v-if="iom && iom.length">
                                         <div class="row gutters-sm">
                                             <div class="col-sm-12 mb-6">
                                                 <div class="card h-100">
@@ -374,6 +375,7 @@
                                 tutor:tutorId.value})
                         issetIom.value = iom.value.length ? iom.value : []
 
+                        // console.log(issetIom.value)
 
                         if(iom.value.length) {
                             //get exercises from IOM
@@ -388,7 +390,6 @@
                         }
                     }
                 }
-
 
                 //USER INFO
                 surname.value = profile.value[0].surname
@@ -408,6 +409,8 @@
                 birthday.value = profile.value[0]['birthday']
                 avatar.value = baseUrl.value +'/'+profile.value[0]['avatar'];
                 checkOnline(activeTime.value,15)
+
+                console.log(iomInfo.value)
                 loading.value = false
 
             })

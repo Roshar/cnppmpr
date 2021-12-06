@@ -39,7 +39,8 @@
                                                 <p class="text-secondary mb-1">Слушатель</p>
                                                 <p class="text-muted font-size-sm">Возраст: {{ age}}{{declensionAge(age)}}</p>
                                                 <p :class="onlineClass"> {{onlineStatus}}</p>
-                                                <button class="btn btn-outline-primary" @click="showModal=true">Отправить сообщение</button>
+<!--                                                <button class="btn btn-outline-primary" @click="showModal=true">Отправить сообщение</button>-->
+                                                <button class="btn btn-outline-primary" >Отправить сообщение</button>
                                             </div>
                                         </div>
                                     </div>

@@ -24,7 +24,6 @@
                 <div class="col-6">
                     <label > Ссылка</label>
                     <input type="text" :class="['form-control',{invalid:linkError}]" @blur="linkBlur" name="link" v-model="link">
-                    <small v-if="linkError">{{linkError}}</small>
                 </div>
             </div>
             <div class="row">
@@ -40,11 +39,11 @@
             <div class="row">
                 <div class="col-12">
                     <label > Предмет</label>
-                    <select :class="['form-control',{invalid:dError}]" name="discipline" v-model="discipline">
+                    <select :class="['form-control',{invalid:disError}]" name="discipline" v-model="discipline">
                         <option value="">Выбрать предмет</option>
                         <option v-for="(item, index) in disciplines" :key="item.id_dis" :value="item.id_dis">{{item.title_discipline}}</option>
                     </select>
-                    <small v-if="dError">{{dError}}</small>
+                    <small v-if="disError">{{disError}}</small>
                 </div>
             </div>
             <hr>
@@ -110,7 +109,6 @@
                 }
             }
 
-
             onMounted(async()=>{
                 loading.value = true
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
@@ -120,9 +118,8 @@
             })
 
             const onSubmit = async(values) => {
-                console.log(values)
-                values.link = (values.link !== 'undefined') ? values.link : null
-                values.description = mysqlEscape(description.value)
+                values.link = (!values.link) ? '' : values.link
+                values.description =  (!values.description) ? '' : mysqlEscape(description.value)
                 await store.dispatch('globalLibrary/addInLibrary',{
                     values
                 })
