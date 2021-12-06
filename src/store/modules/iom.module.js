@@ -373,6 +373,7 @@ export default {
             }
         },
 
+
         async deleteIom({commit, dispatch}, payload) {
             try{
                 const {data} = await axios.post('/api/iom/deleteIom',payload)

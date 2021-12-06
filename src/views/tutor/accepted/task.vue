@@ -101,7 +101,7 @@
                                                 <hr>
                                                 <h6>Файл:</h6>
 
-                                                <a class="mb-0" v-if="aFilePath" :href="aFilePath"> Скачать</a>
+                                                <a type="button" class="btn btn-outline-secondary" target="_blank" v-if="issetFile" :href="aFilePath"> Скачать</a>
                                                 <p class="mb-0" v-else>Пусто</p>
                                                 <hr>
                                             </div>
@@ -164,10 +164,12 @@
             const showModal = ref(false)
             const accepted = ref()
             const studentFIO = ref()
+            const studentId = ref(route.params.studentId)
             const iomTitle = ref()
             const exTitle = ref()
             const ex_link = ref()
             const exDescription = ref()
+            const issetFile = ref(false)
             const created = ref()
             const term = ref()
             const aContent = ref()
@@ -193,6 +195,15 @@
                 }
             }
 
+            // const downloadFile = async(val) => {
+            //     await store.dispatch('iom/downloadFile', {
+            //         token,
+            //         studentId: route.params.studentId,
+            //         fileName:  val
+            //
+            //     })
+            // }
+
             const successAction = async() => {
                 await store.dispatch('iom/successTask',{
                     token,
@@ -212,7 +223,6 @@
                     exId: route.params.exId,
                     studentId: route.params.studentId
                 })
-                console.log(answer)
 
                 accepted.value  = answer.accepted
                 studentFIO.value  = answer.surname + ' '+answer.name + ' '+ answer.patronymic
@@ -222,7 +232,9 @@
                 exDescription.value  = answer['ex_description']
                 ex_link.value  = answer['ex_link']
                 created.value  = answer['answer_created']
-                aFilePath.value  = baseUrl.value +'/'+ answer['file_path']
+                issetFile.value = answer['file_path'] ? true : false
+                aFilePath.value  = baseUrl.value +'/'+ studentId.value +'/'+ answer['file_path']
+                // aFilePath.value  = answer['file_path']
                 term.value  = answer['ex_term']
                 aContent.value  = answer['answer_content']
                 aLink.value  = answer['answer_link']
@@ -235,7 +247,7 @@
                 loading,
                 messageBodyError,
                 tutorComment,
-                exTitle,accepted, studentFIO,aFilePath,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
+                exTitle,accepted,issetFile, studentFIO,aFilePath,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
                 showModal
             }
         },
