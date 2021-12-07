@@ -3,11 +3,10 @@ import {useField, useForm} from 'vee-validate'
 
 export function useLibraryForm(fn){
 
-
-
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
             category:'',
+            discipline:'',
         }
     })
 
@@ -41,12 +40,22 @@ export function useLibraryForm(fn){
             .required('Обязательное поле')
     )
 
+    const {value:discipline, errorMessage: disError, handleBlur:disBlue} = useField(
+        'discipline',
+        yup
+            .string()
+            .trim()
+            .required('Обязательное поле')
+    )
 
     const onSubmit = handleSubmit(fn)
 
     return {
         title,
         description,
+        discipline,
+        disError,
+        disBlue,
         link,
         category,
         titleError,

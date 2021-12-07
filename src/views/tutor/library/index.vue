@@ -118,8 +118,8 @@
 
              //Задания из текущего ИОМа
 
-
              const sub = async function (values)  {
+
                  values.description = mysqlEscape(description.value)
                  await store.dispatch('library/addExercise',{
                      token: localStorage.getItem('jwt-token'),
