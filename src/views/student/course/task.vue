@@ -135,7 +135,7 @@
     import {ref,onMounted, watch} from 'vue'
     import AppLoader from "../../../components/ui/AppLoader";
     import StudentMainMenu from "../../../components/studentMenu/StudentMainMenu";
-    import ConversationTask from "../../../components/conversation/ConversationTask";
+    import ConversationTask from "../../../components/conversation/ConversationTaskStudent";
     import {checkTerm} from '../../../utils/checkTerm'
     import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
     import {mysqlEscape} from '../../../utils/mysqlEscape'

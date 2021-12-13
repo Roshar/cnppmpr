@@ -29,23 +29,7 @@
                                 <p>{{item.message}}</p>
                                 <ul class="list-unstyled list-inline media-detail pull-left">
                                     <li><i class="fa fa-calendar"></i>{{item['created_date']}}</li>
-<!--                                        <li v-if="item['like'] !== 0">-->
-<!--                                            <i class="fa fa-thumbs-up"></i> {{item['like']}}-->
-<!--                                        </li>-->
                                 </ul>
-
-            <!--                            <ul class="list-unstyled list-inline media-detail pull-right">-->
-            <!--                                <li class="social_actions">-->
-            <!--                                    <span style="display: flex; align-items: center; vertical-align: center">-->
-            <!--                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">-->
-            <!--                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>-->
-            <!--                                     </svg>-->
-            <!--                                     <button class="btn btn-own" >{{getStatusMark()}}</button>-->
-            <!--                                    </span>-->
-
-            <!--                                </li>-->
-<!--&lt;!&ndash;                                <li class="social_actions"><button class="btn">Ответить</button></li>&ndash;&gt;-->
-            <!--                            </ul>-->
                             </div>
                         </div>
                     </div>

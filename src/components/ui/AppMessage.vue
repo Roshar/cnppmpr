@@ -4,12 +4,13 @@
             <div class="col-3"></div>
             <div class="col-6">
                 <div class="notification-app" v-if="message">
-                    <div  :class="['alert alert-success alert-warning alert-dismissible fade show']" role="alert">
+                    <div  :class="['alert','alert-success']" role="alert">
                         {{title}} {{message.value}}
                         <button type="button"  @click.prevent="close" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+
                 </div>
 
             </div>
@@ -28,6 +29,7 @@
                 danger: 'Ошибка!',
                 warning: 'Внимание!'
             }
+
             const store = useStore()
 
             const message = computed(() => store.state.systemMessage)
@@ -37,6 +39,7 @@
             return {
                 message,
                 title,
+
                 close: () => {
                     store.commit('clearSystemMessage')
                 }
@@ -46,9 +49,19 @@
 </script>
 
 <style scoped>
+/*.notification-app {*/
+/*    position: absolute;*/
+/*    top:0;*/
+/*    z-index: 999;*/
+/*}*/
 .notification-app {
-    position: absolute;
-    top:0;
+    position: fixed;
+    top: 27%;
+    left: 50%;
+    transform: translate(-50%,-27%);
     z-index: 999;
+    background-color: #fafbfc;
+    opacity: 0.7;
+
 }
 </style>

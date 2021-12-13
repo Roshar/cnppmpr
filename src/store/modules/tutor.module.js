@@ -39,10 +39,26 @@ export default {
             }
         },
 
+        // получить комментарии к заданию
+
         async getCommentsByTaskForTutor ({commit, dispatch, state }, payload) {
             try {
-                const {data} = await axios.post('/api/user/getCommentsByTaskForTutor', payload)
+                const {data} = await axios.post('/api/tutor/getCommentsByTaskForTutor', payload)
                 return data.values
+            } catch(e){
+                await router.push({name:'404'})
+            }
+        },
+
+        // отправить комментарий
+        async sendCommentsForTaskTutor ({commit, dispatch, state }, payload) {
+            try {
+                const {data} = await axios.post('/api/tutor/sendCommentsForTaskTutor', payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'premier'
+                }, {root: true})
+
             } catch(e){
                 await router.push({name:'404'})
             }

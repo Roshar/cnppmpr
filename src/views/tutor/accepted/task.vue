@@ -140,7 +140,7 @@
                                         </div>
                                         <div id="collapseThree2" class="collapse" aria-labelledby="headingThree" data-parent="#accordion-1">
                                             <div class="card-body">
-<!--                                                <conversation-task  v-if="chat" :chat="chat" :studentId="studentId" :tutorId="tutorId"></conversation-task>-->
+                                                <conversation-task  v-if="chat" @sendMessage="sendMessage" :chat="chat" :studentId="studentId" :tutorId="tutorId"></conversation-task>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
 <script>
     import {ref,computed,onMounted,watch} from 'vue'
     import {useStore} from 'vuex'
-    import ConversationTask from "../../../components/conversation/ConversationTask";
+    import ConversationTask from "../../../components/conversation/ConversationTaskTutor";
     import {useRouter} from "vue-router";
     import {useRoute} from 'vue-router'
     import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
@@ -180,6 +180,7 @@
             const accepted = ref()
             const studentFIO = ref()
             const studentId = ref(route.params.studentId)
+            const tutorId = ref()
             const iomTitle = ref()
             const exTitle = ref()
             const ex_link = ref()
@@ -231,12 +232,16 @@
                     studentId: route.params.studentId
                 })
 
-                chat.value = await store.dispatch('student/getCommentsByTask', {
-                    taskId: route.params.taskId,
-                    iomId: route.params.iomId,
-                    tutorId: route.params.tutorId,
-                    token: localStorage.getItem('jwt-token')
+                chat.value = await store.dispatch('tutor/getCommentsByTaskForTutor', {
+                    token,
+                    iomId: route.params.iom,
+                    exId: route.params.exId,
+                    studentId: route.params.studentId
                 })
+                if(chat.value) {
+                    tutorId.value = chat.value[0]['tutorId']
+                }
+
 
                 accepted.value  = answer.accepted
                 studentFIO.value  = answer.surname + ' '+answer.name + ' '+ answer.patronymic
@@ -255,13 +260,25 @@
                 loading.value = false
             })
 
+            const sendMessage = async() => {
+                chat.value = await store.dispatch('tutor/getCommentsByTaskForTutor', {
+                    token,
+                    iomId: route.params.iom,
+                    exId: route.params.exId,
+                    studentId: route.params.studentId
+                })
+                if(chat.value) {
+                    tutorId.value = chat.value[0]['tutorId']
+                }
+            }
+
 
             document.title = "Раздел: Задание"
             return {
                 loading,
                 messageBodyError,
                 tutorComment,
-                exTitle,accepted,issetFile, studentFIO,aFilePath,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
+                exTitle,accepted,issetFile,sendMessage, chat,studentId,tutorId, studentFIO,aFilePath,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
                 showModal
             }
         },
