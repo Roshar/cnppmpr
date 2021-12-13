@@ -38,11 +38,20 @@
                         <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Вставьте ссылку">
                     </div>
                     <div class="form-group">
-                        <label for="link">Тип задания</label>
+                        <label for="link">Категория</label>
                         <select :class="['form-control',{invalid:catError}]"  name="tag" v-model="category">
                             <option value="">Выбрать категорию</option>
                             <option v-for="(item, index) in tagsData"  :key="item['id_tag']"   :value="item['id_tag']">{{item['title_tag']}}</option>
                             <small v-if="catError">{{catError}}</small>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="link">Уровень</label>
+                        <select :class="['form-control',{invalid:levelError}]"  name="level" v-model="level">
+                            <option value="">Выбрать уровень</option>
+                            <option v-for="(item, index) in levels"  :key="item['id']"   :value="item['id']">{{item['title']}}</option>
+                            <small v-if="levelError">{{levelError}}</small>
                         </select>
                     </div>
                     <div class="row">
@@ -95,6 +104,7 @@
              const showModal = ref(false)
              const filter = ref({})
              const tagsData = ref()
+             const levels = ref()
              const description = ref()
 
              const editor =  ClassicEditor
@@ -106,6 +116,7 @@
                  loading.value = true
                  await store.dispatch('library/getLibraryData',{token: localStorage.getItem('jwt-token')})
                  tagsData.value = await store.dispatch('tag/getTag')
+                 levels.value = await store.dispatch('discipline/getLevels')
                  loading.value = false
              })
 
@@ -130,7 +141,7 @@
              }
 
              document.title = "Библиотека заданий"
-             return {...useLibraryForm(sub), showModal, close: () => showModal.value = false, description, libraryData, loading, filter, tagsData,editor, editorConfig}
+             return {...useLibraryForm(sub), showModal,levels,  close: () => showModal.value = false, description, libraryData, loading, filter, tagsData,editor, editorConfig}
          },
          components: {LibraryList,AppLoader,RequestFilter,TutorMainMenu}
      }

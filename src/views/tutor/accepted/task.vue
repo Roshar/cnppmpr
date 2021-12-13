@@ -130,6 +130,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="card">
+                                        <div class="card-header" id="headingThree2">
+                                            <h5 class="mb-0">
+                                                <a data-toggle="collapse" data-target="#collapseThree2" aria-expanded="false" aria-controls="collapseThree">
+                                                    Обсуждение к заданию
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseThree2" class="collapse" aria-labelledby="headingThree" data-parent="#accordion-1">
+                                            <div class="card-body">
+<!--                                                <conversation-task  v-if="chat" :chat="chat" :studentId="studentId" :tutorId="tutorId"></conversation-task>-->
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 </div>
                             </div>
@@ -149,6 +163,7 @@
 <script>
     import {ref,computed,onMounted,watch} from 'vue'
     import {useStore} from 'vuex'
+    import ConversationTask from "../../../components/conversation/ConversationTask";
     import {useRouter} from "vue-router";
     import {useRoute} from 'vue-router'
     import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
@@ -171,6 +186,7 @@
             const exDescription = ref()
             const issetFile = ref(false)
             const created = ref()
+            const chat = ref()
             const term = ref()
             const aContent = ref()
             const aFilePath = ref()
@@ -195,15 +211,6 @@
                 }
             }
 
-            // const downloadFile = async(val) => {
-            //     await store.dispatch('iom/downloadFile', {
-            //         token,
-            //         studentId: route.params.studentId,
-            //         fileName:  val
-            //
-            //     })
-            // }
-
             const successAction = async() => {
                 await store.dispatch('iom/successTask',{
                     token,
@@ -222,6 +229,13 @@
                     iomId: route.params.iom,
                     exId: route.params.exId,
                     studentId: route.params.studentId
+                })
+
+                chat.value = await store.dispatch('student/getCommentsByTask', {
+                    taskId: route.params.taskId,
+                    iomId: route.params.iomId,
+                    tutorId: route.params.tutorId,
+                    token: localStorage.getItem('jwt-token')
                 })
 
                 accepted.value  = answer.accepted
@@ -252,7 +266,8 @@
             }
         },
         components: {
-            TutorMainMenu
+            TutorMainMenu,
+            ConversationTask
         }
     }
 </script>

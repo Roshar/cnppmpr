@@ -223,6 +223,95 @@ export default {
             }
         },
 
+        // получить данные из таблицы ДОПОЛНИТЕЛЬНАЯ ИИНФОРМАЦИЯ
+        async getStudentAdditionallyOptionById ({ dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/getStudentAdditionallyOptionById', payload)
+                return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        // получить уровни образования
+        async getEducationLevels ({dispatch}) {
+            try {
+                const {data} = await axios.post('/api/student/getEducationLevels')
+                 return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        // получитть список должностей
+        async getPositions ({commit, dispatch, state}) {
+            try {
+                const {data} = await axios.post('/api/student/getPositions')
+                 return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        // получить список со стажем
+        async getExperience ({commit, dispatch, state}) {
+            try {
+                const {data} = await axios.post('/api/student/getExperience')
+                 return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        // получить категории учителей
+        async getCategoryTeach ({commit, dispatch, state}) {
+            try {
+                const {data} = await axios.post('/api/student/getCategoryTeach')
+                 return data.values
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+
+        // добавить или изменть дополнительную информацию о слушателе
+
+        async insertOrUpdateAdditionally ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/insertOrUpdateAdditionally',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
         async getExercisesFromMyIom ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/student/getExercisesFromMyIom', payload)
@@ -270,6 +359,7 @@ export default {
                 await router.push({name:'404'})
             }
         },
+
 
         async sendCommentsForTask ({commit, dispatch, state }, payload) {
             try {

@@ -8,6 +8,7 @@ export function useLibraryForm(fn){
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
             category:'',
+            level:'',
         }
     })
 
@@ -41,6 +42,14 @@ export function useLibraryForm(fn){
             .required('Обязательное поле')
     )
 
+    const {value:level,  errorMessage: levelError, handleBlur:levelBlur} = useField(
+        'level',
+        yup
+            .string()
+            .trim()
+            .required('Обязательное поле')
+    )
+
 
     const onSubmit = handleSubmit(fn)
 
@@ -53,6 +62,9 @@ export function useLibraryForm(fn){
         catError,
         titleBlur,
         catBlur,
+        level,
+        levelError,
+        levelBlur,
         onSubmit,
         isSubmiting,
     }

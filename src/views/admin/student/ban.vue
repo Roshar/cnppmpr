@@ -115,7 +115,8 @@
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
                 banUsers.value = await getUsers(tblName.value)
-                await router.push('/ban')
+                window.location.href = '/ban'
+                // await router.push('/ban')
             }
 
             onMounted(async()=>{

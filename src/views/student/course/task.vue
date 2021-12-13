@@ -118,7 +118,7 @@
 
     </div>
     <div class="col-5">
-        <conversation-task  v-if="chat" :chat="chat" :studentId="studentId" :tutorId="tutorId"  ></conversation-task>
+        <conversation-task  v-if="chat" :chat="chat" :studentId="studentId" :tutorId="tutorId"></conversation-task>
     </div>
 
     <transition  name="fade" appear>

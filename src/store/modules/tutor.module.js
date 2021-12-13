@@ -1,4 +1,5 @@
 import axios from '../../axios/request'
+import router from "../../router";
 const USERID = 'userId'
 const MESSAGE = 'message'
 
@@ -35,6 +36,15 @@ export default {
                 }, {root: true})
                 throw new Error()
                 console.log("not module user")
+            }
+        },
+
+        async getCommentsByTaskForTutor ({commit, dispatch, state }, payload) {
+            try {
+                const {data} = await axios.post('/api/user/getCommentsByTaskForTutor', payload)
+                return data.values
+            } catch(e){
+                await router.push({name:'404'})
             }
         },
 

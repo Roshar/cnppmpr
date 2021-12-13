@@ -1,5 +1,6 @@
 <template>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <div class="col-12 navbar-col">
             <div class="row justify-content-center">
                 <div class="col-9 ">
@@ -69,6 +70,38 @@
                         <button type="button" class="btn btn-block btn-outline-primary-send" @click="finishEdu">Отправить оценку и заврешить обучение</button>
                     </form>
                 </div>
+                <div class="modal-form3" v-if="showModalProfile">
+                    <div class="content">
+                        <div class="card tutor-card" v-if="tutorId">
+                            <div class="row">
+                                <div class="col-12">
+                            <span style="float:right" @click="showModalProfile = false"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                  <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                                  </svg>
+                            </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="firstinfo">
+                                        <img :src="tutorAvatar"/>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="profileinfo">
+                                        <h4>{{tutorFio}}</h4>
+                                        <h6>Ваш тьютор</h6>
+                                        <hr>
+                                        <span>Телефон: {{tutorPhone}} </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row justify-content-center">
                     <div class="col-md-12">
                         <div class="row align-items-top">
@@ -108,9 +141,14 @@
                                         <hr>
                                         <div class="candidate-info">
                                             <h6 class="text-white">ФИО тьютора:</h6>
-                                            <p class="text-white">{{tutorFio}}</p>
-                                        </div>
+                                            <div v-if="tutorId">
+                                                <p class="text-white">{{tutorFio}} | <button class="btn" style="color: tomato" @click="showModalProfile=true"> профиль  </button></p>
 
+                                            </div>
+                                            <div v-else>
+                                                <p class="text-white"> не назначен</p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="mt-0" v-if="!statusInCurrentIomFinished">
                                         <div v-if="issetIom">
@@ -240,7 +278,7 @@
 
         </div>
         <transition  name="fade" appear>
-            <div class="modal-overlay" v-if="showModalNotice || showModalSuccess" @click="clearOverlay">
+            <div class="modal-overlay" v-if="showModalNotice || showModalSuccess || showModalProfile" @click="clearOverlay">
             </div>
         </transition>
 </template>
@@ -272,6 +310,7 @@
             const readyFinishedStatus = ref(false)
             const showModalNotice = ref(false)
             const showModalSuccess = ref(false)
+            const showModalProfile = ref(false)
             const common_exe = ref(0)
             const finished_exe = ref(0)
             const edit_exe = ref(0)
@@ -290,6 +329,8 @@
             const statusInCurrentIomFinished = ref(false)
             let tutorId = ref()
             let tutorFio = ref()
+            let tutorAvatar = ref()
+            let tutorPhone = ref()
             let dependencies = ref()
             let exerciseData = ref()
             let tagsData = ref()
@@ -324,6 +365,7 @@
             const clearOverlay = () => {
                 showModalSuccess.value = false
                 showModalNotice.value = false
+                showModalProfile.value = false
             }
 
             const filterData = (parentId, childId) => {
@@ -377,7 +419,10 @@
                 await load()
                 dependencies.value = store.getters['user/getUserLinks']
                 if(dependencies.value) {
-                    tutorId.value = dependencies.value.user_id
+                    console.log(dependencies.value)
+                    tutorId.value = dependencies.value['user_id']
+                    tutorPhone.value = dependencies.value['phone']
+                    tutorAvatar.value = baseUrl.value +'/'+dependencies.value.avatar;
                     tutorFio.value = dependencies.value.surname + ' '+dependencies.value.name+' '+dependencies.value.patronymic
                 }
 
@@ -430,11 +475,14 @@
             return {
                 name,
                 showModalSuccess,
+                showModalProfile,
                 surname,
                 setAuthor,
                 patronymic,
+                tutorPhone,
                 readyFinishedStatus,
                 school,
+                tutorAvatar,
                 statusInCurrentIomFinished,
                 clearOverlay,
                 area,
@@ -500,6 +548,18 @@
         background-color: #edeef0;
     }
 
+    .modal-form3 {
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%,-27%);
+        z-index: 99;
+        width: 100%;
+        max-width:700px;
+        padding: 1.5em 1.5em;
+        color: #3c4142;
+    }
+
     .btn-outline-primary {
         color: #4571a3;
         border-color: #4571a3;
@@ -535,7 +595,7 @@
     }
 
     .modal-overlay,.modal-overlay2 {
-        position: absolute;
+        position: fixed;
         height: 100vh;
         top: 0;
         left: 0;
@@ -866,4 +926,84 @@
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         top: 16px;
     }
+
+
+    /* CARD*/
+
+    .tutor-card {
+        padding: 20px 20px;
+
+    }
+    badgescard span {
+        font-size: 1.6em;
+        margin: 0px 6px;
+        opacity: 0.6;
+    }
+
+    .firstinfo {
+        /*flex-direction: column;*/
+        z-index: 2;
+        position: relative;
+    }
+
+    .firstinfo img {
+        border-radius: 2%;
+        max-width: 150px;
+    }
+
+    .firstinfo .profileinfo {
+        padding: 0px 20px;
+    }
+
+    .firstinfo .profileinfo h1 {
+        font-size: 1.8em;
+    }
+
+    .firstinfo .profileinfo h3 {
+        font-size: 1.2em;
+        color: #00bcd4;
+        font-style: italic;
+    }
+
+    .firstinfo .profileinfo p.bio {
+        padding: 10px 0px;
+        color: #5A5A5A;
+        line-height: 1.2;
+        font-style: initial;
+    }
+
+    @keyframes animatop {
+        0% {
+            opacity: 0;
+            bottom: -500px;
+        }
+        100% {
+            opacity: 1;
+            bottom: 0px;
+        }
+    }
+
+    @keyframes animainfos {
+        0% {
+            bottom: 10px;
+        }
+        100% {
+            bottom: -42px;
+        }
+    }
+
+    @keyframes rotatemagic {
+        0% {
+            opacity: 0;
+            transform: rotate(0deg);
+            top: -24px;
+            left: -253px;
+        }
+        100% {
+            transform: rotate(-30deg);
+            top: -24px;
+            left: -78px;
+        }
+    }
+
 </style>

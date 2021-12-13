@@ -19,6 +19,9 @@
                         <h5>Категория</h5>
                         <p>{{category}}</p>
                         <hr>
+                        <h5>Уровень</h5>
+                        <p>{{level}}</p>
+                        <hr>
                         <h5>Предмет</h5>
                         <p>{{discipline}}</p>
                     </div>
@@ -44,6 +47,7 @@
             const data = ref()
             const id = ref()
             let title = ref()
+            let level = ref()
             let description = ref()
             let link = ref()
             let category = ref()
@@ -56,8 +60,9 @@
                 id.value = data.value[0].id
                 title.value = data.value[0].title
                 description.value = data.value[0].description
-                category.value = data.value[0].title_tag
-                discipline.value = data.value[0].title_discipline
+                category.value = data.value[0]['title_tag']
+                discipline.value = data.value[0]['title_discipline']
+                level.value = data.value[0]['level_title']
                 link.value = data.value[0].link
                 tag.value = store.getters['tag/getTags']
             }
@@ -72,6 +77,7 @@
             return {
                 loading,
                 tag,
+                level,
                 id,
                 link,
                 title,

@@ -6,8 +6,9 @@ export function useExerciseForm(fn){
 
     const {handleSubmit,isSubmiting} = useForm({
         initialValues: {
-            tag:1,
-            mentor:0
+            tag:'',
+            author:0,
+            level:''
         }
     })
 
@@ -53,11 +54,20 @@ export function useExerciseForm(fn){
             .required('Обязательное поле')
     )
 
+    const {value:level, errorMessage: liError, handleBlur: liBlur} = useField(
+        'level',
+        yup
+            .string()
+            .trim()
+            .required('Обязательное поле')
+    )
+
     const onSubmit = handleSubmit(fn)
 
     return {
         title,
         description,
+        level,
         link,
         term,
         tag,
@@ -65,6 +75,8 @@ export function useExerciseForm(fn){
         titleError,
         descriptionError,
         linkError,
+        liBlur,
+        liError,
         mentorError,
         termError,
         tagError,

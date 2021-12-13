@@ -34,7 +34,6 @@
                         <select class="form-control"  id="category" name="category" v-model="category">
                             <option value="">Выбрать категория</option>
                             <option v-for="(item, index) in tag" :key="item.id_tag"
-                                    :selected="item['id_tag'] === category ? ' selected ' : '' "
                                     :value="item.id_tag">{{item.title_tag}}</option>
                         </select>
                         <small v-if="tagError"  style="color:tomato">Обязательное поле</small>
@@ -46,12 +45,26 @@
                         <select class="form-control" name="discipline" id="discipline" v-model="discipline">
                             <option value="">Выбрать предмет</option>
                             <option v-for="(item, index) in disciplines" :key="item.id_dis"
-                                    :selected="item['id_dis'] === discipline ? ' selected ' : '' "
                                     :value="item.id_dis">{{item.title_discipline}}</option>
                         </select>
                         <small v-if="disError"  style="color:tomato">Обязательное поле</small>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <label > Уровень</label>
+                        <select class="form-control" name="level_iom"  v-model="level">
+                            <option value="">Выбрать уровень</option>
+
+                            <option v-for="(item, index) in levels" :key="item.id"
+                                    :value="item.id">{{item.title}}
+                            </option>
+                        </select>
+                        <small v-if="levelError"  style="color:tomato">Обязательное поле</small>
+                    </div>
+                </div>
+                <br>
                 <div class="row">
                     <div class="col-4"><button type="button" @click="updateItem('save')" class="btn btn-primary-outline" >Изменить</button></div>
                     <div class="col-4"><button type="button" @click="updateItem('redirect')" class="btn btn-primary-outline" >Изменить и закрыть</button></div>
@@ -87,12 +100,16 @@
             let link = ref()
             let category = ref()
             let discipline = ref()
+            let level = ref()
+            let levels = ref()
             // LIBRARY DATA
             const currentTime = ref()
             const disciplines = ref()
             const tagError = ref()
             const titleError = ref()
+            const level_iom = ref()
             const disError = ref()
+            const levelError = ref()
             const editor =  ClassicEditor
             const editorConfig = {
                 toolbar: {
@@ -117,6 +134,7 @@
                 title: true,
                 category: true,
                 discipline: true,
+                level_iom: true,
             }
 
             let invalid = ref({
@@ -127,14 +145,16 @@
 
             const load = async() => {
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
+                levels.value = await store.dispatch('discipline/getLevels')
                 await store.dispatch('tag/getTag')
                 await store.dispatch('globalLibrary/getLibraryDataById',{id: route.params.id})
                 data.value = store.getters['globalLibrary/getLibraryData']
                 id.value = data.value[0].id
                 title.value = data.value[0].title
                 description.value = data.value[0].description
-                category.value = data.value[0].tag_id
-                discipline.value = data.value[0].discipline_id
+                category.value = data.value[0]['tag_id']
+                discipline.value = data.value[0]['discipline_id']
+                level.value = data.value[0]['level_id']
                 link.value = data.value[0].link
                 tag.value = store.getters['tag/getTags']
             }
@@ -145,7 +165,7 @@
                 loading.value = false
             })
 
-            watch([title,category,discipline], (values)=>{
+            watch([title,category,discipline,level], (values) => {
                 if(values[0] !== '') {
                     titleError.value = ''
                 }else {
@@ -161,7 +181,11 @@
                 }else {
                     disError.value = true
                 }
-
+                if(values[3] !== '') {
+                    levelError.value = ''
+                }else {
+                    levelError.value = true
+                }
             })
 
             const updateItem = async(status) => {
@@ -173,6 +197,7 @@
                     tagError.value = error.value?.tag
                     titleError.value = error.value?.title
                     disError.value = error.value?.discipline
+                    levelError.value = error.value?.level
 
                     if(Object.keys(error.value).length === 0) {
                         await store.dispatch('globalLibrary/updateInLibrary',{
@@ -182,6 +207,7 @@
                             link: link.value,
                             category: category.value,
                             discipline: discipline.value,
+                            level: level.value,
                         })
                         if(status == 'save') {
                             await load()
@@ -205,7 +231,10 @@
                 id,
                 link,
                 updateItem,
+                level_iom,
                 title,
+                levels,
+                level,
                 disError,
                 titleError,
                 tagError,
@@ -215,8 +244,8 @@
                 errorSchemaRequired,
                 invalid,
                 editorConfig,
+                levelError,
                 editor
-
             }
         },
         components: {AppLoader,AdminLibraryMenu}

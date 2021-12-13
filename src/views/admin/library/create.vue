@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-6">
                     <label > Ссылка</label>
-                    <input type="text" :class="['form-control',{invalid:linkError}]" @blur="linkBlur" name="link" v-model="link">
+                    <input type="text" class="form-control"  name="link" v-model="link">
                 </div>
             </div>
             <div class="row">
@@ -44,6 +44,16 @@
                         <option v-for="(item, index) in disciplines" :key="item.id_dis" :value="item.id_dis">{{item.title_discipline}}</option>
                     </select>
                     <small v-if="disError">{{disError}}</small>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label > Уровень реализации ИОМ </label>
+                    <select :class="['form-control',{invalid:liError}]" name="level_iom" v-model="level_iom">
+                        <option value="">Выбрать уровень</option>
+                        <option v-for="(item, index) in levels" :key="item.id" :value="item.id">{{item.title}}</option>
+                    </select>
+                    <small v-if="liError">{{liError}}</small>
                 </div>
             </div>
             <hr>
@@ -73,6 +83,7 @@
             const currentTime = ref()
             const disciplines = ref()
             const description = ref()
+            const levels = ref()
             const editor =  ClassicEditor
             const editorConfig = {
                 toolbar: {
@@ -112,6 +123,7 @@
             onMounted(async()=>{
                 loading.value = true
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
+                levels.value = await store.dispatch('discipline/getLevels')
                 await store.dispatch('tag/getTag')
                 tag.value = store.getters['tag/getTags']
                 loading.value = false
@@ -134,6 +146,7 @@
                 disciplines,
                 description,
                 tag,
+                levels,
                 editorConfig,
                 editor
             }

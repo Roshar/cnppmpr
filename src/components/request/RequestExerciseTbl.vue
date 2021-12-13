@@ -12,7 +12,8 @@
                     <th scope="col">Краткое описание</th>
                     <th scope="col">Ссылка на задание</th>
                     <th scope="col">Срок</th>
-                    <th scope="col">Тип</th>
+                    <th scope="col">Категория</th>
+                    <th scope="col">Уровень</th>
                     <th scope="col">Действие</th>
                 </tr>
             </thead>
@@ -26,6 +27,7 @@
                     </td>
                     <td>{{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</td>
                     <td>{{item['title_tag']}}</td>
+                    <td>{{item['level_title']}}</td>
                     <td><router-link :to="{ path: `/my_iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" class="btn btn-outline-open btn-block">Открыть</router-link></td>
                 </tr>
             </tbody>

@@ -11,7 +11,6 @@ export function useLibraryForm(fn){
     })
 
 
-
     const {value:title, errorMessage: titleError, handleBlur:titleBlur} = useField(
         'title',
         yup
@@ -48,6 +47,14 @@ export function useLibraryForm(fn){
             .required('Обязательное поле')
     )
 
+    const {value:level_iom, errorMessage: liError, handleBlur:liBlue} = useField(
+        'level_iom',
+        yup
+            .string()
+            .trim()
+            .required('Обязательное поле')
+    )
+
     const onSubmit = handleSubmit(fn)
 
     return {
@@ -56,6 +63,9 @@ export function useLibraryForm(fn){
         discipline,
         disError,
         disBlue,
+        level_iom,
+        liBlue,
+        liError,
         link,
         category,
         titleError,

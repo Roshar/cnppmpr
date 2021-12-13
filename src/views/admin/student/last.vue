@@ -108,13 +108,13 @@
             const deactivationUser = async (user) => {
                 await store.dispatch('admin/deactivationById',{userId: user})
                 lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                await router.push('/last_student')
+                window.location.href = '/last_student'
             }
 
             const activation = async (user) => {
                 await store.dispatch('admin/activationById',{userId: user})
                 lastStudents.value = await store.dispatch('admin/getLastUsers',{tbl:'students'})
-                await router.push('/last_student')
+                window.location.href = '/last_student'
             }
 
             onMounted(async()=>{

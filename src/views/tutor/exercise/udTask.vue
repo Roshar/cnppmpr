@@ -28,12 +28,21 @@
                             </select>
                             <small v-if="mentorError" class="form-text text-muted">Обязательное поле</small>
                         </div>
+
                         <div class="form-group">
                             <select :class="['form-control',invalid.tagInvalid]"  name="tag" v-model="tag_id">
                                 <option v-for="(item, index) in tagsData"  :key="item['id_tag']"  :selected="item['id_tag'] === tag_id ? ' selected ' : '' "  :value="item['id_tag']">{{item['title_tag']}}</option>
                             </select>
                             <small v-if="tagError" class="form-text text-muted">Обязательное поле</small>
                         </div>
+
+                        <div class="form-group">
+                            <select class="form-control"  name="tag" v-model="level_id">
+                                <option v-for="(item, index) in levels"  :key="item['id']"  :value="item['id']">{{item['title']}}</option>
+                            </select>
+                            <small v-if="levelError" class="form-text text-muted">Обязательное поле</small>
+                        </div>
+
                         <input type="hidden" name="id_exercises" v-model="id_exercise">
                         <div class="form-group">
                             <label for="term">Срок выполнения </label>
@@ -122,6 +131,9 @@
             const loading = ref()
             const title = ref()
             const description = ref()
+            const levels = ref()
+            const level = ref()
+            const level_id = ref()
             const tag_id = ref()
             const term = ref()
             const link = ref()
@@ -135,6 +147,7 @@
             const titleError = ref()
             const mentorError = ref()
             const tagError = ref()
+            const levelError = ref()
             const tblA = ref([])
             let error = ref({})
             const editor =  ClassicEditor
@@ -160,13 +173,15 @@
             let errorSchemaRequired = {
                 title: true,
                 tag: true,
-                mentor: true
+                mentor: true,
+                level: true
             }
 
             let invalid = ref({
                 titleInvalid: '',
                 mentorInvalid: '',
                 tagInvalid: '',
+                levelInvalid: '',
             })
             const validIdIom = async() => {
                 await store.dispatch('iom/getIomId',route.params)
@@ -182,9 +197,11 @@
                 title.value = taskData.value.title
                 description.value = taskData.value.description
                 tag_id.value = taskData.value['tag_id']
+                levels.value = await store.dispatch('discipline/getLevels')
                 //term.value = taskData.value.term.split(".").reverse().join("-");
                 term.value = taskData.value.term
-
+                level.value = taskData.value['level_title']
+                level_id.value = taskData.value['level_id']
                 mentor.value = taskData.value.mentor
                 link.value = taskData.value.link
                 id_exercise.value = taskData.value['id_exercises']
@@ -220,6 +237,7 @@
                 tagError.value = error.value?.tag
                 titleError.value = error.value?.title
                 mentorError.value = error.value?.mentor
+                levelError.value = error.value?.level
 
                 if(Object.keys(error.value).length === 0) {
                     await store.dispatch('iom/updateExercise',{tbl:tblA.value[0][0].subTypeTableIom,values:{
@@ -230,7 +248,8 @@
                                         term:term.value,
                                         link:link.value,
                                         id_exercise:id_exercise.value,
-                                        iomId: route.params.id
+                                        iomId: route.params.id,
+                                        level: level_id.value
                                     }})
                     taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
                     taskData.value.term = taskData.value.term.split(".").reverse().join("-")
@@ -248,11 +267,15 @@
                 id_exercise,
                 onSubmit,
                 invalid,
+                level_id,
+                level,
+                levels,
                 title,
                 description,
                 link,
                 term,
                 mentor,
+                levelError,
                 mentorsData,
                 tagsData,
                 currentMentor,

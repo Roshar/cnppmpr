@@ -315,7 +315,7 @@ export default {
 
             } catch(e){
                 dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
+                    value: e.data.values.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
@@ -332,7 +332,7 @@ export default {
 
             } catch(e){
                 dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()

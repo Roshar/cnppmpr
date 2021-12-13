@@ -7,6 +7,7 @@
             <span style="font-style: italic;">Автор:  </span><p class="card-text">{{currentMentor}}</p>
             <span style="font-style: italic;">Ссылка: </span><p class="card-text">{{taskData.link}}</p>
             <span style="font-style: italic;">Категория: </span><p class="card-text">{{taskData['title_tag']}}</p>
+            <span style="font-style: italic;">Уровень: </span><p class="card-text">{{taskData['level_title']}}</p>
             <span style="font-style: italic;">Срок выполнения: </span><p class="card-text">{{checkTerm(taskData['term'], taskData['term'])}}</p>
         </div>
     </div>

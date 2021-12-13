@@ -123,27 +123,122 @@
                                             </div>
                                         </div>
                                     </div>
-<!--                                    <div class="card mb-3">-->
-<!--                                        <div class="card-body">-->
-<!--                                            <div class="row">-->
-<!--                                                <div class="col-sm-3">-->
-<!--                                                    <h6 class="mb-0">Общее количество ИОМов</h6>-->
-<!--                                                </div>-->
-<!--                                                <div class="col-sm-9 text-secondary">-->
-<!--                                                    <span></span>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <hr>-->
-<!--                                            <div class="row">-->
-<!--                                                <div class="col-sm-3">-->
-<!--                                                    <h6 class="mb-0">Количество завершивших обучение</h6>-->
-<!--                                                </div>-->
-<!--                                                <div class="col-sm-9 text-secondary">-->
-<!--                                                    <span></span>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <div class="card mb-3" v-if="showAdditionally">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <h6> Дополнительная информация  | </h6>
+                                                </div>
+                                                <div class="col-sm-8" @click="showAdditionally = false">
+                                                    <h6 style="font-size: .9em; font-style: italic; color: #2a5885; cursor: pointer"> Редактировать</h6>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Образование</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{education_level_title || 'не указано' }}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Занимаемая должность</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{position_title || 'не указано'}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Педагогический стаж</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{experience_title || 'не указано'}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Квалификационная категория</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{category_student_title || 'не указано'}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-3" style="border:1px solid tomato" v-else>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <h6> Дополнительная информация  | </h6>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <button  type="button"  class="btn" style="font-size: .9em; font-style: italic; color: tomato; cursor: pointer"
+                                                    @click="saveAdditionally"> Сохранить </button>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <button type="button" class="btn" @click="showAdditionally=true" style="font-size: .9em; font-style: italic; color: tomato; cursor: pointer"> Отмена </button>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Образование</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    <select class="form-control"  name="education_value" v-model="education_level">
+                                                        <option value="0"> не выбрано</option>
+                                                        <option v-for="(item, index) in edu_level_list"  :key="item['id']"  :value="item['id']">{{item['title']}}</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Занимаемая должность</h6>
+                                                </div>
+
+                                                <div class="col-sm-9 text-secondary">
+                                                    <select class="form-control"  name="position" v-model="position">
+                                                        <option value="0"> не выбрано</option>
+                                                        <option v-for="(item, index) in position_list"  :key="item['id']"  :value="item['id']">{{item['title']}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Педагогический стаж</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    <select class="form-control"  name="experience" v-model="experience">
+                                                        <option value="0"> не выбрано</option>
+                                                        <option v-for="(item, index) in experience_list"  :key="item['id']"  :value="item['id']">{{item['title']}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Квалификационная категория</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    <select class="form-control"  name="category_student" v-model="category_student">
+                                                        <option value="0"> не выбрано</option>
+                                                        <option v-for="(item, index) in category_list"  :key="item['id']"  :value="item['id']">{{item['title']}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -176,18 +271,31 @@
             const issetIom = ref()
             const age = ref();
             const birthday = ref();
+            const education_level = ref();
+            const education_level_title = ref();
+            const category_student = ref();
+            const category_student_title = ref();
+            const experience = ref();
+            const experience_title = ref();
+            const position = ref();
+            const position_title = ref();
             const baseUrl = ref(process.env.VUE_APP_URL)
             const avatar = ref();
             const gender = ref();
             const login = ref();
             const area = ref();
             const school = ref();
+            const showAdditionally = ref(true)
             const discipline = ref();
-            let students = ref();
-            let dependencies = ref()
-            let tutorId = ref()
-            let tutorFio = ref()
-            let token = store.state['auth'].token;
+            const students = ref();
+            const dependencies = ref()
+            const edu_level_list = ref()
+            const position_list = ref()
+            const experience_list = ref()
+            const category_list = ref()
+            const tutorId = ref()
+            const tutorFio = ref()
+            const token = store.state['auth'].token;
             let statData;
             const loading = ref(true)
 
@@ -217,11 +325,46 @@
                 students.value = (store.state['user'].userLink) ? store.state['user'].userLink['COUNT(*)'] : null
             }
 
+            const getAdditionallyInfo = async() => {
 
-            onMounted(async()=>{
+                // получаем данные слушателя
+                const studentAdditionallyData = await store.dispatch('student/getStudentAdditionallyOptionById', {
+                    studentId: id.value
+                })
+                if(studentAdditionallyData && studentAdditionallyData.length) {
+                    position_title.value = studentAdditionallyData[0]['position_title']
+                    category_student_title.value = studentAdditionallyData[0]['category_title']
+                    education_level_title.value = studentAdditionallyData[0]['edu_level_title']
+                    experience_title.value = studentAdditionallyData[0]['experience_title']
+
+
+                    experience.value = studentAdditionallyData[0]['experience_id']
+                    category_student.value = studentAdditionallyData[0]['category_id']
+                    education_level.value = studentAdditionallyData[0]['edu_level_id']
+                    position.value = studentAdditionallyData[0]['position_id']
+                }
+
+
+                // список с уровнями образования
+                edu_level_list.value = await store.dispatch('student/getEducationLevels')
+
+                // education_level_title.value =
+                // список с должностями
+                position_list.value = await store.dispatch('student/getPositions')
+                // стаж
+                experience_list.value = await store.dispatch('student/getExperience')
+                // категории учителей
+                category_list.value = await store.dispatch('student/getCategoryTeach')
+            }
+
+
+            onMounted(async() => {
                 loading.value = true
                 await load()
                 dependencies.value = store.getters['user/getUserLinks']
+
+                // получение дополнительной информации
+                await getAdditionallyInfo()
 
                 if(dependencies.value) {
                     tutorId.value = dependencies.value.user_id
@@ -235,6 +378,27 @@
                 }
                 loading.value = false
             })
+
+            const saveAdditionally = async() => {
+
+                if(category_student.value || experience.value || education_level.value || position.value ) {
+                    await store.dispatch('student/insertOrUpdateAdditionally', {
+                        studentId: id.value,
+                        category_id:category_student.value,
+                        edu_experience_id:experience.value,
+                        education_id:education_level.value,
+                        position_id:position.value
+                    })
+
+                    await getAdditionallyInfo()
+                    showAdditionally.value  = true
+                    await router.push('/')
+
+                }
+
+
+
+            }
 
 
             let tutor = "Вам еще не назначен тьютор";
@@ -251,20 +415,33 @@
                 area,
                 phone,
                 discipline,
+                experience,
+                category_student,
+                edu_level_list,
                 tutor,
                 gender,
+                saveAdditionally,
+                education_level,
+                experience_list,
+                category_list,
+                position,
+                showAdditionally,
                 genderVal,
                 declensionAge,
+                position_list,
                 avatar,
                 birthday,
                 age,
                 login,
                 goToModule,
                 issetIom,
+                education_level_title,
+                position_title,
+                experience_title,
+                category_student_title,
                 tutorId,
                 tutorFio,
                 loading
-
             }
         },
         components: {StudentMainMenu,AppLoader}

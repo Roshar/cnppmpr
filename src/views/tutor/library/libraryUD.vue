@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                          <label for="link">Ссылка на задание <i style="font-size: .8em">(необязательное поле)</i></label>
-                        <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Введите название задания">
+                        <input type="text" class="form-control" v-model="link" id="link" name="link" placeholder="Ссылка">
                     </div>
 
                     <div class="form-group">
@@ -26,6 +26,14 @@
                         </select>
                         <small v-if="tagError" class="form-text text-muted">Обязательное поле</small>
                     </div>
+
+                    <div class="form-group">
+                        <select class="form-control"  name="tag" v-model="level_id">
+                             <option v-for="(item, index) in levels"  :key="item['id']"  :value="item['id']">{{item['title']}}</option>
+                        </select>
+                        <small v-if="levelError" class="form-text text-muted">Обязательное поле</small>
+                    </div>
+
                     <input type="hidden" name="id_exercises" v-model="id_exercise">
                     <div class="row">
                         <div class="col-6">
@@ -106,6 +114,8 @@ export default {
         const title = ref()
         const description = ref()
         const tag_id = ref()
+        const levels = ref()
+        const level_id = ref()
         const term = ref()
         const link = ref()
         const mentor = ref()
@@ -114,7 +124,9 @@ export default {
         const taskData = ref({})
         const showModal = ref(false)
         const titleError = ref()
+        const level = ref()
         const tagError = ref()
+        const levelError = ref()
         const tblA = ref([])
         let error = ref({})
         const editor =  ClassicEditor
@@ -124,11 +136,13 @@ export default {
         let errorSchemaRequired = {
             title: true,
             tag: true,
+            level_id: true
         }
 
         let invalid = ref({
             titleInvalid: '',
             tagInvalid: '',
+            levelError: '',
         })
 
         onMounted(async() => {
@@ -136,10 +150,13 @@ export default {
             taskData.value = await store.dispatch('library/getTaskById',{token: localStorage.getItem('jwt-token'),
             id: route.params.id})
             tagsData.value = await store.dispatch('tag/getTag')
+            levels.value = await store.dispatch('discipline/getLevels')
             title.value = taskData.value.title
             description.value = taskData.value.description
             tag_id.value = taskData.value['tag_id']
             link.value = taskData.value.link
+            level.value = taskData.value['level_title']
+            level_id.value = taskData.value['level_id']
             id_exercise.value = taskData.value['id']
             loading.value = false
 
@@ -155,6 +172,7 @@ export default {
             requiredForm('select',errorSchemaRequired,error)
             tagError.value = error.value?.tag
             titleError.value = error.value?.title
+            levelError.value = error.value?.level_id
 
             if(Object.keys(error.value).length === 0) {
                 console.log('UPDATE')
@@ -164,6 +182,7 @@ export default {
                         tag:tag_id.value,
                         link:link.value,
                         id:id_exercise.value,
+                        level:level_id.value,
                     }})
                 taskData.value = await store.dispatch('library/getTaskById',{token: localStorage.getItem('jwt-token'),
                     id: route.params.id})
@@ -180,7 +199,11 @@ export default {
             showModal,
             id_exercise,
             onSubmit,
+            levels,
+            level_id,
             invalid,
+            levelError,
+            level,
             title,
             description,
             link,

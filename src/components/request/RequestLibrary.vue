@@ -10,7 +10,8 @@
                 <th scope="col">№</th>
                 <th scope="col">Наименование</th>
                 <th scope="col">Краткое описание</th>
-                <th scope="col">Тип</th>
+                <th scope="col">Категория</th>
+                <th scope="col">Уровень</th>
                 <th scope="col">Действие</th>
             </tr>
             </thead>
@@ -20,6 +21,7 @@
                 <td><router-link :to="{ path: `/library/${item.id}`}" >{{item.title}}</router-link></td>
                 <td> {{shortContent(clearHTML(item.description))}}</td>
                 <td>{{item['title_tag']}}</td>
+                <td>{{item['level_title']}}</td>
                 <td><router-link :to="{ path: `/library/${item.id}`}" class="btn btn-outline-open btn-block">Открыть</router-link></td>
             </tr>
             </tbody>

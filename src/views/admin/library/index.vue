@@ -8,18 +8,25 @@
             <hr>
             <h5 class="subtitle-page">Отсортировать по параметрам </h5>
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <label > Категория</label>
                     <select class="form-control" name="tag" v-model="category">
                         <option value="0">Выбрать категория</option>
                         <option v-for="(item, index) in tag" :key="item.id_tag" :value="item.id_tag">{{item.title_tag}}</option>
                     </select>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <label > Предмет</label>
                     <select class="form-control" name="discipline" v-model="discipline_value">
                         <option value="0">Выбрать предмет</option>
                         <option v-for="(item, index) in disciplines" :key="item.id_dis" :value="item.id_dis">{{item.title_discipline}}</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label > Уровень</label>
+                    <select class="form-control" name="discipline" v-model="level_value">
+                        <option value="0">Выбрать уровень</option>
+                        <option v-for="(item, index) in levels" :key="item.id" :value="item.id">{{item.title}}</option>
                     </select>
                 </div>
             </div>
@@ -41,6 +48,7 @@
                                 <th scope="col" style="width: 15%">Описание</th>
                                 <th scope="col" style="width: 20%">Предмет</th>
                                 <th scope="col" style="width: 15%">Категория</th>
+                                <th scope="col" >Уровень</th>
                                 <th scope="col" style="width: 7%">Дата создания</th>
                                 <th scope="col" style="width: 5%">Изменить</th>
                                 <th scope="col" style="width: 5%">Удалить</th>
@@ -53,6 +61,7 @@
                             <td>{{shortContent(clearHTML(item.description),50)}}</td>
                             <td> {{item['title_discipline']}}</td>
                             <td>{{item['title_tag']}}</td>
+                            <td>{{item['level_title']}}</td>
                             <td>{{item['created_date']}}</td>
                             <td>
                                 <div style="text-align: center" @click="editItem(item.id)">
@@ -95,22 +104,24 @@
             const loading = ref(true)
             const search = ref(false)
             const discipline_value = ref("0")
+            const level_value = ref("0")
             const tag = ref()
             // LIBRARY DATA
             const currentTime = ref()
             const disciplines = ref()
+            const levels = ref()
             const library = ref()
             const countNum = ref(0)
             const deactivation = ref(false)
             const category = ref("0")
 
-
-            watch([ category, discipline_value], async (values) => {
-                if(values[0] !== '0' || values[1] !== '0' ) {
+            watch([ category, discipline_value, level_value], async (values) => {
+                if(values[0] !== '0' || values[1] !== '0' || values[2] !== '0' ) {
                     await store.dispatch('globalLibrary/getLibraryDataWithFilter',
                         {
                             disId: discipline_value.value,
                             tagId: category.value,
+                            level: level_value.value
                         })
                     library.value = store.getters['globalLibrary/getLibraryData']
                     countNum.value = library.value.length ? library.value.length : 0
@@ -136,6 +147,7 @@
             onMounted(async()=>{
                 loading.value = true
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
+                levels.value = await store.dispatch('discipline/getLevels')
                 await store.dispatch('globalLibrary/getLibraryData')
                 library.value = store.getters['globalLibrary/getLibraryData']
                 await store.dispatch('tag/getTag')
@@ -152,6 +164,8 @@
                 search,
                 disciplines,
                 discipline_value,
+                level_value,
+                levels,
                 library,
                 deactivation,
                 category,

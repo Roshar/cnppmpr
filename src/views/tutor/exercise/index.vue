@@ -53,7 +53,6 @@
             <hr>
 
             <h5 class="subtitle-page">Поисковик</h5>
-
             <request-library-data v-model="filterLib" :show-modal-lib="showModalLib"
                                   :execLib="execLib"
                                   :title="title"
@@ -85,23 +84,34 @@
                     </div>
                     <div class="form-group">
                         <label for="link">Автор</label>
-                        <select :class="['form-control',{invalid:mentorError}]" name="author" v-model="mentor">
+                        <select class="form-control" name="author" v-model="mentor">
                             <option value=0>Вы</option>
                             <option v-if="mentorsData" v-for="(item, index) in mentorsData"  :key="item.id"  :selected="item.id === mentor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
                         </select>
                         <small v-if="mentorError">{{mentorError}}</small>
                     </div>
                     <div class="form-group">
-                        <label for="link">Тип задания</label>
+                        <label for="link">Категория</label>
                         <select :class="['form-control',{invalid:tagError}]"  name="tag" v-model="tag">
+                            <option value=''>Выбрать категорию</option>
                             <option v-for="(item, index) in tagsData"  :key="item['id_tag']"   :value="item['id_tag']">{{item['title_tag']}}</option>
                             <small v-if="tagError">{{tagError}}</small>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="link">Уровень</label>
+                        <select :class="['form-control',{invalid:liError}]"  name="tag" v-model="level">
+                            <option value=''>Выбрать уровень</option>
+                            <option v-for="(item, index) in levels"  :key="item['id']"   :value="item['id']">{{item['title']}}</option>
+                            <small v-if="liError">{{liError}}</small>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="term">Срок выполнения </label>
                         <br>
-                        <span> <i>Если дата будет указана раньше текущей, срок выполнения будет сохранен как "бессрочно" </i> </span>
+                        <span> <i>Если дата будет указана раньше текущей или поле не будет заполнено, срок выполнения будет сохранен как "бессрочно" </i> </span>
                         <input type="date" class="form-control" id="term" name="term" v-model="term">
                         <small v-if="termError">{{termError}}</small>
                     </div>
@@ -191,6 +201,7 @@
             const filter = ref({})
             const mentorsData = ref()
             const tagsData = ref()
+            const levels = ref()
             const description = ref()
             const filterLib = ref({})
             const filterLibGlobal = ref({})
@@ -232,6 +243,8 @@
                 })
                 const iomData = store.getters['iom/getCurrentIomData']
                 currentIomTitle.value = iomData.title
+
+                levels.value = await store.dispatch('discipline/getLevels')
 
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 await store.dispatch('library/getLibraryData',{token: localStorage.getItem('jwt-token')})
@@ -307,6 +320,7 @@
                 filterLib,
                 filterLibGlobal,
                 mentorsData,
+                levels,
                 tagsData,
                 showModalOption,
                 showModalLibGlobal,

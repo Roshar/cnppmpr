@@ -73,12 +73,14 @@
             const store = useStore()
             const route = useRoute()
             const router = useRouter()
+
             watch([title,tag], values => {
                 emit('update:modelValue', {
                     title: values[0],
                     tag: values [1]
                 })
             })
+
             const addTaskFromLib = async (id) => {
                 const values = {
                     id: id,
@@ -89,6 +91,7 @@
                 emit('closeLib')
                 await router.push(`/my_iom/${route.params.id}/exercise`)
             }
+
             return{
                 title,
                 tag,

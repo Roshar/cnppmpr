@@ -17,6 +17,19 @@ export default {
             }
         },
 
+        async getLevels({dispatch}) {
+            try {
+                const {data} = await axios.post('/api/get/levels')
+                return data.values ? data.values : []
+            }catch (e) {
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
     },
 
 }
