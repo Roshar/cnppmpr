@@ -7,6 +7,7 @@
         <div class="content-wallpaper">
             <div class="row">
                 <div class="col-8">
+
                     <h4 class="title-page">Просмотр ответа</h4>
                     <h6>Наименование задания: {{exTitle}}</h6>
                     <h6>Объект оценки (слушатель): {{studentFIO}} </h6>
@@ -238,9 +239,12 @@
                     exId: route.params.exId,
                     studentId: route.params.studentId
                 })
-                if(chat.value) {
+                console.log(chat.value )
+                if(chat.value && chat.value.length) {
                     tutorId.value = chat.value[0]['tutorId']
                 }
+
+
 
 
                 accepted.value  = answer.accepted

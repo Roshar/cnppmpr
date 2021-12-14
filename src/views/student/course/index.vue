@@ -206,55 +206,66 @@
                                             <div class="timeline-box" v-if="tagsData" v-for="tag in tagsData" >
                                                 <h5 class="resume-experience-title">
                                                     {{tag.title_tag}}</h5>
+
                                                 <div v-if="exerciseData" v-for="item in exerciseData">
-                                                    <div class="jobster-candidate-timeline active_block"   v-if="item.accepted === null && (item['on_check'] === 0 || item['on_check'] === null)"  @click="openTask(item.id_exercises,item.iom_id)">
-                                                        <div class="jobster-timeline-item " v-if="filterData(tag.tag_id,item.tag_id)">
-                                                            <div class="jobster-timeline-cricle">
-                                                                <i class="active far fa-circle"></i>
-                                                            </div>
-                                                            <div class="jobster-timeline-info" >
-                                                                <div class="dashboard-timeline-info">
-                                                                    <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                                    <h6 class="mb-2"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                                    <span style="font-style: italic"> Автор: {{setAuthor(item.mentor )}}</span>
-                                                                    <p class="mt-2">Содержание: {{shortContent(clearHTML(item.description))}}</p>
+                                                    <div v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-candidate-timeline active_block"   v-if="item.accepted === null && (item['on_check'] === 0 || item['on_check'] === null)"  @click="openTask(item.id_exercises,item.iom_id)">
+                                                            <div class="jobster-timeline-item ">
+                                                                <div class="jobster-timeline-cricle">
+                                                                    <i class="active far fa-circle"></i>
+                                                                </div>
+                                                                <div class="jobster-timeline-info" >
+                                                                    <div class="dashboard-timeline-info">
+                                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                        <h6 class="mb-2"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                        <span style="font-style: italic"> Автор: {{setAuthor(item.mentor )}}</span>
+                                                                        <p class="mt-2">Содержание: {{shortContent(clearHTML(item.description))}}</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="jobster-candidate-timeline done"   v-if="item.accepted === 1 && item['on_check'] === 0 " @click="openTask(item.id_exercises,item.iom_id)" >
-                                                        <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
-                                                            <div class="jobster-timeline-info" >
-                                                                <div class="dashboard-timeline-info ">
-                                                                    <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                                    <h6 class="mb-2" style="color: green"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                                    <span style="font-style: italic; background-color: green; color:white;padding: 4px"> Статус: Ответ принят</span>
+                                                    <div v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-candidate-timeline done"   v-if="item.accepted === 1 && item['on_check'] === 0 " @click="openTask(item.id_exercises,item.iom_id)" >
+                                                            <div class="jobster-timeline-item" >
+                                                                <div class="jobster-timeline-info" >
+                                                                    <div class="dashboard-timeline-info ">
+                                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                        <h6 class="mb-2" style="color: green"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                        <span style="font-style: italic; background-color: green; color:white;padding: 4px"> Статус: Ответ принят</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="jobster-candidate-timeline pendding pendding_block"   v-if="item.accepted === 2 && item['on_check'] === 0"  @click="openTask(item.id_exercises,item.iom_id)">
-                                                        <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
-                                                            <div class="jobster-timeline-info" >
-                                                                <div class="dashboard-timeline-info">
-                                                                    <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                                    <h6 class="mb-2" style="color: orange"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                                    <span style="font-style: italic; background-color: orange; color:white;padding: 4px"> Статус: Необходимо внести корректировки в ответ</span>
+                                                    <div v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-candidate-timeline pendding pendding_block"   v-if="item.accepted === 2 && item['on_check'] === 0"  @click="openTask(item.id_exercises,item.iom_id)">
+                                                            <div class="jobster-timeline-item" >
+                                                                <div class="jobster-timeline-info" >
+                                                                    <div class="dashboard-timeline-info">
+                                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                        <h6 class="mb-2" style="color: orange"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                        <span style="font-style: italic; background-color: orange; color:white;padding: 4px"> Статус: Необходимо внести корректировки в ответ</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="jobster-candidate-timeline on_check_block"   v-if="item['on_check'] === 1" >
-                                                        <div class="jobster-timeline-item" v-if="filterData(tag.tag_id,item.tag_id)">
-                                                            <div class="jobster-timeline-info" >
-                                                                <div class="dashboard-timeline-info">
-                                                                    <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                                    <h6 class="mb-2" style="color: blueviolet"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
-                                                                    <span style="font-style: italic; background-color: blueviolet; color:white;padding: 4px"> Статус: На проверке</span>
+
+                                                    <div v-if="filterData(tag.tag_id,item.tag_id)">
+                                                        <div class="jobster-candidate-timeline on_check_block"   v-if="item['on_check'] === 1" >
+                                                            <div class="jobster-timeline-item" >
+                                                                <div class="jobster-timeline-info" >
+                                                                    <div class="dashboard-timeline-info">
+                                                                        <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
+                                                                        <h6 class="mb-2" style="color: blueviolet"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                        <span style="font-style: italic; background-color: blueviolet; color:white;padding: 4px"> Статус: На проверке</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -441,7 +452,6 @@
                         } )
 
                         exerciseData.value = store.getters['student/getExercisesMyIom']
-                        console.log(exerciseData.value)
 
                         common_exe.value = (exerciseData.value && exerciseData.value.length ) ? exerciseData.value.length : 0
                         if(exerciseData.value && exerciseData.value.length) {
