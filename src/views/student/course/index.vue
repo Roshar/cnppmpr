@@ -481,7 +481,6 @@
             const openTask = (taskId, iomId) => {
                 router.push(`/my_course/${iomId}/${taskId}/${tutorId.value}`)
             }
-
             return {
                 name,
                 showModalSuccess,
