@@ -133,6 +133,74 @@
                                         </div>
                                         <hr>
                                     </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h6> ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ  </h6>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Образование</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                {{education_level_title || 'не указано' }}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Занимаемая должность</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                {{position_title || 'не указано'}}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Педагогический стаж</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                {{experience_title || 'не указано'}}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Квалификационная категория</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                {{category_student_title || 'не указано'}}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h6> Результаты диагностики профессиональных дефицитов (при наличии) </h6>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Формы/результаты проведенных профессиональных диагностик</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                {{prof_result_title || 'не указано'}}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Индивидуальный запрос педагога (при наличии)</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                {{individual_request_title || 'не указано'}}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
                                 </div>
                                 <div v-if="iom.length">
                                     <div class="row gutters-sm">
@@ -236,6 +304,12 @@
             const iomInfo = ref()
             const finishedExercises = ref()
             const pendingExercises = ref()
+            const education_level_title = ref()
+            const individual_request_title = ref();
+            const category_student_title = ref();
+            const experience_title = ref();
+            const position_title = ref();
+            const prof_result_title = ref();
 
             //EDIT FLAG
             const editProfile = ref(false)
@@ -291,6 +365,17 @@
                 const userId = route.params.userId
                 profile.value = await store.dispatch('admin/getProfile',{tbl:'students', userId:userId})
                 dependencies.value = await store.dispatch('admin/getDependenciesStudent',{ userId:userId})
+                const studentAdditionallyData = await store.dispatch('student/getStudentAdditionallyOptionById', {
+                    studentId: userId
+                })
+                if(studentAdditionallyData && studentAdditionallyData.length) {
+                    position_title.value = studentAdditionallyData[0]['position_title']
+                    category_student_title.value = studentAdditionallyData[0]['category_title']
+                    education_level_title.value = studentAdditionallyData[0]['edu_level_title']
+                    experience_title.value = studentAdditionallyData[0]['experience_title']
+                    individual_request_title.value = studentAdditionallyData[0]['individual_request_title']
+                    prof_result_title.value = studentAdditionallyData[0]['profresult_title']
+                }
 
                 //DEPENDENCIES INFO
                 if(dependencies.value.length) {
@@ -342,6 +427,12 @@
                 loading,
                 showModal,
                 editProfile,
+                education_level_title,
+                position_title,
+                individual_request_title,
+                prof_result_title,
+                category_student_title,
+                experience_title,
                 areas,
                 currentUser,
                 disciplines,

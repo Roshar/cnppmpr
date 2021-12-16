@@ -170,6 +170,30 @@
                                                 </div>
                                             </div>
                                             <hr>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h6> Результаты диагностики профессиональных дефицитов (при наличии) </h6>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Формы/результаты проведенных профессиональных диагностик</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{prof_result_title || 'не указано'}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Индивидуальный запрос педагога (при наличии)</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    {{individual_request_title || 'не указано'}}
+                                                </div>
+                                            </div>
+                                            <hr>
                                         </div>
                                     </div>
                                     <div class="card mb-3" style="border:1px solid tomato" v-else>
@@ -237,6 +261,28 @@
                                                 </div>
                                             </div>
                                             <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Формы/результаты проведенных профессиональных диагностик</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                    <textarea name="prof_result" class="form-control" id="prof_result" rows="14" v-model="prof_result">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0">Индивидуальный запрос педагога (при наличии)</h6>
+                                                </div>
+                                                <div class="col-sm-9 text-secondary">
+                                                     <textarea name="individual_request" id="individual_request" class="form-control" rows="14" v-model="individual_request">
+
+                                                    </textarea>
+
+                                                </div>
+                                            </div>
+                                            <hr>
                                         </div>
                                     </div>
                                 </div>
@@ -271,6 +317,10 @@
             const issetIom = ref()
             const age = ref();
             const birthday = ref();
+            const prof_result = ref();
+            const prof_result_title = ref();
+            const individual_request = ref();
+            const individual_request_title = ref();
             const education_level = ref();
             const education_level_title = ref();
             const category_student = ref();
@@ -336,7 +386,8 @@
                     category_student_title.value = studentAdditionallyData[0]['category_title']
                     education_level_title.value = studentAdditionallyData[0]['edu_level_title']
                     experience_title.value = studentAdditionallyData[0]['experience_title']
-
+                    individual_request_title.value = studentAdditionallyData[0]['individual_request_title']
+                    prof_result_title.value = studentAdditionallyData[0]['profresult_title']
 
                     experience.value = studentAdditionallyData[0]['experience_id']
                     category_student.value = studentAdditionallyData[0]['category_id']
@@ -381,13 +432,16 @@
 
             const saveAdditionally = async() => {
 
-                if(category_student.value || experience.value || education_level.value || position.value ) {
+                if(category_student.value || experience.value || education_level.value || position.value || prof_result.value || individual_request.value ) {
                     await store.dispatch('student/insertOrUpdateAdditionally', {
                         studentId: id.value,
                         category_id:category_student.value,
                         edu_experience_id:experience.value,
                         education_id:education_level.value,
-                        position_id:position.value
+                        position_id:position.value,
+                        individual_request: individual_request.value,
+                        prof_result: prof_result.value,
+
                     })
 
                     await getAdditionallyInfo()
@@ -418,6 +472,10 @@
                 experience,
                 category_student,
                 edu_level_list,
+                prof_result,
+                prof_result_title,
+                individual_request,
+                individual_request_title,
                 tutor,
                 gender,
                 saveAdditionally,
