@@ -4,7 +4,8 @@
         <TutorMainMenu></TutorMainMenu>
     </div>
     <div class="col-9">
-        <div class="content-wallpaper">
+        <app-loader v-if="loading"></app-loader>
+        <div class="content-wallpaper" v-else>
             <div class="row">
                 <div class="col-8">
 
@@ -163,6 +164,7 @@
 
 <script>
     import {ref,computed,onMounted,watch} from 'vue'
+    import AppLoader from "../../../components/ui/AppLoader";
     import {useStore} from 'vuex'
     import ConversationTask from "../../../components/conversation/ConversationTaskTutor";
     import {useRouter} from "vue-router";
@@ -214,12 +216,14 @@
             }
 
             const successAction = async() => {
+                loading.value = true
                 await store.dispatch('iom/successTask',{
                     token,
                     iomId: route.params.iom,
                     exId: route.params.exId,
                     studentId: route.params.studentId
                 })
+
                 window.location.href = `/show_exercises_accepted`
             }
 
@@ -288,7 +292,8 @@
         },
         components: {
             TutorMainMenu,
-            ConversationTask
+            ConversationTask,
+            AppLoader
         }
     }
 </script>

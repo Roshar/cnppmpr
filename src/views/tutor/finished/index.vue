@@ -4,7 +4,7 @@
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
-            <h4 class="title-page">Слушатели, успешно завершившие обучение </h4>
+            <h4 class="title-page">Слушатели, успешно завершившие обучение и ожидающие подтверждения </h4>
             <hr>
         </div>
         <div class="row">
@@ -19,6 +19,8 @@
                             <th scope="col" style="width: 30%">Школа</th>
                             <th scope="col" style="width: 25%">Район</th>
                             <th scope="col" style="width: 20%">ИОМ</th>
+                            <th scope="col" >Дата начала обучения</th>
+                            <th scope="col" >Дата окончания обучения</th>
                             <th scope="col" >Сформировать отчет</th>
 
                         </tr>
@@ -30,8 +32,10 @@
                             <td>{{item['school_name']}}</td>
                             <td>{{item['title_area']}}</td>
                             <td> <router-link :to="{path:`/my_iom/${item['iom_id']}/exercise`}">{{item.title}}</router-link> </td>
+                            <td> {{item['start_education']}}</td>
+                            <td> {{item['end_education']}}</td>
                             <td>
-                                <button class="btn btn-primary-outline">Сгенерировать</button> </td>
+                                <button class="btn btn-primary-outline" type="button" @click="generationReport(item['user_id'],item['iom_id'])">Сгенерировать</button> </td>
                         </tr>
                         </tbody>
                     </table>
@@ -54,6 +58,18 @@
             const router = useRouter()
             const loading = ref(true)
             const students = ref()
+            const token = ref(localStorage.getItem('jwt-token'))
+
+            const generationReport = async(student_id, iom_id) => {
+                loading.value = true
+                await store.dispatch('finished/generationReportByStudentEducation', {
+                    student_id,
+                    iom_id,
+                    token: token.value
+                })
+                loading.value = false
+            }
+
 
             onMounted(async() => {
                 loading.value = true
@@ -69,7 +85,8 @@
 
             return {
                 loading,
-                students
+                students,
+                generationReport
             }
         },
         components: {AppLoader,TutorMainMenu}

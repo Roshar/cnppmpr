@@ -24,9 +24,9 @@
           </select>
         </div>
         <div class="col-4">
-          <label > Индивидуальной </label>
+          <label > Статус ИОМа </label>
           <select class="form-control" name="iom" v-model="iom">
-            <option value="">Выбрать район</option>
+            <option value="">Выбрать </option>
             <option value="0"> без ИОМ</option>
             <option value="1"> с ИОМ</option>
           </select>

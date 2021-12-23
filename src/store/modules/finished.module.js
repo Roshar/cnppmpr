@@ -36,6 +36,25 @@ export default {
             }
         },
 
+        /**
+         *
+         * итоговый отчет по слушателю
+         */
+        async generationReportByStudentEducation({ commit, dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/finished/generationReportByStudentEducation', payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                }, {root: true})
+            }catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async checkStudentIOM({ commit, dispatch}, payload) {
             try {
                 const {data} = await axios.post('/api/finished/checkStudentIOM', payload)
@@ -66,7 +85,6 @@ export default {
                 throw new Error()
             }
         },
-
 
         async getStudentsForTutor({ commit, dispatch}, payload) {
             try {

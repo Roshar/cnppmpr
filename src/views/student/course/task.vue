@@ -125,8 +125,7 @@
         <div class="modal-overlay" v-if="showModal" @click="showModal = false">
         </div>
     </transition>
-
-
+    
 </template>
 
 <script>
@@ -248,11 +247,13 @@
 
 
             const sendMessage = async() => {
+                loading.value = true
                 if(reportLink.value !== '' || reportMessage.value !== '' || uploadData.value !== '' ){
                     if(reportMessage.value !== '') {
                         reportMessage.value = mysqlEscape(reportMessage.value)
                     }
                     if(uploadData.value) {
+
                         const ff = new FormData()
                         ff.append('answer', uploadData.value, studentId.value)
                         ff.append('link', reportLink.value)
@@ -262,6 +263,7 @@
                         ff.append('taskId', taskId.value)
                         ff.append('token', localStorage.getItem('jwt-token'))
                         await store.dispatch('student/insertInReportWithFile', ff)
+                        loading.value = false
                         await router.push('/my_course')
                     }else {
                         await store.dispatch('student/insertInReportWithoutFile', {
@@ -273,6 +275,7 @@
                             token: localStorage.getItem('jwt-token'),
                             files: null
                         })
+                        loading.value = true
                         await router.push('/my_course')
                     }
 
