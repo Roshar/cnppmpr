@@ -119,6 +119,71 @@ export default {
             }
         },
 
+        async getHistoryInfoIOM ({dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getHistoryInfoIOM', payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getAreasStatisticsByStudent ({dispatch}) {
+            try {
+                const {data} = await axios.post('/api/admin/getAreasStatisticsByStudent')
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getIomStatistic ({dispatch}) {
+            try {
+                const {data} = await axios.post('/api/admin/getIomStatistic')
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getDisciplineStatisticsByStudentOrTutor ({dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getDisciplineStatisticsByStudentOrTutor',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getFinishedStudentsByYear ({dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getFinishedStudentsByYear',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async getOptionFromStudents ({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/getOptionFromStudents',payload)

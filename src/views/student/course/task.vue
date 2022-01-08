@@ -231,10 +231,10 @@
                 description.value = taskData.value.description
                 link.value = taskData.value.link
                 term.value = taskData.value.term
-                category.value = taskData.value.title_tag
+                category.value = taskData.value['title_tag']
                 tag_id.value = taskData.value.tag_id
                 iomId.value = taskData.value.iom_id
-                taskId.value = taskData.value.id_exercises
+                taskId.value = taskData.value['id_exercises']
                 author.value = taskData.value.mentor
                 if(accepted.value === 2){
                     reportMessage.value =taskData.value.content

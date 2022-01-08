@@ -122,7 +122,6 @@
             })
 
 
-
             onMounted(async()=>{
                 loading.value = true
                 areas.value = await store.dispatch('area/getAreas')

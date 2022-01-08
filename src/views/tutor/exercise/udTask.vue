@@ -119,6 +119,7 @@
     import {requiredForm} from '../../../utils/requiredForm'
     import {checkPossibilityDeleteData} from '../../../accessRouteAndAction/checkPossibilityDeleteData'
     import {mysqlEscape} from '../../../utils/mysqlEscape'
+    import editorConfig from '../../../utils/configurationEditor'
 
 
     import {ref,computed,onMounted,watch} from 'vue'
@@ -148,27 +149,9 @@
             const mentorError = ref()
             const tagError = ref()
             const levelError = ref()
-            const tblA = ref([])
             let error = ref({})
             const editor =  ClassicEditor
-            const editorConfig = {
-                toolbar: {
-                    items: [
-                        'heading', '|',
-                        'alignment', '|',
-                        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
-                        'link', '|',
-                        'bulletedList', 'numberedList', 'todoList',
-                        'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor', '|',
-                        'code', 'codeBlock', '|',
-                        'insertTable', '|',
-                        'outdent', 'indent', '|',
-                         'blockQuote', '|',
-                        'undo', 'redo'
-                    ],
-                    shouldNotGroupWhenFull: true
-                }
-            }
+
 
             let errorSchemaRequired = {
                 title: true,
@@ -185,7 +168,7 @@
             })
             const validIdIom = async() => {
                 await store.dispatch('iom/getIomId',route.params)
-                await tblA.value.push(store.state['iom'].tblNames)
+
             }
             validIdIom()
             onMounted(async() => {
@@ -207,7 +190,6 @@
                 id_exercise.value = taskData.value['id_exercises']
                 loading.value = false
 
-
                 if(Object.keys(mentorsData.value).length !== 0) {
                     mentorsData.value.forEach((person) =>{
                         if(person.id === taskData.value.mentor){
@@ -222,11 +204,7 @@
             const deleteTask = async() => {
                 await checkPossibilityDeleteData(store,{
                     param:route.params,
-                    tbl:{
-                        subTypeTableIom:tblA.value[0][0].subTypeTableIom,
-                        report:tblA.value[0][0].report,
-                        student:tblA.value[0][0].student,
-                    }
+
                 })
                 await router.push(`/my_iom/${route.params.id}/exercise/`)
             }
@@ -240,7 +218,7 @@
                 levelError.value = error.value?.level
 
                 if(Object.keys(error.value).length === 0) {
-                    await store.dispatch('iom/updateExercise',{tbl:tblA.value[0][0].subTypeTableIom,values:{
+                    await store.dispatch('iom/updateExercise',{values:{
                                         title:title.value,
                                         description:mysqlEscape(description.value),
                                         mentor:mentor.value,
@@ -249,7 +227,8 @@
                                         link:link.value,
                                         id_exercise:id_exercise.value,
                                         iomId: route.params.id,
-                                        level: level_id.value
+                                        level: level_id.value,
+                                        token: localStorage.getItem('jwt-token')
                                     }})
                     taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
                     taskData.value.term = taskData.value.term.split(".").reverse().join("-")
@@ -288,8 +267,8 @@
                 refund: () => {
                     router.push(`/my_iom/${route.params.id}/exercise`)
                 },
-                deleteTask,
                 editorConfig,
+                deleteTask,
                 editor
             }
 

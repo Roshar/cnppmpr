@@ -3,12 +3,11 @@
     <div class="col-3">
         <TutorMainMenu></TutorMainMenu>
     </div>
-    <div class="col-9">
-        <app-loader v-if="loading"></app-loader>
-        <div class="content-wallpaper" v-else>
+    <app-loader v-if="loading"></app-loader>
+    <div class="col-9" v-else>
+        <div class="content-wallpaper" v-if="issetAnswer && issetAnswer.length">
             <div class="row">
                 <div class="col-8">
-
                     <h4 class="title-page">Просмотр ответа</h4>
                     <h6>Наименование задания: {{exTitle}}</h6>
                     <h6>Объект оценки (слушатель): {{studentFIO}} </h6>
@@ -154,6 +153,13 @@
                 </div>
             </div>
         </div>
+        <div class="content-wallpaper" v-else>
+            <div class="row">
+                <div class="col-12">
+                    <h2>Пусто</h2>
+                </div>
+            </div>
+        </div>
     </div>
     <transition  name="fade" appear>
         <div class="modal-overlay" v-if="showModal" @click="showModal = false">
@@ -175,11 +181,11 @@
         setup() {
             const store = useStore()
             const route = useRoute()
-            const router = useRouter()
             const token = localStorage.getItem('jwt-token')
             const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const showModal = ref(false)
+            const issetAnswer = ref()
             const accepted = ref()
             const studentFIO = ref()
             const studentId = ref(route.params.studentId)
@@ -227,7 +233,6 @@
                 window.location.href = `/show_exercises_accepted`
             }
 
-
             onMounted(async()=>{
                 loading.value = true
                 const answer = await store.dispatch('iom/getStudentAnswer', {
@@ -237,34 +242,37 @@
                     studentId: route.params.studentId
                 })
 
+                issetAnswer.value = answer
+
                 chat.value = await store.dispatch('tutor/getCommentsByTaskForTutor', {
                     token,
                     iomId: route.params.iom,
                     exId: route.params.exId,
                     studentId: route.params.studentId
                 })
-                console.log(chat.value )
+
                 if(chat.value && chat.value.length) {
                     tutorId.value = chat.value[0]['tutorId']
                 }
 
+                if(issetAnswer.value && issetAnswer.value.length) {
+                    accepted.value  = answer[0].accepted
+                    studentFIO.value  = answer[0].surname + ' '+answer[0].name + ' '+ answer[0].patronymic
+                    iomTitle.value  = answer[0]['iom_title']
+                    exTitle.value  = answer[0]['ex_title']
+                    tutorComment.value  = answer[0]['tutor_comment']
+                    exDescription.value  = answer[0]['ex_description']
+                    ex_link.value  = answer[0]['ex_link']
+                    created.value  = answer[0]['answer_created']
+                    issetFile.value = answer[0]['file_path'] ? true : false
+                    aFilePath.value  = baseUrl.value +'/'+ studentId.value +'/'+ answer['file_path']
+                    // aFilePath.value  = answer['file_path']
+                    term.value  = answer[0]['ex_term']
+                    aContent.value  = answer[0]['answer_content']
+                    aLink.value  = answer[0]['answer_link']
+                }
 
 
-
-                accepted.value  = answer.accepted
-                studentFIO.value  = answer.surname + ' '+answer.name + ' '+ answer.patronymic
-                iomTitle.value  = answer['iom_title']
-                exTitle.value  = answer['ex_title']
-                tutorComment.value  = answer['tutor_comment']
-                exDescription.value  = answer['ex_description']
-                ex_link.value  = answer['ex_link']
-                created.value  = answer['answer_created']
-                issetFile.value = answer['file_path'] ? true : false
-                aFilePath.value  = baseUrl.value +'/'+ studentId.value +'/'+ answer['file_path']
-                // aFilePath.value  = answer['file_path']
-                term.value  = answer['ex_term']
-                aContent.value  = answer['answer_content']
-                aLink.value  = answer['answer_link']
                 loading.value = false
             })
 
@@ -286,7 +294,7 @@
                 loading,
                 messageBodyError,
                 tutorComment,
-                exTitle,accepted,issetFile,sendMessage, chat,studentId,tutorId, studentFIO,aFilePath,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
+                exTitle,accepted,issetFile,sendMessage,issetAnswer, chat,studentId,tutorId, studentFIO,aFilePath,iomTitle,created,term,aContent,aLink,messageBody,ex_link,sendCorrection,successAction,exDescription,
                 showModal
             }
         },

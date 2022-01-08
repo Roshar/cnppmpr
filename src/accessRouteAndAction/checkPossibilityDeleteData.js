@@ -5,7 +5,6 @@ export async function checkPossibilityDeleteData(store, item) {
 
 export async function checkPossibilityDeleteIom(store, item) {
     await store.dispatch('iom/deleteIom',item)
-
 }
 
 

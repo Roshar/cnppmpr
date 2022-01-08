@@ -151,7 +151,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-0" v-if="!statusInCurrentIomFinished">
-                                        <div v-if="issetIom">
+                                        <div v-if="issetIom && issetIom.length">
                                             <h5 class="text-white">Ваш прогресс по прохождению ИОМ</h5>
                                             <h6 class="text-white">(индивидуальный образовательный маршрут)</h6>
                                             <br>
@@ -195,7 +195,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-7" v-if="!statusInCurrentIomFinished">
-                                <div v-if="issetIom">
+                                <div v-if="issetIom && issetIom.length">
                                     <button type="button" v-if="readyFinishedStatus" @click="showModalSuccess = true" class="btn btn-block btn-outline-primary">Завершить обучение</button>
                                     <button type="button" v-else class="btn btn-block btn-outline-primary" @click="showModalNotice = true" >Завершить обучение</button>
                                     <div class="resume-experience">
@@ -270,7 +270,7 @@
                                             </div>
                                         </div>
                                         <div v-if="!exerciseData">
-                                            Нет заданий в назначенном для вас ИОМе
+                                            Задания были пройдены или временно недоступны
                                         </div>
 
                                     </div>
@@ -420,30 +420,31 @@
                     token: localStorage.getItem('jwt-token')
                 })
                 statusInCurrentIomFinished.value = store.getters['finished/getStatusByIOM'].length
+                statusInCurrentIomFinished.value
             }
 
 
             onMounted(async()=>{
                 loading.value = true
-
                 await store.dispatch('user/getUserData',localStorage.getItem('jwt-token'))
                 await load()
                 dependencies.value = store.getters['user/getUserLinks']
                 if(dependencies.value) {
-                    console.log(dependencies.value)
                     tutorId.value = dependencies.value['user_id']
                     tutorPhone.value = dependencies.value['phone']
                     tutorAvatar.value = baseUrl.value +'/'+dependencies.value.avatar;
                     tutorFio.value = dependencies.value.surname + ' '+dependencies.value.name+' '+dependencies.value.patronymic
                 }
 
+
                 if(tutorId.value){
                     issetIom.value = await store.dispatch('student/checkIssetMyIom',{
                         tutorId:tutorId.value,
                         studentId: id.value
                     })
+                    console.log(issetIom.value)
 
-                    if(issetIom.value) {
+                    if(issetIom.value && issetIom.value.length) {
                         await checkStatusCurrentIom()
                         await store.dispatch('student/getExercisesFromMyIom',{
                             iomId: issetIom.value[0]['iom_id'],

@@ -19,23 +19,7 @@
                             <li class="widget-49-meeting-item"><span>Всего районов:</span></li>
                             <li class="widget-49-meeting-item"><span>Статистика по районам:</span>
                                 <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Ачхой-Мартановский район - {{achkhoy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Веденский район - {{vedeno}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Грозненский район - {{grozarea}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Гудермесский район - {{gudarea}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Итум-Калинский район - {{itum}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Курчалоевский район - {{kurchaloy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Надтеречный район - {{nadterech}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Наурский район - {{naur}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Ножай-Юртовский район - {{nojay}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Серноводский район - {{sun}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Урус-Мартановский район - {{urus}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шалинский район - {{shali}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шаройский район - {{sharoy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шатойский район - {{shatoy}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Шелковской район -{{shelk}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>город Аргун -{{argun}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>город Грозный -{{grozny}}</span></li>
+                                    <li class="widget-49-meeting-item" v-if="areaData && areaData.length" v-for="item in areaData"><span>{{item['title_area']}} - {{item['area']}}</span></li>
                                 </ul>
                             </li>
 
@@ -57,18 +41,11 @@
                             </li>
                             <li class="widget-49-meeting-item"><span>Количество студентов по учебным предметам</span>
                                 <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYAS}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLitS}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMathS}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHimS}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBioS}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhizS}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHistS}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObzS}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeoS}}</span></li>
+                                    <li class="widget-49-meeting-item" v-if="disciplineStatStudent && disciplineStatStudent.length" v-for="item in disciplineStatStudent"><span>
+                                        {{item['title_discipline']}} - {{item['dis']}}
+                                    </span></li>
                                 </ul>
                             </li>
-
                         </ol>
                         <div class="widget-49-meeting-action">
                             <router-link to="/students" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</router-link>
@@ -94,15 +71,8 @@
                             <li class="widget-49-meeting-item"><span>Всего тьюторов {{tutorCount}}</span></li>
                             <li class="widget-49-meeting-item"><span>Количество тьюторов по учебным предметам</span>
                                 <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYA}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLit}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMath}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHim}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBio}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhiz}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHist}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObz}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeo}}</span></li>
+                                    <li class="widget-49-meeting-item" v-if="disciplineStatTutor && disciplineStatTutor.length"
+                                        v-for="item in disciplineStatTutor"><span>{{item['title_discipline']}} - {{item['dis']}} </span></li>
                                 </ul>
                             </li>
                         </ol>
@@ -130,15 +100,9 @@
                             <li class="widget-49-meeting-item"><span>Всего ИОМов {{countIom}}</span></li>
                             <li class="widget-49-meeting-item"><span>Количество ИОМов по учебным предметам</span>
                                 <ul class="widget-49-meeting-points">
-                                    <li class="widget-49-meeting-item"><span>Русский язык - {{disciplineCountRYAI}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Литература - {{disciplineCountLitI}} </span></li>
-                                    <li class="widget-49-meeting-item"><span>Математика - {{disciplineCountMathI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Химия - {{disciplineCountHimI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Биология - {{disciplineCountBioI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Физика  - {{disciplineCountPhizI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>История  - {{disciplineCountHistI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Обществознание  - {{disciplineCountObzI}}</span></li>
-                                    <li class="widget-49-meeting-item"><span>Георграфия  - {{disciplineCountGeoI}}</span></li>
+                                    <li class="widget-49-meeting-item" v-if="iomStat && iomStat.length"
+                                        v-for="item in iomStat"><span>{{item['title_discipline']}} - {{item['dis']}} </span></li>
+
                                 </ul>
                             </li>
                         </ol>
@@ -163,8 +127,7 @@
                             </div>
                         </div>
                         <ol class="widget-49-meeting-points">
-                            <li class="widget-49-meeting-item"><span>Всего слушателей, завершившие обучение - {{countReport}}</span></li>
-
+                            <li class="widget-49-meeting-item" ><span v-if="countReport">Количество слушателей, прошедших обучение в году - {{countReport[0]['id']}}</span></li>
                         </ol>
                         <div class="widget-49-meeting-action">
                             <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
@@ -189,25 +152,10 @@
             const currentTime = ref()
             const countStudents = ref()
             const optionStudents = ref()
-            const achkhoy = ref()
-            const vedeno = ref()
-            const grozarea = ref()
-            const gudarea = ref()
-            const itum = ref()
-            const kurchaloy = ref()
-            const nadterech = ref()
-            const naur = ref()
-            const nojay = ref()
-            const sun = ref()
-            const urus = ref()
-            const shali = ref()
-            const sharoy = ref()
-            const shatoy = ref()
-            const shelk = ref()
-            const argun = ref()
-            const grozny = ref()
+            const areaData = ref()
             const man = ref()
             const woman = ref()
+            const year = ref(new Date().getFullYear())
             const ageBefore25 = ref(0)
             const ageInterval25to35 = ref(0)
             const ageInterval35to45 = ref(0)
@@ -215,39 +163,17 @@
             const ageInterval55to65 = ref(0)
             const ageMore65 = ref(0)
             const tutorCountS = ref(0)
-            const disciplineCountRYAS = ref(0)
-            const disciplineCountLitS = ref(0)
-            const disciplineCountMathS = ref(0)
-            const disciplineCountHimS = ref(0)
-            const disciplineCountBioS = ref(0)
-            const disciplineCountPhizS = ref(0)
-            const disciplineCountHistS = ref(0)
-            const disciplineCountObzS = ref(0)
-            const disciplineCountGeoS = ref(0)
+            const disciplineStatStudent = ref()
 
             // TUTOR DATA
+            const disciplineStatTutor = ref()
             const tutorCount = ref(0)
-            const disciplineCountRYA = ref(0)
-            const disciplineCountLit = ref(0)
-            const disciplineCountMath = ref(0)
-            const disciplineCountHim = ref(0)
-            const disciplineCountBio = ref(0)
-            const disciplineCountPhiz = ref(0)
-            const disciplineCountHist = ref(0)
-            const disciplineCountObz = ref(0)
-            const disciplineCountGeo = ref(0)
+
 
             // IOM INFO
             const countIom = ref(0)
-            const disciplineCountRYAI = ref(0)
-            const disciplineCountLitI = ref(0)
-            const disciplineCountMathI = ref(0)
-            const disciplineCountHimI = ref(0)
-            const disciplineCountBioI = ref(0)
-            const disciplineCountPhizI = ref(0)
-            const disciplineCountHistI = ref(0)
-            const disciplineCountObzI = ref(0)
-            const disciplineCountGeoI = ref(0)
+            const iomStat = ref()
+
 
             // REPORT INFO
             const countReport = ref(0)
@@ -266,23 +192,8 @@
                 tutorCount.value = await store.dispatch('admin/getUserCount', {tbl: 'tutors'})
 
                 //AREA INFO
-                achkhoy.value = await countItem('area_id','students', {parameter:'number',val:1})
-                vedeno.value = await countItem('area_id','students',{parameter:'number',val:2})
-                grozarea.value = await countItem('area_id','students',{parameter:'number',val:3})
-                gudarea.value = await countItem('area_id','students',{parameter:'number',val:4})
-                itum.value = await countItem('area_id','students',{parameter:'number',val:5})
-                kurchaloy.value = await countItem('area_id','students',{parameter:'number',val:6})
-                nadterech.value = await countItem('area_id','students',{parameter:'number',val:7})
-                naur.value = await countItem('area_id','students',{parameter:'number',val:8})
-                nojay.value = await countItem('area_id','students',{parameter:'number',val:9})
-                sun.value = await countItem('area_id','students',{parameter:'number',val:10})
-                urus.value = await countItem('area_id','students',{parameter:'number',val:11})
-                shali.value = await countItem('area_id','students',{parameter:'number',val:13})
-                sharoy.value = await countItem('area_id','students',{parameter:'number',val:14})
-                shatoy.value = await countItem('area_id','students',{parameter:'number',val:15})
-                shelk.value = await countItem('area_id','students',{parameter:'number',val:16})
-                argun.value = await countItem('area_id','students',{parameter:'number',val:17})
-                grozny.value = await countItem('area_id','students',{parameter:'number',val:18})
+                areaData.value  = await store.dispatch('admin/getAreasStatisticsByStudent')
+
 
                 //GANDER INFO
                 man.value = await countItem('gender','students',{parameter:'string',val:'man'})
@@ -319,41 +230,21 @@
                             start:55,
                             end:100
                         }})
-                disciplineCountRYAS.value = await countItem('discipline_id','students',{parameter:'number',val:1})
-                disciplineCountLitS.value = await countItem('discipline_id','students',{parameter:'number',val:2})
-                disciplineCountMathS.value = await countItem('discipline_id','students',{parameter:'number',val:3})
-                disciplineCountHimS.value = await countItem('discipline_id','students',{parameter:'number',val:4})
-                disciplineCountBioS.value = await countItem('discipline_id','students',{parameter:'number',val:5})
-                disciplineCountPhizS.value = await countItem('discipline_id','students',{parameter:'number',val:6})
-                disciplineCountHistS.value = await countItem('discipline_id','students',{parameter:'number',val:7})
-                disciplineCountObzS.value = await countItem('discipline_id','students',{parameter:'number',val:8})
-                disciplineCountGeoS.value = await countItem('discipline_id','students',{parameter:'number',val:9})
 
-                disciplineCountRYA.value = await countItem('discipline_id','tutors',{parameter:'number',val:1})
-                disciplineCountLit.value = await countItem('discipline_id','tutors',{parameter:'number',val:2})
-                disciplineCountMath.value = await countItem('discipline_id','tutors',{parameter:'number',val:3})
-                disciplineCountHim.value = await countItem('discipline_id','tutors',{parameter:'number',val:4})
-                disciplineCountBio.value = await countItem('discipline_id','tutors',{parameter:'number',val:5})
-                disciplineCountPhiz.value = await countItem('discipline_id','tutors',{parameter:'number',val:6})
-                disciplineCountHist.value = await countItem('discipline_id','tutors',{parameter:'number',val:7})
-                disciplineCountObz.value = await countItem('discipline_id','tutors',{parameter:'number',val:8})
-                disciplineCountGeo.value = await countItem('discipline_id','tutors',{parameter:'number',val:9})
+                disciplineStatStudent.value = await store.dispatch('admin/getDisciplineStatisticsByStudentOrTutor', {tbl:'students'})
+                disciplineStatTutor.value = await store.dispatch('admin/getDisciplineStatisticsByStudentOrTutor', {tbl:'tutors'})
+
 
                 // IOM INFO
-                countIom.value = await countItem('id','count_iom',{parameter:'none'})
-                disciplineCountRYAI.value = await countItem('dis_id','count_iom',{parameter:'number',val:1})
-                disciplineCountLitI.value = await countItem('dis_id','count_iom',{parameter:'number',val:2})
-                disciplineCountMathI.value = await countItem('dis_id','count_iom',{parameter:'number',val:3})
-                disciplineCountHimI.value = await countItem('dis_id','count_iom',{parameter:'number',val:4})
-                disciplineCountBioI.value = await countItem('dis_id','count_iom',{parameter:'number',val:5})
-                disciplineCountPhizI.value = await countItem('dis_id','count_iom',{parameter:'number',val:6})
-                disciplineCountHistI.value = await countItem('dis_id','count_iom',{parameter:'number',val:7})
-                disciplineCountObzI.value = await countItem('dis_id','count_iom',{parameter:'number',val:8})
-                disciplineCountGeoI.value = await countItem('dis_id','count_iom',{parameter:'number',val:9})
+                countIom.value = await countItem('id','a_iom',{parameter:'none'})
+                iomStat.value = await store.dispatch('admin/getIomStatistic')
 
-                //REPORT INFO
-                // countReport.value = await countItem('id', 'report', {parameter: 'none'})
-                countReport.value = 0
+
+
+                // Количество слушателей прошедших обучение в ТЕКУЩЕМ ГОДУ
+                // TODO добавить возможность динаминчно выбирать отчетный год
+                countReport.value = await store.dispatch('admin/getFinishedStudentsByYear', {year:year.value})
+
                 loading.value = false
             })
 
@@ -364,23 +255,7 @@
                 loading,
                 countStudents,
                 optionStudents,
-                achkhoy,
-                vedeno,
-                grozarea,
-                gudarea,
-                itum,
-                kurchaloy,
-                nadterech,
-                naur,
-                nojay,
-                sun,
-                urus,
-                shali,
-                sharoy,
-                shatoy,
-                shelk,
-                argun,
-                grozny,
+                areaData,
                 man,
                 woman,
                 ageBefore25,
@@ -389,38 +264,15 @@
                 ageInterval45to55,
                 ageInterval55to65,
                 ageMore65,
-                tutorCount,
-                disciplineCountRYAS,
-                disciplineCountLitS,
-                disciplineCountMathS,
-                disciplineCountHimS,
-                disciplineCountBioS,
-                disciplineCountPhizS,
-                disciplineCountHistS,
-                disciplineCountObzS,
-                disciplineCountGeoS,
+                disciplineStatStudent,
+
                 // TUTOR
                 tutorCount,
-                disciplineCountRYA,
-                disciplineCountLit,
-                disciplineCountMath,
-                disciplineCountHim,
-                disciplineCountBio,
-                disciplineCountPhiz,
-                disciplineCountHist,
-                disciplineCountObz,
-                disciplineCountGeo,
+                disciplineStatTutor,
                 // IOM
                 countIom,
-                disciplineCountRYAI,
-                disciplineCountLitI,
-                disciplineCountMathI,
-                disciplineCountHimI,
-                disciplineCountBioI,
-                disciplineCountPhizI,
-                disciplineCountHistI,
-                disciplineCountObzI,
-                disciplineCountGeoI,
+                iomStat,
+
                 // REPORT
                 countReport,
 

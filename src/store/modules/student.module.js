@@ -118,13 +118,27 @@ export default {
 
         async getUsersFromIomEducation ({commit, dispatch, state}, payload) {
             try {
-                const {data} = await axios.post('/api/student/getUsersFromIomEducation',
-                    {token: localStorage.getItem('jwt-token'),
-                        filter: payload.filter,
-                        iomId: payload.iomId})
-                if(data.values) {
-                    commit('setStudentsFromIom',data.values)
+                if(!payload.filter) {
+                    const {data} = await axios.post('/api/student/getUsersFromIomEducation',
+                        {token: localStorage.getItem('jwt-token'),
+                            filter: payload.filter,
+                            iomId: payload.iomId,
+                            param: null})
+                    if(data.values) {
+                        commit('setStudentsFromIom',data.values)
+                    }
+                }else {
+                    const {data} = await axios.post('/api/student/getUsersFromIomEducation',
+                        {token: localStorage.getItem('jwt-token'),
+                            filter: payload.filter,
+                            iomId: payload.iomId,
+                            param: payload.param})
+                    console.log(data)
+                    if(data.values) {
+                        commit('setStudentsFromIom',data.values)
+                    }
                 }
+
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.message,
@@ -315,8 +329,6 @@ export default {
         async getExercisesFromMyIom ({commit, dispatch, state}, payload) {
             try {
                 const {data} = await axios.post('/api/student/getExercisesFromMyIom', payload)
-                console.log(data.values)
-
                 if(data.values && data.values.length) {
                     commit('setExercisesMyIom',data.values[0])
                     commit('setExercisesTags',data.values[1])

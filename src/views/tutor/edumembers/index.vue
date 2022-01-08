@@ -44,13 +44,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(item, index) in freeStudents" :key="item.user_id">
+                        <tr v-for="(item, index) in freeStudents" :key="item['user_id']">
                             <th scope="row">{{index+1}}</th>
                             <td>  {{item.name}} {{item.surname}}</td>
-                            <td>{{item.school_name}}</td>
+                            <td>{{item['school_name']}}</td>
                             <td>
                                 <span style="margin-left: 1em">
-                                    <button type="button" class="btn" @click="addInIom(item.user_id)">
+                                    <button type="button" class="btn" @click="addInIom(item['user_id'])">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
                                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                                          <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
@@ -70,7 +70,6 @@
                     </div>
             </form>
         </div>
-
 
         <div class="row">
             <div class="col-12">
@@ -95,8 +94,8 @@
                         <tr v-for="(item, index) in students" :key="item.student_id">
                             <th scope="row">{{index+1}}</th>
                             <td ><router-link :to="{path:`/my_student/profile/${item.student_id}`}" class="name_student_link"> {{item.name}} {{item.surname}}</router-link></td>
-                            <td>{{item.school_name}}</td>
-                            <td>{{item.title_area}}</td>
+                            <td>{{item['school_name']}}</td>
+                            <td>{{item['title_area']}}</td>
                             <td>{{checkFinishedEducation(item.status)}}</td>
                             <td>
                                 <button class="btn" style="color: tomato" @click="deleteFromIom(item.student_id)">
@@ -188,6 +187,8 @@
                 }
 
             })
+
+
             watch([searchValue], async (values) => {
                 search.value = true
                 if(values[0] !== '') {
@@ -195,15 +196,15 @@
                         {filter: true,
                                 iomId:route.params.id,
                                 param: values[0]})
-                    students.value = store.getters['student/getStudentsForTutor']
+                    students.value = store.getters['student/getUsersFromIomEducation']
+
                     countNum.value = students.value.length ? students.value.length : 0
                 }else {
-                    await store.dispatch('student/getStudentsForTutor',{filter: false})
-                    students.value = store.getters['student/getStudentsForTutor']
+                    await store.dispatch('student/getUsersFromIomEducation',{filter: false, iomId:route.params.id})
+                    students.value = store.getters['student/getUsersFromIomEducation']
                     countNum.value = students.value.length ? students.value.length : 0
                 }
             })
-
 
             onMounted(async()=>{
                 loading.value = true

@@ -185,6 +185,7 @@
     import {useRoute} from 'vue-router'
     import {checkPossibilityDeleteIom} from "../../../accessRouteAndAction/checkPossibilityDeleteData";
     import {mysqlEscape} from '../../../utils/mysqlEscape'
+    import editorConfig from '../../../utils/configurationEditor'
     export default {
         setup() {
             const store = useStore()
@@ -193,7 +194,6 @@
             const currentIomTitle = ref()
             const iomId = route.params.id
             const loading = ref(true)
-            const tblA = ref([])
             const showModal = ref(false)
             const showModalLib = ref(false)
             const showModalLibGlobal = ref(false)
@@ -208,15 +208,10 @@
             const termNot = ref(false)
 
             const editor =  ClassicEditor
-            const editorConfig = {
-                removePlugins: ["EasyImage","ImageUpload","MediaEmbed"]
-                    }
 
             // Проверка текущего ИОМ : TRUE|FALSE
-            // Получить все таблицы тьютора | Array
             const validIdIom = async() => {
                 await store.dispatch('iom/getIomId',route.params)
-                await tblA.value.push(store.state['iom'].tblNames)
             }
             validIdIom()
 
@@ -256,7 +251,7 @@
                 loading.value = false
             })
 
-            //Фильтрация: НАЗВАНИЕ|КАТЕГОРИЯ
+            // Фильтрация: НАЗВАНИЕ|КАТЕГОРИЯ
             const exeData = computed(() => store.getters['iom/getExercisesByIomId']
                 .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
                 .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
@@ -274,12 +269,6 @@
                 await checkPossibilityDeleteIom(store,{
                     token: localStorage.getItem('jwt-token'),
                     param:route.params,
-                    tbl:{
-                        subTypeTableIom:tblA.value[0][0].subTypeTableIom,
-                        report:tblA.value[0][0].report,
-                        student:tblA.value[0][0].student,
-                    },
-                    userId: localStorage.getItem('USERID')
                 })
                 let code = store.getters['iom/getCode']
                 showModalDelete.value = false
@@ -297,8 +286,9 @@
             // Задания из текущего ИОМа
             const submit = async function (values)  {
                 values['iomId'] = route.params.id
+                values['token'] = localStorage.getItem('jwt-token')
                 values.description = mysqlEscape(description.value)
-                await store.dispatch('iom/addExercise',{tbl:tblA.value[0][0].subTypeTableIom,values})
+                await store.dispatch('iom/addExercise',values)
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 showModal.value = false
                 await router.push(`/my_iom/${route.params.id}/exercise`)

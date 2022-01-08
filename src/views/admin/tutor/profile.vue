@@ -155,24 +155,25 @@
                                         <div class="card h-100">
                                             <div class="card-body">
                                                 <h6 class="d-flex align-items-center mb-3">Слушатели</h6>
-                                                <small>Укомплектованность группы</small>
+                                                <small>Укомплектованность группы:     {{createGraphics(studentsCount,100,1)}} <br><span style="font-style: italic">(исходя из 100 слушателей на 1 тьютора) </span></small>
                                                 <div class="progress mb-3" style="height: 5px">
                                                     <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics(studentsCount,100)"></div>
                                                 </div>
-                                                <small>Завершивших обучение</small>
+
+                                                <small>Завершившили обучение: {{createGraphics(reportsCount,studentsCount,1)}}</small>
                                                 <div class="progress mb-3" style="height: 5px">
                                                     <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics(reportsCount,studentsCount)" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
                                                 <div style="padding: 10px 0">Гендерная принадлежность слушателей</div>
 
-                                                <small>Муж</small>
+                                                <small>Муж: {{man}} чел. ({{createGraphics(man,studentsCount,1)}})</small>
                                                 <div class="progress mb-3" style="height: 5px">
-                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics(man,studentsCount)" ></div>
                                                 </div>
-                                                <small>Жен</small>
+                                                <small>Жен: {{studentsCount - man}} чел. ({{createGraphics((studentsCount - man),studentsCount,1)}})</small>
                                                 <div class="progress mb-3" style="height: 5px">
-                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics((studentsCount - man),studentsCount)" ></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -228,7 +229,6 @@
             const idTutor = ref()
             const disciplines = ref()
             const students = ref()
-            const dependencies = ref()
             const profile = ref()
             const currentUser  = ref()
             const name = ref()
@@ -296,12 +296,12 @@
                 }
             }
 
-            const createGraphics = (currentValue, maxValue) => {
+            const createGraphics = (currentValue, maxValue, percent=0) => {
                 if(currentValue === 0 || maxValue === 0) {
-                    return 'width: 0%'
+                    return (percent) ? '0%' : 'width: 0%'
                 }else {
                     let res = currentValue/maxValue * 100
-                    return 'width:' + String(res) + '%'
+                    return (percent) ? String(res) + '%' :  'width:' + String(res) + '%'
                 }
             }
 
@@ -335,29 +335,25 @@
                 showModalDelete.value = false
             }
 
-
-
-
-
             onMounted(async()=>{
                 loading.value = true
                 const userId = route.params.userId
                 idTutor.value = route.params.userId
 
                 profile.value = await store.dispatch('admin/getProfile',{tbl:'tutors', userId:userId})
-                dependencies.value = await store.dispatch('admin/getDependenciesTutor',{ userId:userId})
-                console.log(dependencies.value['groupData'])
-                if(dependencies.value['groupData'].length) {
+                const dependencies = await store.dispatch('admin/getDependenciesTutor',{ userId:userId})
+                if(dependencies['groupData'].length) {
                     groupData.value = true
-                    groupName.value = dependencies.value['groupData'][0]['title']
-                    groupId.value = dependencies.value['groupData'][0]['group_id']
+                    groupName.value = dependencies['groupData'][0]['title']
+                    groupId.value = dependencies['groupData'][0]['group_id']
                 }
-                if(dependencies.value['countStudents'][0]['students']){
-                    man.value = dependencies.value['gender'][0]['id']
+                // определяем сколько слушателей муж пола
+                if(dependencies['countStudents'][0]['students']){
+                    man.value = dependencies['gender'][0]['man']
                 }
-                studentsCount.value = dependencies.value['countStudents'][0]['students']
-                reportsCount.value = dependencies.value['countReports'][0]['reports']
-                iomCount.value = dependencies.value['iomData'][0]['ioms']
+                studentsCount.value = dependencies['countStudents'][0]['students']
+                reportsCount.value = dependencies['countReports'][0]['reports']
+                iomCount.value = dependencies['iomData'][0]['ioms']
 
 
                 //USER INFO

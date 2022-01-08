@@ -22,7 +22,7 @@
                                 <tbody>
                                 <tr v-for="(item, index) in courses" :key="item['iom_id']">
                                     <th scope="row">{{index+1}}</th>
-                                    <td>{{item['title']}} </td>
+                                    <td>{{item['iom_title']}} </td>
                                     <td>{{item['surname']}} {{item['name']}} {{item['patronymic']}} </td>
                                     <td>{{item['dt']}} </td>
                                 </tr>
