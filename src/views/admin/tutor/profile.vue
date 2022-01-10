@@ -171,7 +171,7 @@
                                                 <div class="progress mb-3" style="height: 5px">
                                                     <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics(man,studentsCount)" ></div>
                                                 </div>
-                                                <small>Жен: {{studentsCount - man}} чел. ({{createGraphics((studentsCount - man),studentsCount,1)}})</small>
+                                                <small>Жен: {{countWoman(studentsCount - man)}} чел. ({{createGraphics((studentsCount - man),studentsCount,1)}})</small>
                                                 <div class="progress mb-3" style="height: 5px">
                                                     <div class="progress-bar bg-primary" role="progressbar" :style="createGraphics((studentsCount - man),studentsCount)" ></div>
                                                 </div>
@@ -269,6 +269,10 @@
                             link: ''})
                     showModal.value = false
                 }
+            }
+
+            const countWoman = (total, woman) => {
+                return (total) ? total - woman : 0
             }
 
             const activation = async (user) => {
@@ -391,6 +395,7 @@
                 man,
                 delBtn,
                 deleteTutor,
+                countWoman,
                 groupName,
                 lastActive,
                 reportsCount,
