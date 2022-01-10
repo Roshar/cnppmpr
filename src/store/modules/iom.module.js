@@ -214,7 +214,7 @@ export default {
             } catch(e){
                 console.log(e)
                 dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
@@ -247,10 +247,14 @@ export default {
                     token: localStorage.getItem('jwt-token'),
                     payload
                 })
-                return (data.values[1].length) ? true :  router.push('/404')
+
+                if(!data.values || !data.values.length) {
+                    await router.push('/404')
+                }
+
             } catch(e){
                 dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()

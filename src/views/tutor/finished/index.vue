@@ -34,8 +34,13 @@
                             <td> <router-link :to="{path:`/my_iom/${item['iom_id']}/exercise`}">{{item.title}}</router-link> </td>
                             <td> {{item['start_education']}}</td>
                             <td> {{item['end_education']}}</td>
-                            <td>
-                                <button class="btn btn-primary-outline" type="button" @click="generationReport(item['user_id'],item['iom_id'])">Сгенерировать</button> </td>
+
+                            <td v-if="item['dump_link']">
+                                <a :href="item['dump_link']" target="_blank" class="btn btn-primary-outline" type="button" >Скачать</a>
+                            </td>
+                            <td v-else>
+                                <button class="btn btn-primary-outline" type="button" @click="generationReport(item['user_id'],item['iom_id'])">Сгенерировать</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -67,6 +72,10 @@
                     iom_id,
                     token: token.value
                 })
+                await store.dispatch('finished/getStudentsForTutor', {
+                    token: localStorage.getItem('jwt-token')
+                })
+                students.value = store.getters['finished/finishedStudents']
                 loading.value = false
             }
 

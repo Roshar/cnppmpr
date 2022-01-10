@@ -237,6 +237,7 @@
                     id: route.params.id
                 })
                 const iomData = store.getters['iom/getCurrentIomData']
+
                 currentIomTitle.value = iomData.title
 
                 levels.value = await store.dispatch('discipline/getLevels')
@@ -255,6 +256,7 @@
             const exeData = computed(() => store.getters['iom/getExercisesByIomId']
                 .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
                 .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
+
 
             let execLib = computed(() => store.getters['library/getLibraryData']
                 .filter(data => (filterLib.value.title) ? data.title.includes(filterLib.value.title) : data)
