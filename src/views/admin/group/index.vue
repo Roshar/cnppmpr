@@ -76,11 +76,11 @@
                     <div class="col-4" v-for="(item, index) in groupsData" :key="item.id">
                         <div class="card">
                             <div class="card-body">
-                                <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания: {{item.created_at}}</div>
+                                <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания: {{item['created_at']}}</div>
                                 <h5 class="card-title">{{item.title}}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Тьютор: {{item.surname}} {{item.name}} {{item.patronymic}}</h6>
-                                <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{item.title_discipline}} </h6>
-                                <p class="card-text">{{item.description}}</p>
+                                <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{item['title_discipline']}} </h6>
+                                <p class="card-text" v-if="item.description !== 'undefined'"> {{item.description}} </p>
                                 <router-link :to="{path:`/group/${item.id}`}" class="btn-primary-outline" >Открыть</router-link>
                                 <button class="btn-danger-outline" @click="getIdForDelete(item.id)">Удалить</button>
                             </div>

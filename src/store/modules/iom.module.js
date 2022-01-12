@@ -207,10 +207,10 @@ export default {
             }
         },
 
-        async getMentor ({commit, dispatch, state}, payload) {
+        async getMentorDataForTutor ({commit, dispatch, state}, payload) {
             try {
-                const {data} = await axios.post('/api/iom/getMentor',payload )
-                return data.values ? data.values : []
+                const {data} = await axios.post('/api/iom/getMentorDataForTutor',payload )
+                return data.values
             } catch(e){
                 console.log(e)
                 dispatch('setSystemMessage', {

@@ -127,7 +127,7 @@
                             </div>
                         </div>
                         <ol class="widget-49-meeting-points">
-                            <li class="widget-49-meeting-item" ><span v-if="countReport">Количество слушателей, прошедших обучение в году - {{countReport[0]['id']}}</span></li>
+                            <li class="widget-49-meeting-item" ><span v-if="countReport">Количество слушателей, прошедших обучение в текущем  году - {{countReport[0]['id']}}</span></li>
                         </ol>
                         <div class="widget-49-meeting-action">
                             <a href="#" class="btn btn-sm btn-flash-border-primary">Перейти в раздел</a>
@@ -169,11 +169,9 @@
             const disciplineStatTutor = ref()
             const tutorCount = ref(0)
 
-
             // IOM INFO
             const countIom = ref(0)
             const iomStat = ref()
-
 
             // REPORT INFO
             const countReport = ref(0)
@@ -186,46 +184,48 @@
                 loading.value = true
 
                 // STUDENT INFO
-                countStudents.value = await store.dispatch('admin/getUserCount',{tbl:'students'})
+                countStudents.value = await store.dispatch('admin/getUserCount',{tbl:'student'})
 
                 // TUTOR INFO
-                tutorCount.value = await store.dispatch('admin/getUserCount', {tbl: 'tutors'})
+                tutorCount.value = await store.dispatch('admin/getUserCount', {tbl: 'tutor'})
 
                 //AREA INFO
                 areaData.value  = await store.dispatch('admin/getAreasStatisticsByStudent')
 
 
                 //GANDER INFO
-                man.value = await countItem('gender','students',{parameter:'string',val:'man'})
-                woman.value = await countItem('gender','students',{parameter:'string',val:'woman'})
+                const genders = await store.dispatch('admin/getCountGender')
+
+                man.value = genders[0]['gender']
+                woman.value = genders[1]['gender']
 
                 //AGE INFO
-                ageBefore25.value = await countItem('birthday','students',
+                ageBefore25.value = await countItem('birthday','student',
                     {parameter:'age',val:{
                             start:1,
                             end:25
                         }})
-                ageInterval25to35.value = await countItem('birthday','students',
+                ageInterval25to35.value = await countItem('birthday','student',
                     {parameter:'age',val:{
                             start:25,
                             end:35
                         }})
-                ageInterval35to45.value = await countItem('birthday','students',
+                ageInterval35to45.value = await countItem('birthday','student',
                     {parameter:'age',val:{
                             start:35,
                             end:45
                         }})
-                ageInterval45to55.value = await countItem('birthday','students',
+                ageInterval45to55.value = await countItem('birthday','student',
                     {parameter:'age',val:{
                             start:45,
                             end:55
                         }})
-                ageInterval55to65.value = await countItem('birthday','students',
+                ageInterval55to65.value = await countItem('birthday','student',
                     {parameter:'age',val:{
                             start:55,
                             end:55
                         }})
-                ageMore65.value = await countItem('birthday','students',
+                ageMore65.value = await countItem('birthday','student',
                     {parameter:'age',val:{
                             start:55,
                             end:100

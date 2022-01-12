@@ -30,6 +30,7 @@ import GlobalLibrary from '../views/admin/library'
 import GlobalLibraryShow from '../views/admin/library/show'
 import GlobalLibraryCreate from '../views/admin/library/create'
 import GlobalLibraryEdit from '../views/admin/library/edit'
+import MentorAdmin from '../views/admin/mentor'
 import showFinished from '../views/tutor/finished'
 
 import StudentProfileAdmin from '../views/admin/student/profile'
@@ -263,6 +264,16 @@ const routes = [
     path: '/last_tutor',
     name: 'last_tutor',
     component: LastTutorAdmin,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/mentor',
+    name: 'mentor',
+    component: MentorAdmin,
     beforeEnter: beforeAdmin(),
     meta:{
       auth: true,

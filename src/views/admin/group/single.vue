@@ -74,7 +74,7 @@
                                 <h5 class="card-title">{{title}}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Тьютор: {{name}}</h6>
                                 <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{disciplineTitle}} </h6>
-                                <p class="card-text">{{description}}</p>
+                                <p class="card-text" v-if="description !== 'undefined'">{{description}}</p>
                             </div>
                         </div>
                     </div>

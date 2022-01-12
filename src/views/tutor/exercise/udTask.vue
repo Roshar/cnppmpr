@@ -24,7 +24,9 @@
                             <label for="mentor">Автор</label>
                             <select  :class="['form-control',invalid.mentorInvalid]" name="mentor" id="mentor" v-model="mentor">
                                 <option value="0">Вы</option>
-                                <option v-for="(item, index) in mentorsData"  :key="item.id"  :selected="item.id === mentor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
+                                <option v-for="item in mentorsData"  :key="item.id"
+                                        :selected="item.id === mentor ? ' selected ' : ''"
+                                        :value=item.id> {{item.surname}} {{item.name}} {{item.patronymic}} </option>
                             </select>
                             <small v-if="mentorError" class="form-text text-muted">Обязательное поле</small>
                         </div>
@@ -109,7 +111,6 @@
 </template>
 
 <script>
-
     import RequestTask from "../../../components/request/RequestTask";
     import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
     import AppLoader from "../../../components/ui/AppLoader";
@@ -119,6 +120,7 @@
     import {requiredForm} from '../../../utils/requiredForm'
     import {checkPossibilityDeleteData} from '../../../accessRouteAndAction/checkPossibilityDeleteData'
     import {mysqlEscape} from '../../../utils/mysqlEscape'
+    import {getCurrentAuthor} from '../../../utils/getCurrentAuthor'
     import editorConfig from '../../../utils/configurationEditor'
 
 
@@ -175,30 +177,22 @@
                 loading.value = true
                 taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
                 taskData.value.term = taskData.value.term.split(".").reverse().join("-")
-                mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
+                mentorsData.value = await store.dispatch('iom/getMentorDataForTutor', {token: localStorage.getItem('jwt-token')})
                 tagsData.value = await store.dispatch('tag/getTag')
-                title.value = taskData.value.title
-                description.value = taskData.value.description
+                title.value = taskData.value['title']
+                description.value = taskData.value['description']
                 tag_id.value = taskData.value['tag_id']
                 levels.value = await store.dispatch('discipline/getLevels')
                 //term.value = taskData.value.term.split(".").reverse().join("-");
-                term.value = taskData.value.term
+                term.value = taskData.value['term']
                 level.value = taskData.value['level_title']
                 level_id.value = taskData.value['level_id']
-                mentor.value = taskData.value.mentor
-                link.value = taskData.value.link
+                mentor.value = taskData.value['mentor']
+                link.value = taskData.value['link']
                 id_exercise.value = taskData.value['id_exercises']
                 loading.value = false
+                currentMentor.value = getCurrentAuthor(mentor.value, taskData.value)
 
-                if(Object.keys(mentorsData.value).length !== 0) {
-                    mentorsData.value.forEach((person) =>{
-                        if(person.id === taskData.value.mentor){
-                            currentMentor.value = person.firstname
-                        }
-                    })
-                }else{
-                    currentMentor.value = 'Вы'
-                }
             })
 
             const deleteTask = async() => {
@@ -231,6 +225,8 @@
                                         token: localStorage.getItem('jwt-token')
                                     }})
                     taskData.value = await store.dispatch('iom/getTaskById',{param:route.params})
+                    mentor.value = taskData.value['mentor']
+                    currentMentor.value = getCurrentAuthor(mentor.value, taskData.value)
                     taskData.value.term = taskData.value.term.split(".").reverse().join("-")
                                 showModal.value = false
                                 await router.push(`/my_iom/${route.params.id}/exercise/${route.params.task}`)

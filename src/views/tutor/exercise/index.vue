@@ -86,7 +86,7 @@
                         <label for="link">Автор</label>
                         <select class="form-control" name="author" v-model="mentor">
                             <option value=0>Вы</option>
-                            <option v-if="mentorsData" v-for="(item, index) in mentorsData"  :key="item.id"  :selected="item.id === mentor ? ' selected ' : ''"  :value=item.id>{{item.firstname}}</option>
+                            <option v-if="mentorsData" v-for="(item, index) in mentorsData"  :key="item.id"   :value=item.id>{{item.lastname}} {{item.name}} {{item.patronymic}}</option>
                         </select>
                         <small v-if="mentorError">{{mentorError}}</small>
                     </div>
@@ -103,7 +103,7 @@
                         <label for="link">Уровень</label>
                         <select :class="['form-control',{invalid:liError}]"  name="tag" v-model="level">
                             <option value=''>Выбрать уровень</option>
-                            <option v-for="(item, index) in levels"  :key="item['id']"   :value="item['id']">{{item['title']}}</option>
+                            <option v-for="(item) in levels"  :key="item['id']"   :value="item['id']">{{item['title']}}</option>
                             <small v-if="liError">{{liError}}</small>
                         </select>
                     </div>
@@ -247,7 +247,7 @@
                 await store.dispatch('globalLibrary/getLibraryDataByTutorDiscipline',
                     {token: localStorage.getItem('jwt-token')})
 
-                mentorsData.value = await store.dispatch('iom/getMentor',{token: localStorage.getItem('jwt-token')})
+                mentorsData.value = await store.dispatch('iom/getMentorDataForTutor',{token: localStorage.getItem('jwt-token')})
                 tagsData.value = await store.dispatch('tag/getTag')
                 loading.value = false
             })

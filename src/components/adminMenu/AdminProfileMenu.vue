@@ -5,6 +5,7 @@
                 <li><router-link to="/"  class="router-link" >Мой профиль</router-link></li>
                 <li><router-link to="/students"  class="router-link" >Слушатели</router-link></li>
                 <li><router-link to="/tutors"  class="router-link" >Тьюторы</router-link></li>
+                <li><router-link to="/mentor"  class="router-link" >Наставники</router-link></li>
                 <li><router-link to="/statistic"  class="router-link" >Статистика</router-link></li>
                 <li><router-link to="/group"  class="router-link" >Учебные группы</router-link></li>
                 <li><router-link to="/iom"  class="router-link" >Идивидуальные образовательные маршруты</router-link></li>

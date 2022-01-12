@@ -218,7 +218,6 @@ export default {
         async deactivationById ({dispatch},payload) {
             try {
                 const {data} = await axios.post('/api/admin/deactivationById',payload)
-
                 dispatch('setSystemMessage', {
                     value: data.values.message,
                     type: 'primary'
@@ -233,10 +232,40 @@ export default {
             }
         },
 
+        async addMentor ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/addMentor',payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
         async getUsersWithBanStatus ({dispatch},payload) {
             try {
                 console.log(payload)
                 const {data} = await axios.post('/api/admin/getUsersWithBanStatus',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getCountGender({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getCountGender',payload)
                 return data.values
             } catch(e){
                 dispatch('setSystemMessage', {
@@ -264,6 +293,66 @@ export default {
             try {
                 const {data} = await axios.post('/api/admin/getProfile',payload)
                 return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getMentorData ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getMentors',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getMentorById ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getMentorById',payload)
+                return data.values
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async editMentorData ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/editMentorData',payload)
+                console.log(data.values)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async deleteMentor ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/deleteMentor',payload)
+                console.log(data.values)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: 'primary'
+                }, {root: true})
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
