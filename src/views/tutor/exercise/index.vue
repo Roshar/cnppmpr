@@ -289,7 +289,9 @@
             const submit = async function (values)  {
                 values['iomId'] = route.params.id
                 values['token'] = localStorage.getItem('jwt-token')
-                values.description = mysqlEscape(description.value)
+                if (values.description) {
+                    values.description = mysqlEscape(description.value)
+                }
                 await store.dispatch('iom/addExercise',values)
                 await store.dispatch('iom/getExercisesByIomId',route.params)
                 showModal.value = false
