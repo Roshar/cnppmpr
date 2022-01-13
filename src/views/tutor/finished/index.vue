@@ -36,7 +36,6 @@
                             <td> {{item['end_education']}}</td>
 
                             <td v-if="item['dump_link']">
-                                {{item['dump_link']}}
                                 <a :href="generationLink(item['dump_link'])" target="_blank" class="btn btn-primary-outline"  >Скачать</a>
                             </td>
                             <td v-else>
