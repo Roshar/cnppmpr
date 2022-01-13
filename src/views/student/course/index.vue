@@ -389,7 +389,7 @@
                         iomId: issetIom.value[0]['iom_id'],
                         tutorId: tutorId.value,
                         token: localStorage.getItem('jwt-token'),
-                        recall: messageBody.value || 'Отсутствует',
+                        recall_: messageBody.value || 'Отсутствует',
                         mark: mark.value
                     })
                     await checkStatusCurrentIom()

@@ -13,7 +13,7 @@
                         <p v-else>Пусто</p>
                         <hr>
                         <h5>Ссылка</h5>
-                        <p v-if="link" > <a :href="link">{{link}}</a></p>
+                        <p v-if="link" > <a :href="link" target="_blank">{{link}}</a></p>
                         <p v-else>Пусто</p>
                         <hr>
                         <h5>Категория</h5>

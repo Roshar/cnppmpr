@@ -23,7 +23,7 @@
                     <td><router-link :to="{ path: `/my_iom/${item['iom_id']}/exercise/${item['id_exercises']}`}" >{{item.title}}</router-link></td>
                     <td>{{shortContent(clearHTML(item.description), 100)}}</td>
                     <td>
-                        <a href="{{item.link}}">{{item.link }}</a>
+                        <a :href="item.link" target="_blank">{{item.link }}</a>
                     </td>
                     <td>{{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</td>
                     <td>{{item['title_tag']}}</td>
