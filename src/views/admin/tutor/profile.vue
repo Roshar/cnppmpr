@@ -105,7 +105,7 @@
                                                 <h6 class="mb-0">ФИО</h6>
                                             </div>
                                             <div class="col-sm-9 text-secondary">
-                                                <span v-if="!editProfile">{{name}} {{surname}} {{patronymic}}</span>
+                                                <span v-if="!editProfile"> {{surname}} {{name}} {{patronymic}}</span>
 
                                             </div>
                                         </div>

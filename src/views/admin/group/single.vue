@@ -236,6 +236,7 @@
             })
 
             const addInGroup = async(user) => {
+                loading.value = true
                 const group = currentGroup.value
                 const tutor = tutorId.value
                 const student = user
@@ -251,6 +252,7 @@
                 studentsInGroup.value = store.getters['admin/getAppointedStudentsCurrentGroup']
                 showModal.value = false
                 await router.push(`/group/${route.params.id}`)
+                loading.value = false
             }
 
 
@@ -279,6 +281,8 @@
 </script>
 
 <style scoped>
+
+
     .modal-overlay,.modal-overlay2 {
         position: fixed;
         top: 0;
@@ -291,6 +295,8 @@
 
     .modal-form{
         position: fixed;
+        overflow: scroll;
+        height: 100%;
         top: 27%;
         left: 50%;
         transform: translate(-50%,-27%);

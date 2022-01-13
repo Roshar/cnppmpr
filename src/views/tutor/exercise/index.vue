@@ -281,14 +281,15 @@
                     await router.push(`/my_iom/${route.params.id}/exercise/`)
                 }
 
-
-
             }
 
             // Задания из текущего ИОМа
             const submit = async function (values)  {
                 values['iomId'] = route.params.id
                 values['token'] = localStorage.getItem('jwt-token')
+                if(values.title) {
+                    values.title = mysqlEscape(values.title)
+                }
                 if (values.description) {
                     values.description = mysqlEscape(description.value)
                 }

@@ -33,11 +33,10 @@
                 <tbody>
                 <tr v-for="(item, index) in lastStudents" :key="item.user_id">
                     <th scope="row">{{index+1}}</th>
-                    <td>{{item.name}} {{item.surname}}</td>
+                    <td> {{item.surname}} {{item.name}} </td>
                     <td>{{item['school_name']}} </td>
                     <td>{{item['title_area']}} </td>
                     <td>{{item['title_discipline']}}</td>
-
                     <td>
                         <input  :class="setBtnActiveClass(item.status)"
                                 :disabled="disabled(item.status)"

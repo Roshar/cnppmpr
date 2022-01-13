@@ -57,7 +57,7 @@
                         <tbody>
                         <tr v-for="(item, index) in students" :key="item.user_id">
                             <th scope="row">{{index+1}}</th>
-                            <td ><router-link :to="{path:`/student/profile/${item.user_id}`}" class="name_student_link"> {{item.name}} {{item.surname}}</router-link></td>
+                            <td ><router-link :to="{path:`/student/profile/${item.user_id}`}" class="name_student_link">  {{item.surname}} {{item.name}}</router-link></td>
                             <td>{{item.school_name}}</td>
                             <td>{{item.title_area}}</td>
                             <td>{{item.title_discipline}}</td>
