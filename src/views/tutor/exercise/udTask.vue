@@ -213,7 +213,7 @@
 
                 if(Object.keys(error.value).length === 0) {
                     await store.dispatch('iom/updateExercise',{values:{
-                                        title:title.value,
+                                        title:mysqlEscape(title.value),
                                         description:mysqlEscape(description.value),
                                         mentor:mentor.value,
                                         tag:tag_id.value,
