@@ -249,7 +249,7 @@
             const sendMessage = async() => {
                 loading.value = true
                 if(reportLink.value !== '' || reportMessage.value !== '' || uploadData.value !== '' ){
-                    if(reportMessage.value !== '') {
+                    if(reportMessage.value && reportMessage.value.length > 2 ) {
                         reportMessage.value = mysqlEscape(reportMessage.value)
                     }
                     if(uploadData.value) {

@@ -101,8 +101,9 @@
                                                 <p class="mb-0" v-else>Пусто</p>
                                                 <hr>
                                                 <h6>Файл:</h6>
-
-                                                <a type="button" class="btn btn-outline-secondary" target="_blank" v-if="issetFile" :href="aFilePath"> Скачать</a>
+                                                <a type="button" class="btn btn-outline-secondary" target="_blank"
+                                                   v-if="issetFile"
+                                                   :href="aFilePath"> Скачать</a>
                                                 <p class="mb-0" v-else>Пусто</p>
                                                 <hr>
                                             </div>
@@ -229,7 +230,6 @@
                     exId: route.params.exId,
                     studentId: route.params.studentId
                 })
-
                 window.location.href = `/show_exercises_accepted`
             }
 
@@ -265,7 +265,7 @@
                     ex_link.value  = answer[0]['ex_link']
                     created.value  = answer[0]['answer_created']
                     issetFile.value = answer[0]['file_path'] ? true : false
-                    aFilePath.value  = baseUrl.value +'/'+ studentId.value +'/'+ answer['file_path']
+                    aFilePath.value  = baseUrl.value +'/'+ studentId.value +'/'+ answer[0]['file_path']
                     // aFilePath.value  = answer['file_path']
                     term.value  = answer[0]['ex_term']
                     aContent.value  = answer[0]['answer_content']

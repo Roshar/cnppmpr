@@ -36,7 +36,8 @@
                             <td> {{item['end_education']}}</td>
 
                             <td v-if="item['dump_link']">
-                                <a :href="item['dump_link']" target="_blank" class="btn btn-primary-outline" type="button" >Скачать</a>
+                                {{item['dump_link']}}
+                                <a :href="generationLink(item['dump_link'])" target="_blank" class="btn btn-primary-outline"  >Скачать</a>
                             </td>
                             <td v-else>
                                 <button class="btn btn-primary-outline" type="button" @click="generationReport(item['user_id'],item['iom_id'])">Сгенерировать</button>
@@ -61,6 +62,7 @@
         setup() {
             const store = useStore()
             const router = useRouter()
+            const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const students = ref()
             const token = ref(localStorage.getItem('jwt-token'))
@@ -79,6 +81,9 @@
                 loading.value = false
             }
 
+            const generationLink = (link)=> {
+                return baseUrl.value+'/'+link
+            }
 
             onMounted(async() => {
                 loading.value = true
@@ -95,7 +100,8 @@
             return {
                 loading,
                 students,
-                generationReport
+                generationReport,
+                generationLink
             }
         },
         components: {AppLoader,TutorMainMenu}
