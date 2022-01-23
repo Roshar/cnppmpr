@@ -4,44 +4,13 @@
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
-            <div class="modal-form" v-if="showModal">
-                <form  @submit.prevent ref="form">
-                    <div class="form-group">
-                        <label for="titleIom">Наименование</label>
-                        <input type="text" :class="['form-control',invalid.titleIomInvalid]" v-model="titleIom" id="titleIom" name="titleIom"  placeholder="Введите название индивидуального образовательного маршрута">
-                        <small id="titleIomHelp" class="form-text text-muted">Обязательное поле</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="descriptionIom">Краткое описание:</label>
-                        <textarea class="form-control" v-model="descriptionIom"  id="descriptionIom" name="descriptionIom" placeholder="Здесь вы можете добавить краткое описание"></textarea>
-                        <small id="descriptionIomHelp" class="form-text text-muted">Необязательное поле</small>
-                    </div>
-                    <div class="row">
-                        <div class="col-10"><button type="button"  class="btn btn-outline-primary-send" @click="addIom" >Создать и перейти в ИОМ</button></div>
-                        <div class="col-2"><button type="button" style="float: right" class="btn btn-outline-secondary"  @click="showModal=false" >Отменить</button></div>
-                    </div>
-                </form>
-            </div>
-            <h4 class="title-page">Моя библиотека индивидуальных образовательных маршрутов</h4>
+
+            <h4 class="title-page">Учебный процесс по индивидуальным образовательным маршрутам </h4>
             <app-loader v-if="loading"></app-loader>
             <div class="content-loader" v-else>
                 <hr>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="create_iom">
-                            <div class="create_iom_block">
-                                <div class="create_iom_block_icon_create" @click="showModal = true">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
-                                        <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
-                                        <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z"/>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <h5 class="subtitle-page">Список </h5>
-                <hr>
 
                 <div class="row" v-if="iomData">
                     <div class="col-4" v-for="(item, index) in iomData" :key="item.id">
@@ -49,14 +18,13 @@
                             <div class="card-body">
                                 <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания:  {{item['created_at']}}</div>
                                 <h5 class="card-title">{{item.title}}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Количество заданий: {{item.countExercises}}</h6>
                                 <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Количество учащихся: {{item.countMembers}}</h6>
-                                <router-link :to="{ path: `/my_iom/${item['iom_id']}/exercise`}" class="btn-primary-outline" >Открыть</router-link>
+                                <router-link :to="{ path: `/learning_process/${item['iom_id']}`}" class="btn-primary-outline" >Открыть</router-link>
                             </div>
                         </div>
                     </div>
                 </div>
-                <h5 v-if="iomData.length == 0">Ваша библиотека пуста</h5>
+                <h5 v-if="iomData.length == 0">Пустой список</h5>
             </div>
         </div>
     </div>
@@ -82,33 +50,18 @@
             const token = localStorage.getItem('jwt-token')
             let titleIom = ref('')
             let descriptionIom = ref('')
-            let invalid = ref({
-                titleIomInvalid: '',
-                titleExInvalid: '',
-            })
-            const addIom = async() => {
-                if(!titleIom.value ||titleIom.value.length<3 ){
-                    invalid.value.titleIomInvalid = "is-invalid"
-                }else {
-                    await store.dispatch('iom/addNewIom',{
-                        title:titleIom.value,
-                        description:descriptionIom.value
-                    })
-                }
-            }
+            const iomData = ref()
 
 
             onMounted(async()=>{
                 loading.value = true
-                await store.dispatch('iom/getData',token)
+                iomData.value = await store.dispatch('learning/getLearningIOM',{token:token})
                 loading.value = false
             })
             return{
-                iomData: computed(() => store.state['iom'].iomData),
+                iomData,
                 route,
                 loading,
-                addIom,
-                invalid,
                 titleIom,
                 descriptionIom,
                 showModal,

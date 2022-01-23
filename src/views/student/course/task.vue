@@ -19,19 +19,19 @@
                             <ckeditor :editor="editor" v-model="reportMessage" :config="editorConfig"></ckeditor>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <div class="form-group">
                                     <label class="message_element">Отчет в виде ссылки </label>
                                     <input type="text" class="form-control" name="link" v-model="reportLink" placeholder="Вставьте сюда ссылку">
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <label class="message_element">Отчет в формате документа </label>
-                                <label class="file">
-                                    <input type="file"  @change="onFileSelected" name="answer" id="file" aria-label="File browser example">
-                                    <span class="file-custom"></span>
-                                </label>
-                            </div>
+<!--                            <div class="col-6">-->
+<!--                                <label class="message_element">Отчет в формате документа </label>-->
+<!--                                <label class="file">-->
+<!--                                    <input type="file"  @change="onFileSelected" name="answer" id="file" aria-label="File browser example">-->
+<!--                                    <span class="file-custom"></span>-->
+<!--                                </label>-->
+<!--                            </div>-->
                         </div>
                         <div class="row">
                             <div class="col-6">
@@ -248,71 +248,74 @@
 
             const sendMessage = async() => {
                 loading.value = true
-                if(reportLink.value !== '' || reportMessage.value !== '' || uploadData.value !== '' ){
+                if(reportLink.value !== '' || reportMessage.value !== '' ){
                     if(reportMessage.value && reportMessage.value.length > 2 ) {
                         reportMessage.value = mysqlEscape(reportMessage.value)
                     }
-                    if(uploadData.value) {
+                    await store.dispatch('student/insertInReportWithoutFile', {
+                        link: reportLink.value,
+                        content: reportMessage.value,
+                        iomId: iomId.value,
+                        taskId: taskId.value,
+                        category: tag_id.value,
+                        token: localStorage.getItem('jwt-token'),
+                        files: null
+                    })
+                    loading.value = true
+                    await router.push('/my_course')
 
-                        const ff = new FormData()
-                        ff.append('answer', uploadData.value, studentId.value)
-                        ff.append('link', reportLink.value)
-                        ff.append('content', reportMessage.value)
-                        ff.append('category', tag_id.value)
-                        ff.append('iomId', iomId.value)
-                        ff.append('taskId', taskId.value)
-                        ff.append('token', localStorage.getItem('jwt-token'))
-                        await store.dispatch('student/insertInReportWithFile', ff)
-                        loading.value = false
-                        await router.push('/my_course')
-                    }else {
-                        await store.dispatch('student/insertInReportWithoutFile', {
-                            link: reportLink.value,
-                            content: reportMessage.value,
-                            iomId: iomId.value,
-                            taskId: taskId.value,
-                            category: tag_id.value,
-                            token: localStorage.getItem('jwt-token'),
-                            files: null
-                        })
-                        loading.value = true
-                        await router.push('/my_course')
-                    }
-
+                    // if(uploadData.value) {
+                    //
+                    //     const ff = new FormData()
+                    //     ff.append('answer', uploadData.value, studentId.value)
+                    //     ff.append('link', reportLink.value)
+                    //     ff.append('content', reportMessage.value)
+                    //     ff.append('category', tag_id.value)
+                    //     ff.append('iomId', iomId.value)
+                    //     ff.append('taskId', taskId.value)
+                    //     ff.append('token', localStorage.getItem('jwt-token'))
+                    //     await store.dispatch('student/insertInReportWithFile', ff)
+                    //     loading.value = false
+                    //     await router.push('/my_course')
+                    // }else {
+                    //
+                    // }
                 }
 
             }
 
             const updateMessage = async() => {
-                if(reportLink.value !== '' || reportMessage.value !== '' || uploadData.value !== '' ){
+                if(reportLink.value !== '' || reportMessage.value !== '' ){
                     if(reportMessage.value !== '') {
                         reportMessage.value = mysqlEscape(reportMessage.value)
                     }
-                    if(uploadData.value) {
-                        const ff = new FormData()
-                        ff.append('answer', uploadData.value, studentId.value)
-                        ff.append('link', reportLink.value)
-                        ff.append('content', reportMessage.value)
-                        ff.append('category', tag_id.value)
-                        ff.append('iomId', iomId.value)
-                        ff.append('reportId', reportId.value)
-                        ff.append('taskId', taskId.value)
-                        ff.append('token', localStorage.getItem('jwt-token'))
-                        await store.dispatch('student/updateInReportWithFile',
-                            ff)
-                        await router.push('/my_course')
+                    await store.dispatch('student/updateInReportWithoutFile', {
+                        link: reportLink.value,
+                        content: reportMessage.value,
+                        iomId: iomId.value,
+                        taskId: taskId.value,
+                        reportId: reportId.value,
+                        token: localStorage.getItem('jwt-token')
+                    })
+                    await router.push('/my_course')
 
-                    }else {
-                        await store.dispatch('student/updateInReportWithoutFile', {
-                            link: reportLink.value,
-                            content: reportMessage.value,
-                            iomId: iomId.value,
-                            taskId: taskId.value,
-                            reportId: reportId.value,
-                            token: localStorage.getItem('jwt-token')
-                        })
-                        await router.push('/my_course')
-                    }
+                    // if(uploadData.value) {
+                    //     const ff = new FormData()
+                    //     ff.append('answer', uploadData.value, studentId.value)
+                    //     ff.append('link', reportLink.value)
+                    //     ff.append('content', reportMessage.value)
+                    //     ff.append('category', tag_id.value)
+                    //     ff.append('iomId', iomId.value)
+                    //     ff.append('reportId', reportId.value)
+                    //     ff.append('taskId', taskId.value)
+                    //     ff.append('token', localStorage.getItem('jwt-token'))
+                    //     await store.dispatch('student/updateInReportWithFile',
+                    //         ff)
+                    //     await router.push('/my_course')
+                    //
+                    // }else {
+                    //
+                    // }
                 }
 
             }

@@ -1,10 +1,20 @@
 <template>
+
     <div class="col-3">
         <tutor-education-menu :iom-id="iomId" :current-iom="currentIomTitle"></tutor-education-menu>
     </div>
+
     <div class="col-9">
         <div class="content-wallpaper">
-            <h4 class="title-page">Участники ИОМа "{{currentIomTitle}}" </h4>
+            <div class="row">
+                <div class="col-8">
+                    <h4 class="title-page">Участники ИОМа "{{currentIomTitle}}" </h4>
+                </div>
+                <div class="col-4">
+                    <button class="btn send-status btn-block" :disabled="" > Отправить статус готовности группы</button>
+                </div>
+            </div>
+
             <hr>
             <div class="row">
                 <div class="col-8">
@@ -70,7 +80,6 @@
                     </div>
             </form>
         </div>
-
         <div class="row">
             <div class="col-12">
                 <app-loader v-if="loading"></app-loader>
@@ -111,12 +120,14 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <transition  name="fade" appear>
         <div class="modal-overlay" v-if="showModal" @click="goBack">
         </div>
     </transition>
+
 </template>
 
 <script>
@@ -149,6 +160,7 @@
             const countNum = ref(0)
             const searchValue = ref('')
             const freeStudents = ref()
+            const reportFinishedStatus = ref(false)
 
             const checkFinishedEducation = (val) =>{
                 return (val === 0) ? 'в процессе' : 'завершил'
@@ -206,6 +218,10 @@
                 }
             })
 
+            const checkReadyStatus = ()=> {
+                reportFinishedStatus.value
+            }
+
             onMounted(async()=>{
                 loading.value = true
                 areas.value = await store.dispatch('area/getAreas')
@@ -220,7 +236,9 @@
                 const iomData = store.getters['iom/getCurrentIomData']
                 currentIomTitle.value = iomData.title
                 students.value = store.getters['student/getUsersFromIomEducation']
+                console.log(students.value )
                 countNum.value = students.value.length ? students.value.length : 0
+
                 loading.value = false
             })
 
@@ -256,6 +274,10 @@
 
 <style scoped>
 
+    .send-status {
+        background-color: #F5B971;
+        color: #212529;
+    }
     .text-example {
         display: flex;
         align-items: center;

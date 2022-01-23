@@ -14,6 +14,9 @@ import StudentAdmin from '../views/admin/student'
 import AdminStatistic from '../views/admin/statistic'
 import AcceptedExercises from '../views/tutor/accepted'
 import AcceptedTask from '../views/tutor/accepted/task'
+import LearningProcess from '../views/tutor/learning_process'
+import LearningProcessSingle from '../views/tutor/learning_process/single'
+
 
 
 import StudentTutor from '../views/tutor/student'
@@ -461,6 +464,27 @@ const routes = [
     path: '/my_iom/:id/exercise/:task',
     name: 'updateDeleteOpen',
     component: udTask,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+
+  {
+    path: '/learning_process',
+    name: 'learning_process',
+    component: LearningProcess,
+    beforeEnter: beforeTutor(),
+    meta:{
+      auth: true,
+    },
+  },
+
+  {
+    path: '/learning_process/:iom',
+    name: 'learning_process_iom',
+    component: LearningProcessSingle,
     beforeEnter: beforeTutor(),
     meta:{
       auth: true,

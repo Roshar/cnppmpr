@@ -13,6 +13,7 @@ import discipline from './modules/discipline.module'
 import conversation from './modules/conversation.module'
 import student from './modules/student.module'
 import finished from './modules/finished.module'
+import learning from './modules/learning_process.module'
 
 
 
@@ -74,6 +75,7 @@ export default createStore({
     conversation,
     globalLibrary,
     student,
-    finished
+    finished,
+    learning
   }
 })
