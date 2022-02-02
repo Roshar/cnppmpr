@@ -52,7 +52,29 @@
                     </div>
                 </form>
             </div>
-            <h4 class="title-page">Учебные группы</h4>
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="title-page">Учебные группы</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label> Фильтр: Дисциплина</label>
+                    <select class="form-control" name="gender" v-model="disId">
+                        <option value="">Выбрать дисциплину</option>
+                        <option v-for="item in disList" :value="item['id_dis']">{{item['title_discipline']}}</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label> Фильтр: Статус группы</label>
+                    <select class="form-control" name="groupStatusId" v-model="groupStatusId">
+                        <option value="">Выбрать статус</option>
+                        <option value="0">В процессе обучения</option>
+                        <option value="1">Завершили обучение</option>
+                    </select>
+                </div>
+            </div>
+
             <hr>
             <div class="row">
                 <div class="col-6">
@@ -101,7 +123,7 @@
 
     import {ref, onMounted, computed, watch} from 'vue'
     import {useStore} from 'vuex'
-    import {useRouter} from 'vue-router'
+    import {useRouter, useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
     import {useGroupForm} from "../../../use/admin/group-form";
     import AdminProfileMenu from "../../../components/adminMenu/AdminProfileMenu";
@@ -110,13 +132,16 @@
         setup() {
             const store = useStore()
             const router = useRouter()
+            const route = useRoute()
             const loading = ref(true)
             const showModal = ref(false)
             const showModalDelete = ref(false)
             const tutorsData = ref()
+            const disId = ref('')
+            const disList = ref()
             const groupsData = ref()
             const deleteId = ref()
-
+            const groupStatusId = ref('')
 
             const deleteGroupDanger = async() =>{
                 if(deleteId.value) {
@@ -141,11 +166,28 @@
                 showModalDelete.value = false
             }
 
+            watch([disId,groupStatusId], async(values) => {
+                if(values[0] || values[1]) {
+                    if(values[0] && values[1]) {
+                        groupsData.value = await store.dispatch('admin/getGroups',
+                            {disId:values[0], groupStatusId: values[1]})
+                    }else if(values[0] && !values[1]) {
+                        groupsData.value = await store.dispatch('admin/getGroups',{disId:values[0]})
+                    }else if(!values[0] && values[1]){
+                        groupsData.value = await store.dispatch('admin/getGroups',
+                            {groupStatusId: values[1]})
+                    }
+                }else {
+                    groupsData.value = await store.dispatch('admin/getGroups')
+                }
+            })
+
+
             onMounted(async()=>{
                 loading.value = true
-                // TUTORS DATA
                 tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
                 groupsData.value = await store.dispatch('admin/getGroups')
+                disList.value = await store.dispatch('discipline/getDisciplines')
                 loading.value = false
             })
 
@@ -166,6 +208,9 @@
                 showModalDelete,
                 tutorsData,
                 groupsData,
+                disList,
+                groupStatusId,
+                disId,
                 deleteGroupDanger,
                 clearFade,
                 cancelDelete,

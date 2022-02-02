@@ -621,9 +621,9 @@ export default {
             }
         },
 
-        async getGroups ({dispatch}) {
+        async getGroups ({dispatch},payload) {
             try {
-                const {data} = await axios.post('/api/admin/getGroups')
+                const {data} = await axios.post('/api/admin/getGroups',payload)
                 return data.values
             } catch(e){
 
@@ -635,6 +635,33 @@ export default {
             }
         },
 
+        async getIomByTutorId ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getIomByTutorId',payload)
+                return data.values
+            } catch(e){
+
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getFinishedStudentsCountByTutor ({dispatch},payload) {
+            try {
+                const {data} = await axios.post('/api/admin/getFinishedStudentsCountByTutor',payload)
+                return data.values
+            } catch(e){
+
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
 
 
         async getGroupById ({dispatch}, payload) {

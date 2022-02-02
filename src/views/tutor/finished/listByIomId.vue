@@ -1,10 +1,10 @@
 <template>
     <div class="col-3">
-        <TutorMainMenu></TutorMainMenu>
+        <tutor-education-menu :iom-id="iomId" :current-iom="currentIomTitle"></tutor-education-menu>
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
-            <h4 class="title-page">Список слушателей, прошедших обучение (за весь период) </h4>
+            <h4 class="title-page">Слушатели, успешно завершившие обучение </h4>
             <hr>
         </div>
         <div class="row">
@@ -22,7 +22,6 @@
                             <th scope="col" >Дата начала обучения</th>
                             <th scope="col" >Дата окончания обучения</th>
                             <th scope="col" >Сформировать отчет</th>
-
                         </tr>
                         </thead>
                         <tbody>
@@ -54,16 +53,19 @@
 <script>
     import {ref, onMounted, computed, watch} from 'vue'
     import {useStore} from 'vuex'
-    import {useRouter} from 'vue-router'
+    import {useRouter, useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
+    import TutorEducationMenu from "../../../components/tutorMenu/TutorEducationMenu";
     export default {
         setup() {
             const store = useStore()
             const router = useRouter()
+            const route = useRoute()
+            const iomId = ref(route.params.iom_id)
             const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const students = ref()
+            const currentIomTitle = ref()
             const token = ref(localStorage.getItem('jwt-token'))
 
             const generationReport = async(student_id, iom_id) => {
@@ -87,11 +89,19 @@
             onMounted(async() => {
                 loading.value = true
 
-                await store.dispatch('finished/getStudentsForTutor', {
-                    token: localStorage.getItem('jwt-token')
+                await store.dispatch('finished/getStudentsForTutorByIomId', {
+                    token: localStorage.getItem('jwt-token'),
+                    iomId:iomId.value
                 })
+                await store.dispatch('iom/getDataById', {
+                    token: localStorage.getItem('jwt-token'),
+                    id: route.params.iom_id
+                })
+                const iomData = store.getters['iom/getCurrentIomData']
+                currentIomTitle.value = iomData.title
 
-                students.value = store.getters['finished/finishedStudents']
+                students.value = store.getters['finished/finishedStudentsbyIomId']
+
 
                 loading.value = false
             })
@@ -100,10 +110,12 @@
                 loading,
                 students,
                 generationReport,
-                generationLink
+                generationLink,
+                iomId,
+                currentIomTitle
             }
         },
-        components: {AppLoader,TutorMainMenu}
+        components: {AppLoader,TutorEducationMenu}
 
     }
 </script>

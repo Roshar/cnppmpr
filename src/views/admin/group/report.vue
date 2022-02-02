@@ -1,11 +1,24 @@
 <template>
     <div class="col-3">
-        <TutorMainMenu></TutorMainMenu>
+        <admin-profile-group-menu :id="currentGroup" :title="title"></admin-profile-group-menu>
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
-            <h4 class="title-page">Список слушателей, прошедших обучение (за весь период) </h4>
-            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="title-page">Список слушателей, прошедших обучение (за весь период) </h4>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label> Фильтр: Индивидуальный образовательный маршрут</label>
+                    <select class="form-control" name="gender" v-model="iomId">
+                        <option value="">Выбрать индивидуальный образовательный маршрут</option>
+                        <option v-for="item in iomList" :value="item.iom_id">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-12">
@@ -54,16 +67,24 @@
 <script>
     import {ref, onMounted, computed, watch} from 'vue'
     import {useStore} from 'vuex'
-    import {useRouter} from 'vue-router'
+    import {useRouter, useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import TutorMainMenu from "../../../components/tutorMenu/TutorMainMenu";
+    import AdminProfileGroupMenu from "../../../components/adminMenu/AdminProfileGroupMenu";
+
     export default {
         setup() {
             const store = useStore()
             const router = useRouter()
+            const route = useRoute()
             const baseUrl = ref(process.env.VUE_APP_URL)
             const loading = ref(true)
             const students = ref()
+            const groupData = ref()
+            const tutorId = ref()
+            const iomId = ref('')
+            const iomList = ref()
+            const title = ref()
+            const currentGroup = ref()
             const token = ref(localStorage.getItem('jwt-token'))
 
             const generationReport = async(student_id, iom_id) => {
@@ -84,15 +105,41 @@
                 return baseUrl.value+'/'+link
             }
 
+            watch([iomId],async(iomId)=>{
+                if(iomId[0]) {
+                    students.value = await store.dispatch('finished/getStudentsForAdminByIomId', {
+                        iomId: iomId[0],
+                        tutorId: groupData.value['tutor_id']
+                    })
+                }else {
+                    students.value = await store.dispatch('finished/getStudentsForAdminByIomId', {
+                        iomId: null,
+                        tutorId: groupData.value['tutor_id']
+                    })
+                }
+
+            })
+
             onMounted(async() => {
                 loading.value = true
+                groupData.value = await store.dispatch('admin/getGroupById',{groupId: route.params.id})
+                if(groupData.value) {
+                    students.value = await store.dispatch('finished/getStudentsForAdminByIomId', {
+                        iomId: null,
+                        tutorId: groupData.value['tutor_id']
+                    })
+                    const iomAndTutorData = await store.dispatch('admin/getAllIomDataByTutorId', {
+                        tutorId:groupData.value['tutor_id']
+                    })
 
-                await store.dispatch('finished/getStudentsForTutor', {
-                    token: localStorage.getItem('jwt-token')
-                })
+                    if(iomAndTutorData.length && iomAndTutorData[0].length )
+                    iomList.value = iomAndTutorData[0]
+                }
 
-                students.value = store.getters['finished/finishedStudents']
+                tutorId.value = groupData.value['tutor_id']
 
+                currentGroup.value = groupData.value['id']
+                title.value = groupData.value.title
                 loading.value = false
             })
 
@@ -100,10 +147,14 @@
                 loading,
                 students,
                 generationReport,
-                generationLink
+                generationLink,
+                currentGroup,
+                title,
+                iomId,
+                iomList
             }
         },
-        components: {AppLoader,TutorMainMenu}
+        components: {AppLoader,AdminProfileGroupMenu}
 
     }
 </script>

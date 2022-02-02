@@ -11,7 +11,9 @@
                     <h4 class="title-page">Участники ИОМа "{{currentIomTitle}}" </h4>
                 </div>
                 <div class="col-4">
-                    <button class="btn send-status btn-block" :disabled="" > Отправить статус готовности группы</button>
+                    <button class="btn send-status btn-block" type="button"
+                            @click="sendReportToFinish" :disabled = "reportFinishedStatus" >
+                        Отправить статус готовности группы</button>
                 </div>
             </div>
 
@@ -160,7 +162,7 @@
             const countNum = ref(0)
             const searchValue = ref('')
             const freeStudents = ref()
-            const reportFinishedStatus = ref(false)
+            const reportFinishedStatus = ref(true)
 
             const checkFinishedEducation = (val) =>{
                 return (val === 0) ? 'в процессе' : 'завершил'
@@ -218,8 +220,19 @@
                 }
             })
 
-            const checkReadyStatus = ()=> {
-                reportFinishedStatus.value
+            const checkReadyStatus = async()=> {
+                await store.dispatch('student/getUsersFinishedIom', {iomId:route.params.id})
+                const finishedStudents = store.getters['student/getUsersFinishedIom']
+                if(finishedStudents) {
+                    reportFinishedStatus.value = (countNum.value !== finishedStudents)
+                }
+            }
+
+            // отправить статус о готовности закрыть группу и завршения обучения всеми участниками
+            const sendReportToFinish = async() => {
+                loading.value = true
+                await store.dispatch('finished/setStatusFinishedIom', {iomId:route.params.id, token: localStorage.getItem('jwt-token')})
+                loading.value = false
             }
 
             onMounted(async()=>{
@@ -236,8 +249,10 @@
                 const iomData = store.getters['iom/getCurrentIomData']
                 currentIomTitle.value = iomData.title
                 students.value = store.getters['student/getUsersFromIomEducation']
-                console.log(students.value )
+
                 countNum.value = students.value.length ? students.value.length : 0
+
+                await checkReadyStatus()
 
                 loading.value = false
             })
@@ -250,6 +265,7 @@
                 searchValue,
                 loading,
                 search,
+                reportFinishedStatus,
                 areas,
                 discipline_value,
                 area_value,
@@ -261,6 +277,7 @@
                 addInIom,
                 search2,
                 showModal,
+                sendReportToFinish,
                 title,
                 freeStudents,
                 goBack,

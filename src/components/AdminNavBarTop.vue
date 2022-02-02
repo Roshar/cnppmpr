@@ -40,8 +40,9 @@
                 <li  class="list-group-item list-group-item-action list-top-menu-li">
                     <span v-if="notificationAction.length" class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction.length}}</span>
                     <a href="#"  data-toggle="dropdown">Уведомления </a>
-                    <ul v-if="notificationAction.length" class="dropdown-menu">
-                        <li>
+                    <ul  class="dropdown-menu">
+                        <li v-if="notificationAction.length">
+                            <span v-if="notificationAction.length " class="badge badge-pill badge-primary" style="float:right;margin-bottom:-4px;">{{notificationAction.length }}</span>
                             <router-link :to="{path:`/admin_notifications`}" style="font-size: .9em">Запрос на удаление ИОМа</router-link>
                         </li>
                     </ul>
@@ -53,10 +54,9 @@
                         <div><img :src="avatar" alt="Админ" class="rounded-circle" width="36" height="36"  ></div>
                         <span style="display:inline-block; margin-left: .5em">
                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"  class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                        </svg>
+                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                            </svg>
                         </span>
-
                     </div>
                     <ul class="dropdown-menu my_account">
                         <router-link to="/" style="font-size: .9em">Мой профиль</router-link>
@@ -90,6 +90,7 @@
             const notificationAction = ref(false)
             const requestFromUsers = ref(0)
             const requestStudents = ref(0)
+            const group_id = ref()
             const baseUrl = ref(process.env.VUE_APP_URL)
             const requestTutors = ref(0)
             const myAccount = ref(null)
@@ -124,6 +125,7 @@
                 requestFromUsers,
                 requestStudents,
                 requestTutors,
+                group_id,
                 avatar,
                 name
             }

@@ -13,12 +13,26 @@ export default {
     actions:{
         async getNotificationAction ({dispatch}) {
             try {
-                const {data} = await axios.post('/api/notification/getAction')
-                return data.values ? data.values : []
+                const {data} = await axios.post('/api/notification/getNotificationAction')
+                return data.values
             } catch(e){
                 console.log(e)
                 dispatch('setSystemMessage', {
-                    value: e.response.data.values.message,
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getNotificationEnd ({dispatch}) {
+            try {
+                const {data} = await axios.post('/api/notification/getNotificationEnd')
+                return data.values
+            } catch(e){
+                console.log(e)
+                dispatch('setSystemMessage', {
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()

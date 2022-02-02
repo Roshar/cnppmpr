@@ -1,96 +1,90 @@
 <template>
     <div class="col-3">
-        <admin-profile-menu></admin-profile-menu>
+        <admin-profile-group-menu :id="currentGroup" :title="title"></admin-profile-group-menu>
     </div>
 
     <div class="col-9">
-        <app-loader v-if="loading"></app-loader>
-        <div class="load-content" v-else>
-            <div class="modal-form" v-if="showModal">
-                <div class="row">
-                    <div class="col-12 ml-auto">
-                        <button class="btn-primary-outline" @click="showModal = false"> ОТМЕНА </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="content-wallpaper-without-padding">
-                            <label > Пол </label>
-                            <select class="form-control" name="gender" v-model="gender_value">
-                                <option value="0">Выбрать пол</option>
-                                <option value="man">Муж</option>
-                                <option value="woman">Жен</option>
-                            </select>
+        <div class="content-wallpaper">
+            <app-loader v-if="loading"></app-loader>
+            <div class="load-content" v-else>
+                <div class="modal-form" v-if="showModal">
+                    <div class="row">
+                        <div class="col-12 ml-auto">
+                            <button class="btn-primary-outline" @click="showModal = false"> ОТМЕНА </button>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="content-wallpaper-without-padding">
-                            <label > Район</label>
-                            <select class="form-control" name="area" v-model="area_value">
-                                <option value="0">Выбрать район</option>
-                                <option v-for="(item, index) in areas" :value="item.id_area">{{item.title_area}}</option>
-                            </select>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="content-wallpaper-without-padding">
+                                <label > Пол </label>
+                                <select class="form-control" name="gender" v-model="gender_value">
+                                    <option value="0">Выбрать пол</option>
+                                    <option value="man">Муж</option>
+                                    <option value="woman">Жен</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="content-wallpaper-without-padding">
+                                <label > Район</label>
+                                <select class="form-control" name="area" v-model="area_value">
+                                    <option value="0">Выбрать район</option>
+                                    <option v-for="(item, index) in areas" :value="item.id_area">{{item.title_area}}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="content-wallpaper-without-padding">
-                            <div class="lists_list"> <!-- <div class="blue-line"></div>    -->
-                                <h5 class="subtitle-page"> Доступные для записи</h5>
-                                <section class="list_section">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">№</th>
-                                            <th scope="col">ФИО</th>
-                                            <th scope="col">Школа</th>
-                                            <th scope="col">Район</th>
-                                            <th scope="col">Добавить в группу</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr v-for="(item, index) in studentsFree" :key="item.user_id">
-                                            <th scope="row">{{index+1}}</th>
-                                            <td>{{item.surname}} {{item.name}} {{item.patronymic}} </td>
-                                            <td>{{item.school_name}}</td>
-                                            <td>{{item.title_area}}</td>
-                                            <td> <button class="btn-primary-outline" type="button" @click="addInGroup(item.user_id)"> Добавить </button></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </section>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="content-wallpaper-without-padding">
+                                <div class="lists_list"> <!-- <div class="blue-line"></div>    -->
+                                    <h5 class="subtitle-page"> Доступные для записи</h5>
+                                    <section class="list_section">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">№</th>
+                                                <th scope="col">ФИО</th>
+                                                <th scope="col">Школа</th>
+                                                <th scope="col">Район</th>
+                                                <th scope="col">Добавить в группу</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(item, index) in studentsFree" :key="item.user_id">
+                                                <th scope="row">{{index+1}}</th>
+                                                <td>{{item.surname}} {{item.name}} {{item.patronymic}} </td>
+                                                <td>{{item.school_name}}</td>
+                                                <td>{{item.title_area}}</td>
+                                                <td> <button class="btn-primary-outline" type="button" @click="addInGroup(item.user_id)"> Добавить </button></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </section>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-5" >
-                    <div class="content-wallpaper">
+                <div class="row">
+                    <div class="col-8">
                         <div class="card">
-                            <div class="card-body">
-                                <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания: {{created}} </div>
-                                <h5 class="card-title">{{title}}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Тьютор: {{name}}</h6>
-                                <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{disciplineTitle}} </h6>
-                                <p class="card-text" v-if="description !== 'undefined'">{{description}}</p>
+                                <div class="card-body">
+                                    <div style="color: rgb(211, 211, 211); padding-bottom:10px"> Дата создания: {{created}} </div>
+                                    <h5 class="card-title">{{title}}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Тьютор: {{name}}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted" >Предмет: {{disciplineTitle}} </h6>
+                                    <p class="card-text" v-if="description !== 'undefined'">{{description}}</p>
+                                    <hr>
+                                    <h6 class="card-subtitle mb-2 text-muted" >Количество участников: {{studentsInGroup.length}} </h6>
+                                    <h6 class="card-subtitle mb-2 text-muted" >Количество индивидуальных образовательных маршрутов:
+                                        <span v-if="iomList">{{iomList['id']}}</span> <span v-else>0</span>
+                                    </h6>
+                                    <h6 class="card-subtitle mb-2 text-muted" >Завершившие обучения: <span v-if="finishedCount">{{finishedCount[0]['id']}}</span>  </h6>
+                                </div>
                             </div>
-                        </div>
                     </div>
-                </div>
-                <div class="col-4">
-                    <div class="content-wallpaper">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Количество участников</h5>
-                                <h3 class="card-subtitle mb-2 text-muted" style="padding-bottom:5px">Всего: {{studentsInGroup.length}} </h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="content-wallpaper">
+                    <div class="col-4">
                         <div class="create_iom">
                             <div class="create_iom_block">
                                 <div class="create_iom_block_icon_create" @click="showModal = true">
@@ -103,41 +97,41 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="content-wallpaper">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">№</th>
-                                <th scope="col">ФИО</th>
-                                <th scope="col">Школа</th>
-                                <th scope="col">Район</th>
-                                <th scope="col">Наличие ИОМа</th>
-                                <th scope="col">Завершившие обучение</th>
-                                <th scope="col">Удалить из группы</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(item, index) in studentsInGroup" :key="item['user_id']">
-                                <th scope="row">{{index+1}}</th>
-                                <td> <router-link :to="{path:`/student/profile/${item['user_id']}`}">{{item.surname}} {{item.name}} {{item.patronymic}} </router-link></td>
-                                <td>{{item['school_name']}}</td>
-                                <td>{{item['title_area']}}</td>
-                                <td v-if="item['iom_id']"> <router-link :to="{path:`/iom/${item['iom_id']}/${item['t_user_id']}`}">назначен</router-link> </td>
-                                <td v-else> не назначен</td>
-                                <td v-if="item['status']">завершено</td>
-                                <td v-else>в процессе</td>
-                                <td><button class="btn" @click="deleteInGroup(item['user_id'])">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
-                                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                                        <path fill-rule="evenodd" d="M12.146 5.146a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
-                                    </svg>
-                                </button></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="content-wallpaper">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">№</th>
+                                    <th scope="col">ФИО</th>
+                                    <th scope="col">Школа</th>
+                                    <th scope="col">Район</th>
+                                    <th scope="col">ИОМ</th>
+                                    <th scope="col">Завершившие обучение</th>
+                                    <th scope="col">Удалить из группы</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item, index) in studentsInGroup" :key="item['user_id']">
+                                    <th scope="row">{{index+1}}</th>
+                                    <td> <router-link :to="{path:`/student/profile/${item['user_id']}`}">{{item.surname}} {{item.name}} {{item.patronymic}} </router-link></td>
+                                    <td>{{item['school_name']}}</td>
+                                    <td>{{item['title_area']}}</td>
+                                    <td v-if="item['iom_id']"> <router-link :to="{path:`/iom/${item['iom_id']}/${item['t_user_id']}`}">открыть</router-link> </td>
+                                    <td v-else> не назначен</td>
+                                    <td v-if="item['status']">завершено</td>
+                                    <td v-else>в процессе</td>
+                                    <td><button class="btn" @click="deleteInGroup(item['user_id'])">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
+                                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                            <path fill-rule="evenodd" d="M12.146 5.146a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,7 +150,7 @@
     import {useRouter} from 'vue-router'
     import {useRoute} from 'vue-router'
     import AppLoader from "../../../components/ui/AppLoader";
-    import AdminProfileMenu from "../../../components/adminMenu/AdminProfileMenu";
+    import AdminProfileGroupMenu from "../../../components/adminMenu/AdminProfileGroupMenu";
 
     export default {
         setup() {
@@ -169,9 +163,11 @@
             const studentsFree = ref([])
             const studentsInGroup = ref([])
             const groupData = ref()
+            const finishedCount = ref()
             const title = ref()
             const description = ref()
             const tutorId = ref()
+            const iomList = ref()
             const currentGroup = ref()
             const created = ref()
             const disciplineTitle = ref()
@@ -202,8 +198,17 @@
                 // TUTORS DATA
                 tutorsData.value = await store.dispatch('admin/getTutorAndCheckAtFree')
                 groupData.value = await store.dispatch('admin/getGroupById',{groupId: route.params.id})
+                groupData.value = await store.dispatch('admin/getGroupById',{groupId: route.params.id})
                 tutorId.value = groupData.value['tutor_id']
-                currentGroup.value = groupData.value['id']
+
+                if(tutorId.value) {
+                    iomList.value = await store.dispatch('admin/getIomByTutorId', {tutorId:tutorId.value})
+                }
+
+                finishedCount.value = await store.dispatch('admin/getFinishedStudentsCountByTutor',{tutorId:tutorId.value})
+                console.log(finishedCount.value)
+
+                    currentGroup.value = groupData.value['id']
 
                 studentsFree.value = await store.dispatch('admin/getFreeStudentsByDisciplineId',{disId: groupData.value['id_dis']})
                 studentsInGroup.value = await store.dispatch('admin/getAppointedStudentsCurrentGroup',
@@ -214,6 +219,7 @@
                 description.value = groupData.value.description
                 created.value = groupData.value['created_at']
                 disciplineTitle.value = groupData.value['title_discipline']
+
                 name.value = groupData.value.surname +' '+ groupData.value.name +' '+ groupData.value.patronymic
             }
 
@@ -260,13 +266,16 @@
                 loading,
                 showModal,
                 flagIom,
+                iomList,
                 tutorsData,
                 groupData,
                 title,
+                currentGroup,
                 description,
                 created,
                 disciplineTitle,
                 name,
+                finishedCount,
                 studentsFree,
                 studentsInGroup,
                 gender_value,
@@ -276,7 +285,7 @@
                 deleteInGroup
             }
         },
-        components: {AppLoader, AdminProfileMenu}
+        components: {AdminProfileGroupMenu, AppLoader}
     }
 </script>
 

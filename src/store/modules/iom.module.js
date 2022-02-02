@@ -46,6 +46,11 @@ export default {
             state.pendingDataOrFinished = values
         },
 
+        setPendingDataOrFinishedByIomId(state, values) {
+            state.pendingDataOrFinishedByIomId = values
+        },
+
+
         //получить количество заданий в ожидании проверки
         setFinishPendingExercises(state, values) {
             state.pendingExercises = values
@@ -180,6 +185,22 @@ export default {
                 const {data} = await axios.post('/api/iom/getPendingDataOrFinished',payload)
                 if(data.values) {
                     commit('setPendingDataOrFinished',data.values)
+                }
+                console.log(state.iomData)
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getPendingDataOrFinishedByIomId ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/iom/getPendingDataOrFinishedByIomId',payload)
+                if(data.values) {
+                    commit('setPendingDataOrFinishedByIomId',data.values)
                 }
                 console.log(state.iomData)
             } catch(e){
@@ -420,6 +441,9 @@ export default {
 
         getPendingDataOrFinished(state) {
             return state.pendingDataOrFinished
+        },
+        getPendingDataOrFinishedByIomId(state) {
+            return state.pendingDataOrFinishedByIomId
         },
 
         getCode(state) {

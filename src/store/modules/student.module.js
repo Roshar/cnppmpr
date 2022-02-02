@@ -15,6 +15,7 @@ export default {
         freestudents: null,
         exercisesFromMyIom: null,
         tagsFromMyIom: null,
+        countFinishedStudents: null,
     },
 
     mutations: {
@@ -39,6 +40,9 @@ export default {
 
         setStudentsFromIom(state, value) {
             state.membersIom = value
+        },
+        setStundentsFinishedIom(state, value) {
+            state.countFinishedStudents = value
         },
 
         setStudentsFreeForIom(state, value) {
@@ -139,6 +143,20 @@ export default {
                     }
                 }
 
+            } catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+            }
+        },
+
+        async getUsersFinishedIom ({commit, dispatch, state}, payload) {
+            try {
+                const {data} = await axios.post('/api/student/getUsersFinishedIom',payload)
+                if(data.values) {
+                    commit('setStundentsFinishedIom',data.values)
+                }
             } catch(e){
                 dispatch('setSystemMessage', {
                     value: e.message,
@@ -459,6 +477,11 @@ export default {
         getUsersFromIomEducation(state) {
            return state.membersIom
         },
+
+        getUsersFinishedIom(state) {
+            return state.countFinishedStudents
+        },
+
         getFreeStudents(state) {
            return state.freestudents
         },

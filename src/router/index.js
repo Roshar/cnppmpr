@@ -13,6 +13,7 @@ import TaskDataAdmin from '../views/admin/iom/task'
 import StudentAdmin from '../views/admin/student'
 import AdminStatistic from '../views/admin/statistic'
 import AcceptedExercises from '../views/tutor/accepted'
+import AcceptedExercisesIomId from '../views/tutor/accepted/listByIomId'
 import AcceptedTask from '../views/tutor/accepted/task'
 import LearningProcess from '../views/tutor/learning_process'
 import LearningProcessSingle from '../views/tutor/learning_process/single'
@@ -35,6 +36,7 @@ import GlobalLibraryCreate from '../views/admin/library/create'
 import GlobalLibraryEdit from '../views/admin/library/edit'
 import MentorAdmin from '../views/admin/mentor'
 import showFinished from '../views/tutor/finished'
+import showFinishedIomId from '../views/tutor/finished/listByIomId'
 
 import StudentProfileAdmin from '../views/admin/student/profile'
 import TutorProfile from '../views/admin/tutor/profile'
@@ -55,6 +57,8 @@ import ExerciselistAndCreate from '../views/tutor/exercise/index'
 import udTask from '../views/tutor/exercise/udTask'
 import Group from '../views/admin/group'
 import SingleGroup from '../views/admin/group/single'
+import SingleGroupReport from '../views/admin/group/report'
+
 import library from '../views/tutor/library/'
 import libraryUD from '../views/tutor/library/libraryUD'
 import NotFound from '../views/NotFound'
@@ -354,6 +358,17 @@ const routes = [
     },
   },
 
+
+  {
+    path: '/group/:id/report',
+    name: 'groupSingleReport',
+    component: SingleGroupReport,
+    beforeEnter: beforeAdmin(),
+    meta:{
+      auth: true,
+    },
+  },
+
   {
     path: '/group/:id',
     name: 'groupSingle',
@@ -363,6 +378,7 @@ const routes = [
       auth: true,
     },
   },
+
 
   {
     path: '/admin_notifications',
@@ -471,10 +487,31 @@ const routes = [
   },
 
 
+  // {
+  //   path: '/learning_process',
+  //   name: 'learning_process',
+  //   component: LearningProcess,
+  //   beforeEnter: beforeTutor(),
+  //   meta:{
+  //     auth: true,
+  //   },
+  // },
+
+  // {
+  //   path: '/learning_process/:iom',
+  //   name: 'learning_process_iom',
+  //   component: LearningProcessSingle,
+  //   beforeEnter: beforeTutor(),
+  //   meta:{
+  //     auth: true,
+  //   },
+  // },
+
+
   {
-    path: '/learning_process',
-    name: 'learning_process',
-    component: LearningProcess,
+    path: '/show_exercises_accepted/:iom',
+    name: 'show_exercises_accepted_iom_id',
+    component: AcceptedExercisesIomId,
     beforeEnter: beforeTutor(),
     meta:{
       auth: true,
@@ -482,9 +519,9 @@ const routes = [
   },
 
   {
-    path: '/learning_process/:iom',
-    name: 'learning_process_iom',
-    component: LearningProcessSingle,
+    path: '/show_exercises_accepted/:iom/:exId/:studentId',
+    name: 'show_exercises_accepted_task',
+    component: AcceptedTask,
     beforeEnter: beforeTutor(),
     meta:{
       auth: true,
@@ -501,15 +538,9 @@ const routes = [
     },
   },
 
-  {
-    path: '/show_exercises_accepted/:iom/:exId/:studentId',
-    name: 'show_exercises_accepted_task',
-    component: AcceptedTask,
-    beforeEnter: beforeTutor(),
-    meta:{
-      auth: true,
-    },
-  },
+
+
+
 
 
 
@@ -556,6 +587,16 @@ const routes = [
       auth: true,
     }
   },
+
+  {
+    path: '/show_finished/:iom_id',
+    name: 'show_finished_iom_id',
+    component: showFinishedIomId,
+    beforeEnter: beforeTutor(),
+    meta: {
+      auth: true,
+    }
+  },
   {
     path: '/show_finished',
     name: 'show_finished',
@@ -565,6 +606,7 @@ const routes = [
       auth: true,
     }
   },
+
 
   /**
    * //////////////////////////////////////////////////////////

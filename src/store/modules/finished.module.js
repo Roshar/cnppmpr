@@ -6,6 +6,7 @@ export default {
         statusInCurrentIom: [],
         courses: [],
         finishedStudents: [],
+        finishedStudentsByIom: null,
     },
     mutations: {
         setStatus(state, value) {
@@ -18,6 +19,10 @@ export default {
         setFinishedStudents(state, value) {
             state.finishedStudents = value
         },
+        setFinishedStudentsByIomId(state, value) {
+            state.finishedStudentsByIom = value
+        },
+
     },
     actions:{
         async studentEducation({ commit, dispatch}, payload) {
@@ -30,6 +35,23 @@ export default {
             }catch(e){
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        // отправить статус о готовности к завершению
+        async setStatusFinishedIom({ commit, dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/finished/setStatusFinishedIom', payload)
+                dispatch('setSystemMessage', {
+                    value: data.values.message,
+                    type: (data.code === 200) ? 'primary' : 'warning'
+                }, {root: true})
+            }catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
                     type: 'danger'
                 }, {root: true})
                 throw new Error()
@@ -95,6 +117,35 @@ export default {
                 }
             }catch(e){
                 dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getStudentsForAdminByIomId({ commit, dispatch}, payload) {
+            try {
+                console.log('ddd')
+                const {data} = await axios.post('/api/finished/getStudentsForAdminByIomId', payload)
+                return data.values
+            }catch(e){
+                dispatch('setSystemMessage', {
+                    value: e.message,
+                    type: 'danger'
+                }, {root: true})
+                throw new Error()
+            }
+        },
+
+        async getStudentsForTutorByIomId({ commit, dispatch}, payload) {
+            try {
+                const {data} = await axios.post('/api/finished/getStudentsForTutorByIomId', payload)
+                if(data.values && data.values.length) {
+                    commit('setFinishedStudentsByIomId', data.values)
+                }
+            }catch(e){
+                dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
                 }, {root: true})
@@ -115,6 +166,11 @@ export default {
         finishedStudents(state) {
             return state.finishedStudents
         },
+
+        finishedStudentsbyIomId(state) {
+            return state.finishedStudentsByIom
+        },
+
     }
 
 }

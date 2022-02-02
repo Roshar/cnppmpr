@@ -3,9 +3,11 @@
         <nav class="colorlib-main-menu" role="navigation">
             <ul class="navbar-menu">
                 <li><router-link to="/"  class="router-link" >Моя страница</router-link></li>
-                <li><router-link :to="{path:`/my_iom/${iomId}/exercise`}"  class="router-link" > {{currentIom}} </router-link></li>
-                <li><router-link :to="{path:`/my_iom/${iomId}/members`}"  class="router-link" >Участники</router-link></li>
                 <li><router-link :to="{name:'my_iom'}"  class="router-link" >ИОМы</router-link></li>
+                <li class="current-unit"><router-link :to="{path:`/my_iom/${iomId}/exercise`}"  class="router-link" > <strong>{{currentIom}}</strong> </router-link></li>
+                <li class="current-unit"><router-link :to="{path:`/my_iom/${iomId}/members`}"  class="router-link" >Участники</router-link></li>
+                <li class="current-unit"><router-link :to="{path:`/show_exercises_accepted/${iomId}`}"  class="router-link" >Ответы слушателей</router-link></li>
+                <li class="current-unit"><router-link :to="{path:`/show_finished/${iomId}`}"  class="router-link" >Завершившие обучение</router-link></li>
             </ul>
         </nav>
     </div>
@@ -14,7 +16,6 @@
     export default {
         props:['iomId','currentIom'],
         setup() {
-
         }
     }
 </script>
@@ -23,6 +24,9 @@
     .colorlib-main-menu {
         background-color: white;
         width: 100%;
+    }
+    li.current-unit {
+        background-color: #eef3f5;
     }
     .colorlib-main-menu ul {
         list-style-type: none;
