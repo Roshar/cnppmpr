@@ -654,7 +654,6 @@ export default {
                 const {data} = await axios.post('/api/admin/getFinishedStudentsCountByTutor',payload)
                 return data.values
             } catch(e){
-
                 dispatch('setSystemMessage', {
                     value: e.response.data.values.message,
                     type: 'danger'
@@ -662,7 +661,6 @@ export default {
                 throw new Error()
             }
         },
-
 
         async getGroupById ({dispatch}, payload) {
             try {

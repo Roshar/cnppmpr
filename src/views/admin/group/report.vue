@@ -41,10 +41,10 @@
                         <tbody>
                         <tr v-for="(item, index) in students" :key="item['user_id']">
                             <th scope="row">{{index+1}}</th>
-                            <td><router-link :to="{path:`/my_student/profile/${item.user_id}`}" class="name_student_link"> {{item.name}} {{item.surname}}</router-link></td>
+                            <td><router-link :to="{path:`/student/profile/${item.user_id}`}" class="name_student_link"> {{item.name}} {{item.surname}}</router-link></td>
                             <td>{{item['school_name']}}</td>
                             <td>{{item['title_area']}}</td>
-                            <td> <router-link :to="{path:`/my_iom/${item['iom_id']}/exercise`}">{{item.title}}</router-link> </td>
+                            <td> <router-link :to="{path:`/iom/${item['iom_id']}/${tutorId}`}">{{item.title}}</router-link> </td>
                             <td> {{item['start_education']}}</td>
                             <td> {{item['end_education']}}</td>
 
@@ -150,6 +150,7 @@
                 generationLink,
                 currentGroup,
                 title,
+                tutorId,
                 iomId,
                 iomList
             }
