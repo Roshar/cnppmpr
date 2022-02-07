@@ -75,7 +75,6 @@
                     <div class="form-group">
                         <label >Краткое описание <i style="font-size: .8em">(необязательное поле)</i></label>
                         <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
-
                     </div>
                     <div class="form-group">
                         <label for="link">Ссылка на задание <i style="font-size: .8em">(необязательное поле)</i></label>
@@ -290,7 +289,7 @@
                 if(values.title) {
                     values.title = mysqlEscape(values.title)
                 }
-                if (values.description) {
+                if (description.value) {
                     values.description = mysqlEscape(description.value)
                 }
                 await store.dispatch('iom/addExercise',values)
