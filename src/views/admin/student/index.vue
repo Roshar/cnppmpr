@@ -134,12 +134,16 @@
 
 
             onMounted(async()=>{
+                let date = new Date();
+                console.log(date.getSeconds())
                 loading.value = true
                 areas.value = await store.dispatch('area/getAreas')
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
                 students.value = await store.dispatch('admin/getUsersActive',{filter: false, tbl:'students'})
                 countNum.value = students.value.length ? students.value.length : 0
                 loading.value = false
+                let date2 = new Date();
+                console.log(date2.getSeconds())
             })
 
 
