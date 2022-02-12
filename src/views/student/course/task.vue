@@ -249,9 +249,11 @@
             const sendMessage = async() => {
                 loading.value = true
                 if(reportLink.value !== '' || reportMessage.value !== '' ){
+
                     if(reportMessage.value && reportMessage.value.length > 2 ) {
                         reportMessage.value = mysqlEscape(reportMessage.value)
                     }
+
                     await store.dispatch('student/insertInReportWithoutFile', {
                         link: reportLink.value,
                         content: reportMessage.value,

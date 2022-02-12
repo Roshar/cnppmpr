@@ -151,15 +151,14 @@ export default {
             id: route.params.id})
             tagsData.value = await store.dispatch('tag/getTag')
             levels.value = await store.dispatch('discipline/getLevels')
-            title.value = taskData.value.title
-            description.value = taskData.value.description
+            title.value = taskData.value['title']
+            description.value = taskData.value['description']
             tag_id.value = taskData.value['tag_id']
-            link.value = taskData.value.link
+            link.value = taskData.value['link']
             level.value = taskData.value['level_title']
             level_id.value = taskData.value['level_id']
             id_exercise.value = taskData.value['id']
             loading.value = false
-
         })
 
         const deleteTask = async() => {
@@ -175,10 +174,10 @@ export default {
             levelError.value = error.value?.level_id
 
             if(Object.keys(error.value).length === 0) {
-                console.log('UPDATE')
+                // const description = description.value ? mysqlEscape(description.value)  : ''
                 await store.dispatch('library/updateExercise',{token: localStorage.getItem('jwt-token'),values:{
                         title:title.value,
-                        description:mysqlEscape(description.value),
+                        description: mysqlEscape(description.value),
                         tag:tag_id.value,
                         link:link.value,
                         id:id_exercise.value,

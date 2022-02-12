@@ -41,7 +41,6 @@
                         <div class="col-4"> <h5 >Список обучающихся(активированные)</h5></div>
                         <div class="col-4"> <span>Общее количество: {{countNum}}</span></div>
                     </div>
-
                     <table class="table">
                         <thead>
                             <tr>
@@ -58,10 +57,10 @@
                         <tr v-for="(item, index) in students" :key="item.user_id">
                             <th scope="row">{{index+1}}</th>
                             <td ><router-link :to="{path:`/student/profile/${item.user_id}`}" class="name_student_link">  {{item.surname}} {{item.name}}</router-link></td>
-                            <td>{{item.school_name}}</td>
-                            <td>{{item.title_area}}</td>
-                            <td>{{item.title_discipline}}</td>
-                            <td>{{item.created}}</td>
+                            <td>{{item['school_name']}}</td>
+                            <td>{{item['title_area']}}</td>
+                            <td>{{item['title_discipline']}}</td>
+                            <td>{{item['created']}}</td>
                             <td>
                                 <div style="text-align: center" @click="deactivationUser(item.user_id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">
@@ -132,18 +131,17 @@
                 await router.push('/students')
             }
 
-
             onMounted(async()=>{
-                let date = new Date();
-                console.log(date.getSeconds())
+                // let date = new Date();
+                // console.log(date.getSeconds())
                 loading.value = true
                 areas.value = await store.dispatch('area/getAreas')
                 disciplines.value = await store.dispatch('discipline/getDisciplines')
                 students.value = await store.dispatch('admin/getUsersActive',{filter: false, tbl:'students'})
                 countNum.value = students.value.length ? students.value.length : 0
                 loading.value = false
-                let date2 = new Date();
-                console.log(date2.getSeconds())
+                // let date2 = new Date();
+                // console.log(date2.getSeconds())
             })
 
 

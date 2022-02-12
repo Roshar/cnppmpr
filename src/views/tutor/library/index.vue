@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-4">
                     <button type="button" @click="showModal = true" class="btn btn-outline-iom btn-block" >
-                            <span style="padding-right:.4rem">
+                        <span style="padding-right:.4rem">
                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
                           <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                           <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -120,18 +120,16 @@
                  loading.value = false
              })
 
-
             // Фильтрация: НАЗВАНИЕ|КАТЕГОРИЯ
              const libraryData = computed(() => store.getters['library/getLibraryData']
                  .filter(data => (filter.value.title) ? data.title.includes(filter.value.title) : data)
                  .filter(data => (filter.value.tag) ? filter.value.tag == data['tag_id'] : data))
 
-
              //Задания из текущего ИОМа
 
              const sub = async function (values)  {
-
-                 values.description = mysqlEscape(description.value)
+                 description.value = description.value ? mysqlEscape(description.value)  : ''
+                 values.description = description.value
                  await store.dispatch('library/addExercise',{
                      token: localStorage.getItem('jwt-token'),
                      values})
