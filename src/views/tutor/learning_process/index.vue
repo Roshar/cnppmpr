@@ -4,14 +4,11 @@
     </div>
     <div class="col-9">
         <div class="content-wallpaper">
-
             <h4 class="title-page">Учебный процесс по индивидуальным образовательным маршрутам </h4>
             <app-loader v-if="loading"></app-loader>
             <div class="content-loader" v-else>
                 <hr>
-
                 <h5 class="subtitle-page">Список </h5>
-
                 <div class="row" v-if="iomData">
                     <div class="col-4" v-for="(item, index) in iomData" :key="item.id">
                         <div class="card">
