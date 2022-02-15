@@ -202,7 +202,7 @@
                     if(Object.keys(error.value).length === 0) {
                         await store.dispatch('globalLibrary/updateInLibrary',{
                             id: id.value,
-                            title: title.value,
+                            title: mysqlEscape(title.value),
                             description: mysqlEscape(description.value),
                             link: link.value,
                             category: category.value,

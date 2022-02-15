@@ -130,6 +130,7 @@
              const sub = async function (values)  {
                  description.value = description.value ? mysqlEscape(description.value)  : ''
                  values.description = description.value
+                 values.title = mysqlEscape(values.title)
                  await store.dispatch('library/addExercise',{
                      token: localStorage.getItem('jwt-token'),
                      values})

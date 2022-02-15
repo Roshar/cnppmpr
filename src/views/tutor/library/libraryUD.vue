@@ -176,7 +176,7 @@ export default {
             if(Object.keys(error.value).length === 0) {
                 // const description = description.value ? mysqlEscape(description.value)  : ''
                 await store.dispatch('library/updateExercise',{token: localStorage.getItem('jwt-token'),values:{
-                        title:title.value,
+                        title:mysqlEscape(title.value),
                         description: mysqlEscape(description.value),
                         tag:tag_id.value,
                         link:link.value,

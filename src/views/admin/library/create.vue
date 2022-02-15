@@ -132,6 +132,7 @@
             const onSubmit = async(values) => {
                 values.link = (!values.link) ? '' : values.link
                 values.description =  (!values.description) ? '' : mysqlEscape(description.value)
+                values.title = mysqlEscape(values.title)
                 await store.dispatch('globalLibrary/addInLibrary',{
                     values
                 })
