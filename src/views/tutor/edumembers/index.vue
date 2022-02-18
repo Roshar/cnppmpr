@@ -11,9 +11,9 @@
                     <h4 class="title-page">Участники ИОМа "{{currentIomTitle}}" </h4>
                 </div>
                 <div class="col-4">
-                    <button class="btn send-status btn-block" type="button"
-                            @click="sendReportToFinish" :disabled = "reportFinishedStatus" >
-                        Отправить статус готовности группы</button>
+<!--                    <button class="btn send-status btn-block" type="button"-->
+<!--                            @click="sendReportToFinish" :disabled = "reportFinishedStatus" >-->
+<!--                        Отправить статус готовности группы</button>-->
                 </div>
             </div>
 

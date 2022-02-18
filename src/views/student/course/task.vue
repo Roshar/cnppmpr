@@ -108,7 +108,7 @@
                         <span style="font-style: italic;">Описание: </span> <div v-html="description"></div>
                         <br>
                         <span style="font-style: italic;">Автор:  </span><p class="card-text">{{currentMentor(author)}}</p>
-                        <span style="font-style: italic;">Ссылка: </span><p class="card-text">{{link}}</p>
+                        <span style="font-style: italic;">Ссылка: </span> <p v-if="link" class="card-text"> <a   :href="link" target="_blank">{{link}}</a> </p> <p v-else class="card-text">Пусто</p>
                         <span style="font-style: italic;">Категория: </span><p class="card-text">{{category}}</p>
                         <span style="font-style: italic;">Срок выполнения: </span><p class="card-text">{{checkTerm(term, term)}}</p>
                     </div>

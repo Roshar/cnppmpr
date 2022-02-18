@@ -239,12 +239,12 @@
                                                         </div>
                                                     </div>
                                                     <div v-if="filterData(tag.tag_id,item.tag_id)">
-                                                        <div class="jobster-candidate-timeline pendding pendding_block"   v-if="item.accepted === 2 && item['on_check'] === 0"  @click="openTask(item.id_exercises,item.iom_id)">
+                                                        <div class="jobster-candidate-timeline pendding pendding_block"  v-if="item.accepted === 2 && item['on_check'] === 0"  @click="openTask(item.id_exercises,item.iom_id)">
                                                             <div class="jobster-timeline-item" >
                                                                 <div class="jobster-timeline-info" >
                                                                     <div class="dashboard-timeline-info">
                                                                         <span class="jobster-timeline-time"> Срок выполнения: {{checkTerm(item['term'], item['term'].split('.').reverse().join('-'))}}</span>
-                                                                        <h6 class="mb-2" style="color: orange"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
+                                                                        <h6 class="mb-2" style="color: darkorange;"> <span style="color:#646f79">Наименование: </span>{{ item.title}}</h6>
                                                                         <span style="font-style: italic; background-color: orange; color:white;padding: 4px"> Статус: Необходимо внести корректировки в ответ</span>
                                                                     </div>
                                                                 </div>
@@ -535,6 +535,7 @@
 </script>
 
 <style scoped>
+
 
     .modal-form{
         position: fixed;
